@@ -31,9 +31,9 @@ import br.com.caelum.vraptor.ioc.Stereotype;
 @Stereotype
 public @interface Convert {
 
-    /**
-     * Register this component as the default converter for a type.
-     */
-    Class<?> value();
+	/**
+	 * Register this component as the default converter for a type.
+	 */
+	Class<?> value();
 
 }

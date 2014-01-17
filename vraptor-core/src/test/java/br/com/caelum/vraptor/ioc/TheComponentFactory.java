@@ -21,7 +21,7 @@ package br.com.caelum.vraptor.ioc;
 */
 @Component
 public class TheComponentFactory implements ComponentFactory<NeedsCustomInstantiation> {
-    public NeedsCustomInstantiation getInstance() {
-        return new NeedsCustomInstantiation();
-    }
+	public NeedsCustomInstantiation getInstance() {
+	return new NeedsCustomInstantiation();
+	}
 }

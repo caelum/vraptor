@@ -42,27 +42,27 @@ import br.com.caelum.vraptor.ioc.RequestScoped;
 @Convert(BigDecimal.class)
 @RequestScoped
 public class LocaleBasedBigDecimalConverter
-    implements Converter<BigDecimal> {
+	implements Converter<BigDecimal> {
 
-    private final Localization localization;
-    
-    public LocaleBasedBigDecimalConverter(Localization localization) {
-        this.localization = localization;
-    }
+	private final Localization localization;
+	
+	public LocaleBasedBigDecimalConverter(Localization localization) {
+	this.localization = localization;
+	}
 
-    public BigDecimal convert(String value, Class<? extends BigDecimal> type, ResourceBundle bundle) {
-        if (isNullOrEmpty(value)) {
-            return null;
-        }
-        
-        try {
-            final Locale locale = localization.getLocale();
-            DecimalFormat fmt = ((DecimalFormat) DecimalFormat.getInstance(locale));
-            fmt.setParseBigDecimal(true);
-            
-            return (BigDecimal) fmt.parse(value);
-        } catch (ParseException e) {
-            throw new ConversionError(MessageFormat.format(bundle.getString("is_not_a_valid_number"), value));
-        }
-    }
+	public BigDecimal convert(String value, Class<? extends BigDecimal> type, ResourceBundle bundle) {
+	if (isNullOrEmpty(value)) {
+		return null;
+	}
+	
+	try {
+		final Locale locale = localization.getLocale();
+		DecimalFormat fmt = ((DecimalFormat) DecimalFormat.getInstance(locale));
+		fmt.setParseBigDecimal(true);
+		
+		return (BigDecimal) fmt.parse(value);
+	} catch (ParseException e) {
+		throw new ConversionError(MessageFormat.format(bundle.getString("is_not_a_valid_number"), value));
+	}
+	}
 }

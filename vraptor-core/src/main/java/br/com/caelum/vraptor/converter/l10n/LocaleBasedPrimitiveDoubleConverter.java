@@ -56,8 +56,8 @@ public class LocaleBasedPrimitiveDoubleConverter implements Converter<Double> {
 		}
 
 		try {
-            final Locale locale = localization.getLocale();
-            DecimalFormat fmt = ((DecimalFormat) DecimalFormat.getInstance(locale));
+		final Locale locale = localization.getLocale();
+		DecimalFormat fmt = ((DecimalFormat) DecimalFormat.getInstance(locale));
 
 			return fmt.parse(value).doubleValue();
 		} catch (ParseException e) {

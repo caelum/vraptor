@@ -69,30 +69,30 @@ public class IogiParametersProviderTest extends ParametersProviderTest {
 		return new IogiParametersProvider(nameProvider, request, new VRaptorInstantiator(converters, new VRaptorDependencyProvider(container), mockLocalization, new VRaptorParameterNamesProvider(nameProvider), request));
 	}
 
-    @Test
-    public void returnsNullWhenInstantiatingAStringForWhichThereAreNoParameters() throws Exception {
-    	thereAreNoParameters();
-    	final ResourceMethod method = string;
+	@Test
+	public void returnsNullWhenInstantiatingAStringForWhichThereAreNoParameters() throws Exception {
+		thereAreNoParameters();
+		final ResourceMethod method = string;
 
-    	Object[] params = provider.getParametersFor(method, errors, null);
+		Object[] params = provider.getParametersFor(method, errors, null);
 
-    	assertArrayEquals(new Object[] {null}, params);
-    }
+		assertArrayEquals(new Object[] {null}, params);
+	}
 
 	@Test
 	public void canInjectADependencyProvidedByVraptor() throws Exception {
 		thereAreNoParameters();
 
 		ResourceMethod resourceMethod = DefaultResourceMethod.instanceFor(OtherResource.class, OtherResource.class.getDeclaredMethod("logic", NeedsMyResource.class));
-    	final MyResource providedInstance = new MyResource();
+		final MyResource providedInstance = new MyResource();
 
-    	when(container.canProvide(MyResource.class)).thenReturn(true);
-    	when(container.instanceFor(MyResource.class)).thenReturn(providedInstance);
+		when(container.canProvide(MyResource.class)).thenReturn(true);
+		when(container.instanceFor(MyResource.class)).thenReturn(providedInstance);
 
-    	Object[] params = provider.getParametersFor(resourceMethod, errors, null);
+		Object[] params = provider.getParametersFor(resourceMethod, errors, null);
 		assertThat(((NeedsMyResource)params[0]).getMyResource(), is(sameInstance(providedInstance)));
 	}
-    //---------- The Following tests mock iogi to unit test the ParametersProvider impl.
+	//---------- The Following tests mock iogi to unit test the ParametersProvider impl.
 	@Test
 	public void willCreateAnIogiParameterForEachRequestParameterValue() throws Exception {
 		ResourceMethod anyMethod = buyA;
@@ -145,41 +145,41 @@ public class IogiParametersProviderTest extends ParametersProviderTest {
 	
 	@Test
 	public void isCapableOfDealingWithSets() throws Exception {
-    	when(nameProvider.parameterNamesFor(any(Method.class))).thenReturn(new String[]{"abc"});
-    	
-        ResourceMethod set = method("set", Set.class);
+		when(nameProvider.parameterNamesFor(any(Method.class))).thenReturn(new String[]{"abc"});
+		
+	ResourceMethod set = method("set", Set.class);
 
-    	requestParameterIs(set, "abc", "1", "2");
+		requestParameterIs(set, "abc", "1", "2");
 
-    	Set<Long> abc = getParameters(set);
+		Set<Long> abc = getParameters(set);
 
-    	assertThat(abc, hasSize(2));
-    	assertThat(abc, allOf(hasItem(1l), hasItem(2l)));
+		assertThat(abc, hasSize(2));
+		assertThat(abc, allOf(hasItem(1l), hasItem(2l)));
 	}
 	
 	@Test
 	public void isCapableOfDealingWithSetsOfObjects() throws Exception {
-    	when(nameProvider.parameterNamesFor(any(Method.class))).thenReturn(new String[]{"abc"});
-    	
-        ResourceMethod set = method("setOfObject", Set.class);
+		when(nameProvider.parameterNamesFor(any(Method.class))).thenReturn(new String[]{"abc"});
+		
+	ResourceMethod set = method("setOfObject", Set.class);
 
-    	requestParameterIs(set, "abc.x", "1");
+		requestParameterIs(set, "abc.x", "1");
 
-    	Set<ABC> abc = getParameters(set);
+		Set<ABC> abc = getParameters(set);
 
-    	assertThat(abc, hasSize(1));
-    	assertThat(abc.iterator().next().getX(), is(1l));
+		assertThat(abc, hasSize(1));
+		assertThat(abc.iterator().next().getX(), is(1l));
 	}
 	
 	//----------
 
 	class OtherResource {
-    	void logic(NeedsMyResource param) {
-    	}
-    }
+		void logic(NeedsMyResource param) {
+		}
+	}
 
 	static class NeedsMyResource {
-    	private final MyResource myResource;
+		private final MyResource myResource;
 
 		public NeedsMyResource(MyResource myResource) {
 			this.myResource = myResource;
@@ -188,5 +188,5 @@ public class IogiParametersProviderTest extends ParametersProviderTest {
 		public MyResource getMyResource() {
 			return myResource;
 		}
-    }
+	}
 }

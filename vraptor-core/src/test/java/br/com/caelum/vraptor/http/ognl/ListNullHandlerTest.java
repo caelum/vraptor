@@ -76,8 +76,8 @@ public class ListNullHandlerTest {
 		client = new Client();
 		handler = new ListNullHandler(removal);
 		
-        context = (OgnlContext) Ognl.createDefaultContext(null);
-        context.put("proxifier", new JavassistProxifier(new ReflectionInstanceCreator()));
+	context = (OgnlContext) Ognl.createDefaultContext(null);
+	context.put("proxifier", new JavassistProxifier(new ReflectionInstanceCreator()));
 	}
 
 	@Test(expected = VRaptorException.class)

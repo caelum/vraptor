@@ -57,8 +57,8 @@ public class IntegerConverterTest {
 		assertThat(converter.convert(null, Integer.class, bundle), is(nullValue()));
 	}
 
-    @Test
-    public void shouldNotComplainAboutEmpty() {
-        assertThat(converter.convert("", Integer.class, bundle), is(nullValue()));
-    }
+	@Test
+	public void shouldNotComplainAboutEmpty() {
+	assertThat(converter.convert("", Integer.class, bundle), is(nullValue()));
+	}
 }

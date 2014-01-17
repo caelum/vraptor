@@ -17,40 +17,40 @@ import br.com.caelum.vraptor.proxy.ObjenesisInstanceCreator;
 import br.com.caelum.vraptor.proxy.Proxifier;
 
 public class ExceptionRecorderTest {
-    
-    static final String DEFAULT_REDIRECT = "/any-resource";
+	
+	static final String DEFAULT_REDIRECT = "/any-resource";
 
-    @Mock private Result result;
-    private ExceptionMapper mapper;
+	@Mock private Result result;
+	private ExceptionMapper mapper;
 
-    @Before
-    public void setUp() {
-        MockitoAnnotations.initMocks(this);
-        Proxifier proxifier = new JavassistProxifier(new ObjenesisInstanceCreator());
-        mapper = new DefaultExceptionMapper(proxifier);
-    }
+	@Before
+	public void setUp() {
+	MockitoAnnotations.initMocks(this);
+	Proxifier proxifier = new JavassistProxifier(new ObjenesisInstanceCreator());
+	mapper = new DefaultExceptionMapper(proxifier);
+	}
 
-    @Test
-    public void withRootException() {
-        mapper.record(Exception.class).forwardTo(DEFAULT_REDIRECT);
-        mapper.findByException(new Exception()).replay(result);
+	@Test
+	public void withRootException() {
+	mapper.record(Exception.class).forwardTo(DEFAULT_REDIRECT);
+	mapper.findByException(new Exception()).replay(result);
 
-        verify(result).forwardTo(DEFAULT_REDIRECT);
-    }
+	verify(result).forwardTo(DEFAULT_REDIRECT);
+	}
 
-    @Test
-    public void withNestedException() {
-        mapper.record(IllegalStateException.class).forwardTo(DEFAULT_REDIRECT);
-        mapper.findByException(new RuntimeException(new IllegalStateException())).replay(result);
+	@Test
+	public void withNestedException() {
+	mapper.record(IllegalStateException.class).forwardTo(DEFAULT_REDIRECT);
+	mapper.findByException(new RuntimeException(new IllegalStateException())).replay(result);
 
-        verify(result).forwardTo(DEFAULT_REDIRECT);
-    }
+	verify(result).forwardTo(DEFAULT_REDIRECT);
+	}
 
-    @Test
-    public void whenNotFoundException() {
-        mapper.record(IOException.class).forwardTo(DEFAULT_REDIRECT);
-        ExceptionRecorder<Result> recorder = mapper.findByException(new RuntimeException(new IllegalStateException()));
+	@Test
+	public void whenNotFoundException() {
+	mapper.record(IOException.class).forwardTo(DEFAULT_REDIRECT);
+	ExceptionRecorder<Result> recorder = mapper.findByException(new RuntimeException(new IllegalStateException()));
 
-        assertThat(recorder, Matchers.nullValue());
-    }
+	assertThat(recorder, Matchers.nullValue());
+	}
 }

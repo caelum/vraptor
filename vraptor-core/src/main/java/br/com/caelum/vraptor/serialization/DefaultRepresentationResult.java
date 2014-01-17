@@ -52,14 +52,14 @@ public class DefaultRepresentationResult implements RepresentationResult {
 		return from(object, null);
 	}
 
-    /**
-     * Override this method if you want another ordering strategy.
-     *
-     * @since 3.4.0
-     */
-    protected void sortSerializations() {
-        Collections.sort(this.serializations, new PackageComparator());
-    }
+	/**
+	 * Override this method if you want another ordering strategy.
+	 *
+	 * @since 3.4.0
+	 */
+	protected void sortSerializations() {
+	Collections.sort(this.serializations, new PackageComparator());
+	}
 
 	public <T> Serializer from(T object, String alias) {
 		if(object == null) {
@@ -69,7 +69,7 @@ public class DefaultRepresentationResult implements RepresentationResult {
 		if(HypermediaResource.class.isAssignableFrom(object.getClass())) {
 			headersHandler.handle(HypermediaResource.class.cast(object));
 		}
-        sortSerializations();
+	sortSerializations();
 		String format = formatResolver.getAcceptFormat();
 		for (Serialization serialization : serializations) {
 			if (serialization.accepts(format)) {

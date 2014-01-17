@@ -34,7 +34,7 @@ public class XStreamXmlDeserializerTest {
 	public void setUp() throws Exception {
 		provider = mock(ParameterNameProvider.class);
 
-        deserializer = new XStreamXMLDeserializer(provider, XStreamBuilderImpl.cleanInstance());
+	deserializer = new XStreamXMLDeserializer(provider, XStreamBuilderImpl.cleanInstance());
 		DefaultResourceClass resourceClass = new DefaultResourceClass(DogController.class);
 
 		woof = new DefaultResourceMethod(resourceClass, DogController.class.getDeclaredMethod("woof"));

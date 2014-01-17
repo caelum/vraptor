@@ -29,50 +29,50 @@ import org.picocontainer.PicoBuilder;
 
 public class PicoBasedContainerTest {
 
-    public static class Fruit {
+	public static class Fruit {
 
-    }
+	}
 
-    public static class Juice {
-        private final Fruit fruit;
+	public static class Juice {
+	private final Fruit fruit;
 
-        public Juice(Fruit f) {
-            this.fruit = f;
-        }
-    }
+	public Juice(Fruit f) {
+		this.fruit = f;
+	}
+	}
 
-    private PicoBasedContainer container;
-    private MutablePicoContainer picoContainer;
+	private PicoBasedContainer container;
+	private MutablePicoContainer picoContainer;
 
-    @Before
-    public void setup() {
-        this.picoContainer = new PicoBuilder().withCaching().build();
-        this.container = new PicoBasedContainer(picoContainer);
-    }
+	@Before
+	public void setup() {
+	this.picoContainer = new PicoBuilder().withCaching().build();
+	this.container = new PicoBasedContainer(picoContainer);
+	}
 
-    @Test
-    public void shouldBeAbleToInstantiateABean() {
-        this.picoContainer.addComponent(Fruit.class);
-        assertThat(container.instanceFor(Fruit.class), is(notNullValue()));
-    }
+	@Test
+	public void shouldBeAbleToInstantiateABean() {
+	this.picoContainer.addComponent(Fruit.class);
+	assertThat(container.instanceFor(Fruit.class), is(notNullValue()));
+	}
 
-    @Test
-    public void shouldBeAbleToProvideAFruitButNotAJuice() {
-    	this.picoContainer.addComponent(Fruit.class);
-    	
-    	assertThat(container.canProvide(Fruit.class), is(true));
-    	assertThat(container.canProvide(Juice.class), is(false));
-    }
+	@Test
+	public void shouldBeAbleToProvideAFruitButNotAJuice() {
+		this.picoContainer.addComponent(Fruit.class);
+		
+		assertThat(container.canProvide(Fruit.class), is(true));
+		assertThat(container.canProvide(Juice.class), is(false));
+	}
 
-    @Test
-    public void shouldBeAbleToInstantiateADependentBean() {
-        this.picoContainer.addComponent(Fruit.class);
-        this.picoContainer.addComponent(Juice.class);
-        
-        Fruit fruit = container.instanceFor(Fruit.class);
-        Juice juice = container.instanceFor(Juice.class);
-        
-        assertThat(juice, is(notNullValue()));
-        assertThat(juice.fruit, is(equalTo(fruit)));
-    }
+	@Test
+	public void shouldBeAbleToInstantiateADependentBean() {
+	this.picoContainer.addComponent(Fruit.class);
+	this.picoContainer.addComponent(Juice.class);
+	
+	Fruit fruit = container.instanceFor(Fruit.class);
+	Juice juice = container.instanceFor(Juice.class);
+	
+	assertThat(juice, is(notNullValue()));
+	assertThat(juice.fruit, is(equalTo(fruit)));
+	}
 }

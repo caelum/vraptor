@@ -27,17 +27,17 @@ import br.com.caelum.vraptor.core.Localization;
 
 class LocaleBasedJodaTimeConverter {
 
-    private final Localization localization;
+	private final Localization localization;
 
 	public LocaleBasedJodaTimeConverter(Localization localization) {
 		this.localization = localization;
 	}
 
 	public DateTime convert(String value, DateTimeFormatter formatter) throws ParseException {
-	    if (isNullOrEmpty(value)) {
+		if (isNullOrEmpty(value)) {
 			return null;
 		}
-	    
+		
 		return formatter.withLocale(getLocale()).parseDateTime(value);
 	}
 

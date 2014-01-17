@@ -42,11 +42,11 @@ public class ForwardToDefaultViewInterceptorTest {
 		this.interceptor = new ForwardToDefaultViewInterceptor(result);
 	}
 
-    @Test
-    public void shouldAcceptAlways() {
-    	assertTrue(interceptor.accepts(null));
-    }
-    
+	@Test
+	public void shouldAcceptAlways() {
+		assertTrue(interceptor.accepts(null));
+	}
+	
 	@Test
 	public void doesNothingIfResultWasAlreadyUsed() {
 		when(result.used()).thenReturn(true);

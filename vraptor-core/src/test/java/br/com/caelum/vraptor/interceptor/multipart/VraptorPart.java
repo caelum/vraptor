@@ -20,67 +20,67 @@ import com.google.common.collect.Maps;
  * @author Otávio Scherer Garcia
  */
 public class VraptorPart
-    implements Part {
+	implements Part {
 
-    private String name;
-    private String contentType;
-    private byte[] content;
-    private Map<String, Collection<String>> headers = Maps.newHashMap();
+	private String name;
+	private String contentType;
+	private byte[] content;
+	private Map<String, Collection<String>> headers = Maps.newHashMap();
 
-    public VraptorPart(String name, String contentType, String filename, byte[] content) {
-        this.name = name;
-        this.contentType = contentType;
-        this.content = content;
-        headers.put(CONTENT_DISPOSITION_KEY, asList("form-data; name=\"" + name + "\"; filename=\"" + filename + "\""));
-    }
+	public VraptorPart(String name, String contentType, String filename, byte[] content) {
+	this.name = name;
+	this.contentType = contentType;
+	this.content = content;
+	headers.put(CONTENT_DISPOSITION_KEY, asList("form-data; name=\"" + name + "\"; filename=\"" + filename + "\""));
+	}
 
-    public VraptorPart(String name, String content) {
-        this.name = name;
-        this.content = content.getBytes();
-    }
+	public VraptorPart(String name, String content) {
+	this.name = name;
+	this.content = content.getBytes();
+	}
 
-    public String getContentType() {
-        return contentType;
-    }
+	public String getContentType() {
+	return contentType;
+	}
 
-    public String getHeader(String name) {
-        Collection<String> values = getHeaders(name);
-        return values.isEmpty() ? null : values.iterator().next();
-    }
+	public String getHeader(String name) {
+	Collection<String> values = getHeaders(name);
+	return values.isEmpty() ? null : values.iterator().next();
+	}
 
-    public Collection<String> getHeaderNames() {
-        return Collections.unmodifiableCollection(headers.keySet());
-    }
+	public Collection<String> getHeaderNames() {
+	return Collections.unmodifiableCollection(headers.keySet());
+	}
 
-    public Collection<String> getHeaders(String name) {
-        Collection<String> values = headers.get(name);
-        if (values == null) {
-            return Collections.emptyList();
-        }
-        return Collections.unmodifiableCollection(values);
-    }
+	public Collection<String> getHeaders(String name) {
+	Collection<String> values = headers.get(name);
+	if (values == null) {
+		return Collections.emptyList();
+	}
+	return Collections.unmodifiableCollection(values);
+	}
 
-    public InputStream getInputStream()
-        throws IOException {
-        return new ByteArrayInputStream(content);
-    }
+	public InputStream getInputStream()
+	throws IOException {
+	return new ByteArrayInputStream(content);
+	}
 
-    public String getName() {
-        return name;
-    }
+	public String getName() {
+	return name;
+	}
 
-    public long getSize() {
-        return content == null ? 0 : content.length;
-    }
+	public long getSize() {
+	return content == null ? 0 : content.length;
+	}
 
-    public void write(String filename)
-        throws IOException {
-        throw new UnsupportedOperationException();
-    }
+	public void write(String filename)
+	throws IOException {
+	throw new UnsupportedOperationException();
+	}
 
-    public void delete()
-        throws IOException {
-        throw new UnsupportedOperationException();
-    }
+	public void delete()
+	throws IOException {
+	throw new UnsupportedOperationException();
+	}
 
 }

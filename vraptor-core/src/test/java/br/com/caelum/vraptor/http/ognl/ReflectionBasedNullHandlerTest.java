@@ -68,7 +68,7 @@ public class ReflectionBasedNullHandlerTest {
 
 		AbstractOgnlTestSupport.configOgnl(converters);
 
-        this.proxifier = new JavassistProxifier(new ReflectionInstanceCreator());
+	this.proxifier = new JavassistProxifier(new ReflectionInstanceCreator());
 		this.context = (OgnlContext) Ognl.createDefaultContext(null);
 		context.setTraceEvaluations(true);
 		context.put("removal", removal);
@@ -147,21 +147,21 @@ public class ReflectionBasedNullHandlerTest {
 
 	@SuppressWarnings("unchecked")
 	public static <T> T proxify(final T pojo) {
-	    
-        ProxyFactory factory = new ProxyFactory();
-        factory.setSuperclass(pojo.getClass());
-        
-        Class<?> proxyClass = factory.createClass();
-        Object proxyInstance = new ObjenesisInstanceCreator().instanceFor(proxyClass);
-        ProxyObject proxyObject = (ProxyObject) proxyInstance;
-        proxyObject.setHandler(new MethodHandler() {
-            public Object invoke(final Object self, final Method thisMethod, final Method proceed, Object[] args)
-                    throws Throwable {
-                return pojo;
-                }
-        });        
+		
+	ProxyFactory factory = new ProxyFactory();
+	factory.setSuperclass(pojo.getClass());
+	
+	Class<?> proxyClass = factory.createClass();
+	Object proxyInstance = new ObjenesisInstanceCreator().instanceFor(proxyClass);
+	ProxyObject proxyObject = (ProxyObject) proxyInstance;
+	proxyObject.setHandler(new MethodHandler() {
+		public Object invoke(final Object self, final Method thisMethod, final Method proceed, Object[] args)
+			throws Throwable {
+		return pojo;
+		}
+	});	
 
-        return (T) proxyInstance;
+	return (T) proxyInstance;
 	}
 
 	@Test

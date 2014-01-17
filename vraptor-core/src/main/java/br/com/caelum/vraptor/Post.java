@@ -37,5 +37,5 @@ public @interface Post {
 	 * All paths that will be mapped to an annotated Resource method.
 	 * @return
 	 */
-    String[] value() default {};
+	String[] value() default {};
 }

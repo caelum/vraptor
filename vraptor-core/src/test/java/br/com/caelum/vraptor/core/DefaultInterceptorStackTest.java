@@ -52,28 +52,28 @@ public class DefaultInterceptorStackTest {
 	static interface FirstInterceptor extends Interceptor {}
 	static interface SecondInterceptor extends Interceptor {}
 
-    @Test
-    public void testInvokesAllInterceptorsInItsCorrectOrder() throws IOException, InterceptionException {
-        stack.add(FirstInterceptor.class);
-        stack.add(SecondInterceptor.class);
+	@Test
+	public void testInvokesAllInterceptorsInItsCorrectOrder() throws IOException, InterceptionException {
+	stack.add(FirstInterceptor.class);
+	stack.add(SecondInterceptor.class);
 
-        stack.next(A_METHOD, AN_INSTANCE);
-        verify(firstHandler).execute(stack, A_METHOD, AN_INSTANCE);
+	stack.next(A_METHOD, AN_INSTANCE);
+	verify(firstHandler).execute(stack, A_METHOD, AN_INSTANCE);
 
-        stack.next(A_METHOD, AN_INSTANCE);
-        verify(secondHandler).execute(stack, A_METHOD, AN_INSTANCE);
-    }
+	stack.next(A_METHOD, AN_INSTANCE);
+	verify(secondHandler).execute(stack, A_METHOD, AN_INSTANCE);
+	}
 
-    @Test
-    public void shouldAddNextInterceptorAsNext() throws InterceptionException, IOException {
-        stack.add(FirstInterceptor.class);
-        stack.addAsNext(SecondInterceptor.class);
+	@Test
+	public void shouldAddNextInterceptorAsNext() throws InterceptionException, IOException {
+	stack.add(FirstInterceptor.class);
+	stack.addAsNext(SecondInterceptor.class);
 
-        stack.next(A_METHOD, AN_INSTANCE);
-        verify(secondHandler).execute(stack, A_METHOD, AN_INSTANCE);
+	stack.next(A_METHOD, AN_INSTANCE);
+	verify(secondHandler).execute(stack, A_METHOD, AN_INSTANCE);
 
-        stack.next(A_METHOD, AN_INSTANCE);
-        verify(firstHandler).execute(stack, A_METHOD, AN_INSTANCE);
-    }
+	stack.next(A_METHOD, AN_INSTANCE);
+	verify(firstHandler).execute(stack, A_METHOD, AN_INSTANCE);
+	}
 
 }

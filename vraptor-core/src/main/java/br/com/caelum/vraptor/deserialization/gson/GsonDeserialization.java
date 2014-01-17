@@ -109,7 +109,7 @@ public class GsonDeserialization implements Deserializer {
 				}
 			} else if (jsonElement.isJsonArray()) {
 				if ((parameterNames.length != 1) || (!(method.getMethod().getGenericParameterTypes()[0] instanceof ParameterizedType))) {
-                    throw new IllegalArgumentException("Methods that consumes an array representation must receive only just one collection generic typed argument");
+			throw new IllegalArgumentException("Methods that consumes an array representation must receive only just one collection generic typed argument");
 				}
 				
 				JsonArray jsonArray= jsonElement.getAsJsonArray();

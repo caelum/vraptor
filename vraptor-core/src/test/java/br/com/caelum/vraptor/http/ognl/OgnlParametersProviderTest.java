@@ -28,7 +28,7 @@ public class OgnlParametersProviderTest extends ParametersProviderTest {
 	@Override
 	protected ParametersProvider getProvider() {
 		EmptyElementsRemoval removal = new EmptyElementsRemoval();
-        Proxifier proxifier = new JavassistProxifier(new ReflectionInstanceCreator());
+	Proxifier proxifier = new JavassistProxifier(new ReflectionInstanceCreator());
 		return new OgnlParametersProvider(nameProvider, request, container, new OgnlFacade(converters, removal, proxifier));
 	}
 

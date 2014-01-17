@@ -53,72 +53,72 @@ import br.com.caelum.vraptor.resource.ResourceMethod;
 @RequestScoped
 @Intercepts(before = ExecuteMethodInterceptor.class, after = ParametersInstantiatorInterceptor.class)
 public class MethodValidatorInterceptor
-    implements Interceptor {
+	implements Interceptor {
 
-    private static final Logger logger = LoggerFactory.getLogger(MethodValidatorInterceptor.class);
+	private static final Logger logger = LoggerFactory.getLogger(MethodValidatorInterceptor.class);
 
-    private final javax.validation.Validator methodValidator;
-    private final Localization localization;
-    private final MessageInterpolator interpolator;
-    private final MethodInfo methodInfo;
-    private final Validator validator;
+	private final javax.validation.Validator methodValidator;
+	private final Localization localization;
+	private final MessageInterpolator interpolator;
+	private final MethodInfo methodInfo;
+	private final Validator validator;
 	private final ParameterNameProvider parameterNameProvider;
 
-    public MethodValidatorInterceptor(Localization localization, MessageInterpolator interpolator, Validator validator,
-            MethodInfo methodInfo, javax.validation.Validator methodValidator, ParameterNameProvider parameterNameProvider) {
-        this.localization = localization;
-        this.interpolator = interpolator;
-        this.validator = validator;
-        this.methodInfo = methodInfo;
-        this.methodValidator = methodValidator;
+	public MethodValidatorInterceptor(Localization localization, MessageInterpolator interpolator, Validator validator,
+		MethodInfo methodInfo, javax.validation.Validator methodValidator, ParameterNameProvider parameterNameProvider) {
+	this.localization = localization;
+	this.interpolator = interpolator;
+	this.validator = validator;
+	this.methodInfo = methodInfo;
+	this.methodValidator = methodValidator;
 		this.parameterNameProvider = parameterNameProvider;
-    }
+	}
 
-    public boolean accepts(ResourceMethod method) {
-        BeanDescriptor bean = methodValidator.getConstraintsForClass(method.getResource().getType());
-        MethodDescriptor descriptor = bean.getConstraintsForMethod(method.getMethod().getName(), method.getMethod().getParameterTypes());
-        return descriptor != null && descriptor.hasConstrainedParameters();
-    }
+	public boolean accepts(ResourceMethod method) {
+	BeanDescriptor bean = methodValidator.getConstraintsForClass(method.getResource().getType());
+	MethodDescriptor descriptor = bean.getConstraintsForMethod(method.getMethod().getName(), method.getMethod().getParameterTypes());
+	return descriptor != null && descriptor.hasConstrainedParameters();
+	}
 
-    public void intercept(InterceptorStack stack, ResourceMethod method, Object resourceInstance)
-        throws InterceptionException {
+	public void intercept(InterceptorStack stack, ResourceMethod method, Object resourceInstance)
+	throws InterceptionException {
 
-        String[] paramNames = parameterNameProvider.parameterNamesFor(method.getMethod());
-        Set<ConstraintViolation<Object>> violations = methodValidator.forExecutables().validateParameters(resourceInstance,
-                method.getMethod(), methodInfo.getParameters());
-        logger.debug("there are {} violations at method {}.", violations.size(), method);
+	String[] paramNames = parameterNameProvider.parameterNamesFor(method.getMethod());
+	Set<ConstraintViolation<Object>> violations = methodValidator.forExecutables().validateParameters(resourceInstance,
+		method.getMethod(), methodInfo.getParameters());
+	logger.debug("there are {} violations at method {}.", violations.size(), method);
 
-        for (ConstraintViolation<Object> violation : violations) {
-            BeanValidatorContext ctx = BeanValidatorContext.of(violation);
-            String msg = interpolator.interpolate(violation.getMessageTemplate(), ctx, getLocale());
+	for (ConstraintViolation<Object> violation : violations) {
+		BeanValidatorContext ctx = BeanValidatorContext.of(violation);
+		String msg = interpolator.interpolate(violation.getMessageTemplate(), ctx, getLocale());
 
-            validator.add(new ValidationMessage(msg, extractCategory(paramNames, violation)));
-            logger.debug("added message {} to validation of bean {}", msg, violation.getRootBean());
-        }
+		validator.add(new ValidationMessage(msg, extractCategory(paramNames, violation)));
+		logger.debug("added message {} to validation of bean {}", msg, violation.getRootBean());
+	}
 
-        stack.next(method, resourceInstance);
-    }
+	stack.next(method, resourceInstance);
+	}
 
-    private Locale getLocale() {
-        return localization.getLocale() == null ? Locale.getDefault() : localization.getLocale();
-    }
+	private Locale getLocale() {
+	return localization.getLocale() == null ? Locale.getDefault() : localization.getLocale();
+	}
 
-    /**
-     * Returns the category for this constraint violation. By default, the category returned
-     * is the name of method with full path for property. You can override this method to
-     * change this behaviour.
-     */
-    protected String extractCategory(String[] paramNames, ConstraintViolation<Object> violation) {
-            Iterator<Node> path = violation.getPropertyPath().iterator();
+	/**
+	 * Returns the category for this constraint violation. By default, the category returned
+	 * is the name of method with full path for property. You can override this method to
+	 * change this behaviour.
+	 */
+	protected String extractCategory(String[] paramNames, ConstraintViolation<Object> violation) {
+		Iterator<Node> path = violation.getPropertyPath().iterator();
 
-            StringBuilder cat = new StringBuilder();
-            cat.append(path.next()).append("."); // method name
-            cat.append(paramNames[path.next().as(ParameterNode.class).getParameterIndex()]);// parameter name
+		StringBuilder cat = new StringBuilder();
+		cat.append(path.next()).append("."); // method name
+		cat.append(paramNames[path.next().as(ParameterNode.class).getParameterIndex()]);// parameter name
 
-            while (path.hasNext()) {
-                    cat.append(".").append(path.next());
-            }
+		while (path.hasNext()) {
+			cat.append(".").append(path.next());
+		}
 
-            return cat.toString();
-    }
+		return cat.toString();
+	}
 }

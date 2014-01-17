@@ -23,53 +23,53 @@ import br.com.caelum.vraptor.resource.ResourceMethod;
 
 public class ExceptionHandlerInterceptorTest {
 
-    private Object instance;
-    @Mock private InterceptorStack stack;
-    @Mock private ResourceMethod method;
-    @Mock private ExceptionMapper mapper;
-    @Mock private Result result;
-    @Mock private ExceptionRecorder<Result> mockRecorder;
-    private ExceptionHandlerInterceptor interceptor;
+	private Object instance;
+	@Mock private InterceptorStack stack;
+	@Mock private ResourceMethod method;
+	@Mock private ExceptionMapper mapper;
+	@Mock private Result result;
+	@Mock private ExceptionRecorder<Result> mockRecorder;
+	private ExceptionHandlerInterceptor interceptor;
 
-    @Before
-    public void setup() throws Exception {
-        MockitoAnnotations.initMocks(this);
-        interceptor = new ExceptionHandlerInterceptor(mapper, result);
-    }
-    
-    @Test
-    public void shouldAlwaysAccept() {
-    	assertTrue(interceptor.accepts(null));
-    }
+	@Before
+	public void setup() throws Exception {
+	MockitoAnnotations.initMocks(this);
+	interceptor = new ExceptionHandlerInterceptor(mapper, result);
+	}
+	
+	@Test
+	public void shouldAlwaysAccept() {
+		assertTrue(interceptor.accepts(null));
+	}
 
-    /**
-     * Test when the exception is found.
-     */
-    @Test
-    public void withRootException() {
-        final Exception e = new IllegalStateException();
-        when(mapper.findByException(e)).thenReturn(mockRecorder);
-        doThrow(new InterceptionException(e)).when(stack).next(method, instance);
+	/**
+	 * Test when the exception is found.
+	 */
+	@Test
+	public void withRootException() {
+	final Exception e = new IllegalStateException();
+	when(mapper.findByException(e)).thenReturn(mockRecorder);
+	doThrow(new InterceptionException(e)).when(stack).next(method, instance);
 
-        interceptor.intercept(stack, method, instance);
-        verify(mockRecorder).replay(result);
-    }
+	interceptor.intercept(stack, method, instance);
+	verify(mockRecorder).replay(result);
+	}
 
-    /**
-     * Test when the exception is not found, so vraptor needs only rethrows the
-     * exception.
-     */
-    @Test
-    public void whenNotFoundException() {
-        final Exception e = new IllegalArgumentException();
-        when(mapper.findByException(e)).thenReturn(null);
-        doThrow(new InterceptionException(e)).when(stack).next(method, instance);
+	/**
+	 * Test when the exception is not found, so vraptor needs only rethrows the
+	 * exception.
+	 */
+	@Test
+	public void whenNotFoundException() {
+	final Exception e = new IllegalArgumentException();
+	when(mapper.findByException(e)).thenReturn(null);
+	doThrow(new InterceptionException(e)).when(stack).next(method, instance);
 
-        try {
-        	interceptor.intercept(stack, method, instance);
-        	fail("Should throw InterceptionException");
-        } catch (InterceptionException e2) {
-        	assertEquals(e2.getCause(), e);
+	try {
+		interceptor.intercept(stack, method, instance);
+		fail("Should throw InterceptionException");
+	} catch (InterceptionException e2) {
+		assertEquals(e2.getCause(), e);
 		}
-    }
+	}
 }

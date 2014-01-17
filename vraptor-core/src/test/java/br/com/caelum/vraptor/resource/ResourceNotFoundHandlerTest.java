@@ -38,15 +38,15 @@ import br.com.caelum.vraptor.http.MutableResponse;
 public class ResourceNotFoundHandlerTest {
 
 	private ResourceNotFoundHandler notFoundHandler;
-    private @Mock MutableRequest webRequest;
-    private @Mock MutableResponse webResponse;
+	private @Mock MutableRequest webRequest;
+	private @Mock MutableResponse webResponse;
 	private @Mock FilterChain chain;
-    private RequestInfo request;
+	private RequestInfo request;
 
-    @Before
+	@Before
 	public void setUp() {
-    	MockitoAnnotations.initMocks(this);
-        request = new RequestInfo(null, chain, webRequest, webResponse);
+		MockitoAnnotations.initMocks(this);
+	request = new RequestInfo(null, chain, webRequest, webResponse);
 		notFoundHandler = new DefaultResourceNotFoundHandler();
 	}
 

@@ -33,22 +33,22 @@ import br.com.caelum.vraptor.interceptor.ExceptionHandlerInterceptor;
  */
 public interface ExceptionMapper {
 
-    /**
-     * Store the exception and return a proxy with {@link Result} state.
-     *
-     * @param exception The exception to store.
-     * @return
-     * @throws NullPointerException if the exception is null.
-     */
-    Result record(Class<? extends Exception> exception);
+	/**
+	 * Store the exception and return a proxy with {@link Result} state.
+	 *
+	 * @param exception The exception to store.
+	 * @return
+	 * @throws NullPointerException if the exception is null.
+	 */
+	Result record(Class<? extends Exception> exception);
 
-    /**
-     * Finds an {@link ExceptionRecorder} by an {@link Exception}. If
-     * {@link ExceptionRecorder} is not found, returns null.
-     *
-     * @param exception The exception to find.
-     * @return
-     */
-    ExceptionRecorder<Result> findByException(Exception exception);
+	/**
+	 * Finds an {@link ExceptionRecorder} by an {@link Exception}. If
+	 * {@link ExceptionRecorder} is not found, returns null.
+	 *
+	 * @param exception The exception to find.
+	 * @return
+	 */
+	ExceptionRecorder<Result> findByException(Exception exception);
 
 }

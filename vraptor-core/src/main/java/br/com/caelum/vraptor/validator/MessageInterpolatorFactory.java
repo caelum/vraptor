@@ -41,8 +41,8 @@ public class MessageInterpolatorFactory implements ComponentFactory<MessageInter
 	
 	private ValidatorFactory getValidatorFactory() {
 		return Validation.byDefaultProvider()
-		        .configure()
-		        .buildValidatorFactory();
+			.configure()
+			.buildValidatorFactory();
 	}
 
 }

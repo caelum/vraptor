@@ -31,15 +31,15 @@ import br.com.caelum.vraptor.resource.ResourceMethod;
 @Lazy
 public class NullMultipartInterceptor implements MultipartInterceptor {
 
-    /**
-     * Never accepts.
-     */
-    public boolean accepts(ResourceMethod method) {
-        return false;
-    }
+	/**
+	 * Never accepts.
+	 */
+	public boolean accepts(ResourceMethod method) {
+	return false;
+	}
 
-    public void intercept(InterceptorStack stack, ResourceMethod method, Object resourceInstance)
-        throws InterceptionException {
-        throw new UnsupportedOperationException();
-    }
+	public void intercept(InterceptorStack stack, ResourceMethod method, Object resourceInstance)
+	throws InterceptionException {
+	throw new UnsupportedOperationException();
+	}
 }

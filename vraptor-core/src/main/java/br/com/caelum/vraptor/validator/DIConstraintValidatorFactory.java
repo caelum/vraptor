@@ -18,25 +18,25 @@ import br.com.caelum.vraptor.proxy.InstanceCreator;
  */
 @ApplicationScoped
 public class DIConstraintValidatorFactory
-    implements ConstraintValidatorFactory {
+	implements ConstraintValidatorFactory {
 
-    private static final Logger logger = LoggerFactory.getLogger(DIConstraintValidatorFactory.class);
-    private final Container container;
+	private static final Logger logger = LoggerFactory.getLogger(DIConstraintValidatorFactory.class);
+	private final Container container;
 
-    public DIConstraintValidatorFactory(Container container) {
-        this.container = container;
-    }
+	public DIConstraintValidatorFactory(Container container) {
+	this.container = container;
+	}
 
-    public <T extends ConstraintValidator<?, ?>> T getInstance(Class<T> key) {
-        if (container.canProvide(key)) {
-            logger.debug("we can provide instance for ConstraintValidator {}", key);
-            return container.instanceFor(key);
-        }
+	public <T extends ConstraintValidator<?, ?>> T getInstance(Class<T> key) {
+	if (container.canProvide(key)) {
+		logger.debug("we can provide instance for ConstraintValidator {}", key);
+		return container.instanceFor(key);
+	}
 
-        return container.instanceFor(InstanceCreator.class).instanceFor(key);
-    }
+	return container.instanceFor(InstanceCreator.class).instanceFor(key);
+	}
 
-    public void releaseInstance(ConstraintValidator<?, ?> key) {
-        // we don't need this
-    }
+	public void releaseInstance(ConstraintValidator<?, ?> key) {
+	// we don't need this
+	}
 }

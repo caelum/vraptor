@@ -44,42 +44,42 @@ import br.com.caelum.vraptor.http.MutableRequest;
 
 public class LocaleBasedPrimitiveFloatConverterTest {
 
-    private LocaleBasedPrimitiveFloatConverter converter;
-    private @Mock MutableRequest request;
-    private @Mock HttpSession session;
-    private @Mock ServletContext context;
-    private ResourceBundle bundle;
-    private JstlLocalization jstlLocalization;
+	private LocaleBasedPrimitiveFloatConverter converter;
+	private @Mock MutableRequest request;
+	private @Mock HttpSession session;
+	private @Mock ServletContext context;
+	private ResourceBundle bundle;
+	private JstlLocalization jstlLocalization;
 
-    @Before
-    public void setup() {
-    	MockitoAnnotations.initMocks(this);
-    	
-        FilterChain chain = mock(FilterChain.class);
-        final RequestInfo webRequest = new RequestInfo(context, chain, request, null);
-        jstlLocalization = new JstlLocalization(webRequest);
-        converter = new LocaleBasedPrimitiveFloatConverter(jstlLocalization);
-        bundle = ResourceBundle.getBundle("messages");
-        Locale.setDefault(Locale.ENGLISH);
-    }
+	@Before
+	public void setup() {
+		MockitoAnnotations.initMocks(this);
+		
+	FilterChain chain = mock(FilterChain.class);
+	final RequestInfo webRequest = new RequestInfo(context, chain, request, null);
+	jstlLocalization = new JstlLocalization(webRequest);
+	converter = new LocaleBasedPrimitiveFloatConverter(jstlLocalization);
+	bundle = ResourceBundle.getBundle("messages");
+	Locale.setDefault(Locale.ENGLISH);
+	}
 
-    @Test
-    public void shouldBeAbleToConvertWithPTBR() {
-        when(request.getAttribute("javax.servlet.jsp.jstl.fmt.locale.request")).thenReturn("pt_BR");
-        assertThat(converter.convert("10,00", float.class, bundle), is(equalTo(Float.parseFloat("10.00"))));
-        assertThat(converter.convert("10,01", float.class, bundle), is(equalTo(Float.parseFloat("10.01"))));
-    }
+	@Test
+	public void shouldBeAbleToConvertWithPTBR() {
+	when(request.getAttribute("javax.servlet.jsp.jstl.fmt.locale.request")).thenReturn("pt_BR");
+	assertThat(converter.convert("10,00", float.class, bundle), is(equalTo(Float.parseFloat("10.00"))));
+	assertThat(converter.convert("10,01", float.class, bundle), is(equalTo(Float.parseFloat("10.01"))));
+	}
 
-    @Test
-    public void shouldBeAbleToConvertWithENUS() {
-        when(request.getAttribute("javax.servlet.jsp.jstl.fmt.locale.request")).thenReturn("en_US");
-        assertThat(converter.convert("10.00", float.class, bundle), is(equalTo(Float.parseFloat("10.00"))));
-        assertThat(converter.convert("10.01", float.class, bundle), is(equalTo(Float.parseFloat("10.01"))));
-    }
+	@Test
+	public void shouldBeAbleToConvertWithENUS() {
+	when(request.getAttribute("javax.servlet.jsp.jstl.fmt.locale.request")).thenReturn("en_US");
+	assertThat(converter.convert("10.00", float.class, bundle), is(equalTo(Float.parseFloat("10.00"))));
+	assertThat(converter.convert("10.01", float.class, bundle), is(equalTo(Float.parseFloat("10.01"))));
+	}
 
-    @Test
-    public void shouldUseTheDefaultLocale()
-        throws ParseException {
+	@Test
+	public void shouldUseTheDefaultLocale()
+	throws ParseException {
 		when(request.getSession()).thenReturn(session);
 		when(request.getAttribute("javax.servlet.jsp.jstl.fmt.locale.request")).thenReturn(null);
 		when(session.getAttribute("javax.servlet.jsp.jstl.fmt.locale.session")). thenReturn(null);
@@ -87,32 +87,32 @@ public class LocaleBasedPrimitiveFloatConverterTest {
 		when(context.getInitParameter("javax.servlet.jsp.jstl.fmt.locale")). thenReturn(null);
 		when(request.getLocale()).thenReturn(Locale.getDefault());
 		
-        DecimalFormat fmt = new DecimalFormat("##0,00");
-        fmt.setMinimumFractionDigits(2);
+	DecimalFormat fmt = new DecimalFormat("##0,00");
+	fmt.setMinimumFractionDigits(2);
 
-        float theValue = 10.00f;
-        String formattedValue = fmt.format(theValue);
-        assertThat((Float) converter.convert(formattedValue, float.class, bundle), is(equalTo(theValue)));
-    }
+	float theValue = 10.00f;
+	String formattedValue = fmt.format(theValue);
+	assertThat((Float) converter.convert(formattedValue, float.class, bundle), is(equalTo(theValue)));
+	}
 
-     @Test
-     public void shouldBeAbleToConvertEmpty() {
-         assertThat((Float) converter.convert("", float.class, bundle), is(equalTo(0f)));
-     }
-    
-     @Test
-     public void shouldBeAbleToConvertNull() {
-         assertThat((Float) converter.convert(null, float.class, bundle), is(equalTo(0f)));
-     }
-    
-    @Test
-    public void shouldThrowExceptionWhenUnableToParse() {
-    	when(request.getAttribute("javax.servlet.jsp.jstl.fmt.locale.request")).thenReturn("pt_br");
-        try {
-            converter.convert("vr3.9", float.class, bundle);
-            fail("Should throw exception");
-        } catch (ConversionError e) {
-            assertThat(e.getMessage(), is(equalTo("vr3.9 is not a valid number.")));
-        }
-    }
+	 @Test
+	 public void shouldBeAbleToConvertEmpty() {
+	 assertThat((Float) converter.convert("", float.class, bundle), is(equalTo(0f)));
+	 }
+	
+	 @Test
+	 public void shouldBeAbleToConvertNull() {
+	 assertThat((Float) converter.convert(null, float.class, bundle), is(equalTo(0f)));
+	 }
+	
+	@Test
+	public void shouldThrowExceptionWhenUnableToParse() {
+		when(request.getAttribute("javax.servlet.jsp.jstl.fmt.locale.request")).thenReturn("pt_br");
+	try {
+		converter.convert("vr3.9", float.class, bundle);
+		fail("Should throw exception");
+	} catch (ConversionError e) {
+		assertThat(e.getMessage(), is(equalTo("vr3.9 is not a valid number.")));
+	}
+	}
 }

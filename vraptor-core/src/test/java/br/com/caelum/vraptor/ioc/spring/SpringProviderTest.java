@@ -114,9 +114,9 @@ public class SpringProviderTest {
 
 		when(servletContext.getInitParameter(SCANNING_PARAM)).thenReturn("enabled");
 
-        when(servletContext.getClassLoader())
-        	.thenReturn(Thread.currentThread().getContextClassLoader());
-        
-    	when(servletContext.getInitParameterNames()).thenReturn(enumeration(asList(SCANNING_PARAM)));
+	when(servletContext.getClassLoader())
+		.thenReturn(Thread.currentThread().getContextClassLoader());
+	
+		when(servletContext.getInitParameterNames()).thenReturn(enumeration(asList(SCANNING_PARAM)));
 	}
 }

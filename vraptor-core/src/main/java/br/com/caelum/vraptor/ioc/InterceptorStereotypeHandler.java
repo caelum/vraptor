@@ -41,11 +41,11 @@ public class InterceptorStereotypeHandler implements StereotypeHandler {
 
 	public void handle(Class<?> type) {
 		if (Interceptor.class.isAssignableFrom(type)) {
-            registerInterceptor(type);
-        } else {
-            throw new VRaptorException("Annotation " + Intercepts.class + " found in " + type
-                    + ", but it is neither an Interceptor nor an InterceptorSequence.");
-        }
+		registerInterceptor(type);
+	} else {
+		throw new VRaptorException("Annotation " + Intercepts.class + " found in " + type
+			+ ", but it is neither an Interceptor nor an InterceptorSequence.");
+	}
 	}
 
 	@SuppressWarnings("unchecked")

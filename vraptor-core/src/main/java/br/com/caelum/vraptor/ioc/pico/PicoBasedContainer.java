@@ -28,22 +28,22 @@ import br.com.caelum.vraptor.ioc.Container;
  */
 public class PicoBasedContainer implements Container {
 
-    private final MutablePicoContainer container;
+	private final MutablePicoContainer container;
 
-    public PicoBasedContainer(MutablePicoContainer container) {
-        this.container = container;
-        this.container.addComponent(this);
-    }
+	public PicoBasedContainer(MutablePicoContainer container) {
+	this.container = container;
+	this.container.addComponent(this);
+	}
 
-    public <T> T instanceFor(Class<T> type) {
-        return container.getComponent(type);
-    }
+	public <T> T instanceFor(Class<T> type) {
+	return container.getComponent(type);
+	}
 
-    public <T> boolean canProvide(Class<T> type) {
-    	return instanceFor(type) != null;
-    }
+	public <T> boolean canProvide(Class<T> type) {
+		return instanceFor(type) != null;
+	}
 
-    public MutablePicoContainer getContainer() {
+	public MutablePicoContainer getContainer() {
 		return container;
 	}
 }

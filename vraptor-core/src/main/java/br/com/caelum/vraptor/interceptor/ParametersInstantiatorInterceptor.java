@@ -49,68 +49,68 @@ import br.com.caelum.vraptor.view.FlashScope;
 @Intercepts(after=ResourceLookupInterceptor.class)
 @Lazy
 public class ParametersInstantiatorInterceptor implements Interceptor {
-    private final ParametersProvider provider;
-    private final ParameterNameProvider parameterNameProvider;
-    private final MethodInfo parameters;
+	private final ParametersProvider provider;
+	private final ParameterNameProvider parameterNameProvider;
+	private final MethodInfo parameters;
 
-    private static final Logger logger = LoggerFactory.getLogger(ParametersInstantiatorInterceptor.class);
-    private final Validator validator;
-    private final Localization localization;
+	private static final Logger logger = LoggerFactory.getLogger(ParametersInstantiatorInterceptor.class);
+	private final Validator validator;
+	private final Localization localization;
 	private final List<Message> errors = new ArrayList<Message>();
 	private final MutableRequest request;
 	private final FlashScope flash;
 
-    public ParametersInstantiatorInterceptor(ParametersProvider provider, ParameterNameProvider parameterNameProvider, MethodInfo parameters,
-            Validator validator, Localization localization, MutableRequest request, FlashScope flash) {
-        this.provider = provider;
-        this.parameterNameProvider = parameterNameProvider;
-        this.parameters = parameters;
-        this.validator = validator;
-        this.localization = localization;
+	public ParametersInstantiatorInterceptor(ParametersProvider provider, ParameterNameProvider parameterNameProvider, MethodInfo parameters,
+		Validator validator, Localization localization, MutableRequest request, FlashScope flash) {
+	this.provider = provider;
+	this.parameterNameProvider = parameterNameProvider;
+	this.parameters = parameters;
+	this.validator = validator;
+	this.localization = localization;
 		this.request = request;
 		this.flash = flash;
-    }
+	}
 
-    public boolean accepts(ResourceMethod method) {
-        return method.getMethod().getParameterTypes().length > 0;
-    }
+	public boolean accepts(ResourceMethod method) {
+	return method.getMethod().getParameterTypes().length > 0;
+	}
 
 	public void intercept(InterceptorStack stack, ResourceMethod method, Object resourceInstance) throws InterceptionException {
-    	Enumeration<String> names = request.getParameterNames();
-    	while (names.hasMoreElements()) {
+		Enumeration<String> names = request.getParameterNames();
+		while (names.hasMoreElements()) {
 			fixParameter(names.nextElement());
 		}
-    	
-    	addHeaderParametersToAttribute(method);
-    	
-        Object[] values = getParametersFor(method);
+		
+		addHeaderParametersToAttribute(method);
+		
+	Object[] values = getParametersFor(method);
 
-        validator.addAll(errors);
+	validator.addAll(errors);
 
-    	if (!errors.isEmpty()) {
-    		logger.debug("There are conversion errors: {}", errors);
-    	}
-        logger.debug("Parameter values for {} are {}", method, values);
+		if (!errors.isEmpty()) {
+			logger.debug("There are conversion errors: {}", errors);
+		}
+	logger.debug("Parameter values for {} are {}", method, values);
 
-        parameters.setParameters(values);
-        stack.next(method, resourceInstance);
-    }
+	parameters.setParameters(values);
+	stack.next(method, resourceInstance);
+	}
  
 	private void addHeaderParametersToAttribute(ResourceMethod method) {
 		Method trueMethod = method.getMethod();  
 		  
-        String[] parameters = parameterNameProvider.parameterNamesFor(trueMethod);  
+	String[] parameters = parameterNameProvider.parameterNamesFor(trueMethod);  
 
-        Annotation[][] annotations = trueMethod.getParameterAnnotations();  
-        for (int i = 0; i < annotations.length; i++) {  
-            for (Annotation annotation : annotations[i]) {  
-                if (annotation instanceof HeaderParam) {  
-                    HeaderParam headerParam = (HeaderParam) annotation;  
-                    String value = request.getHeader(headerParam.value());  
-                    request.setAttribute(parameters[i], value);  
-                }  
-            }  
-        }  
+	Annotation[][] annotations = trueMethod.getParameterAnnotations();  
+	for (int i = 0; i < annotations.length; i++) {  
+		for (Annotation annotation : annotations[i]) {  
+		if (annotation instanceof HeaderParam) {  
+			HeaderParam headerParam = (HeaderParam) annotation;  
+			String value = request.getHeader(headerParam.value());  
+			request.setAttribute(parameters[i], value);  
+		}  
+		}  
+	}  
 		
 	}
 

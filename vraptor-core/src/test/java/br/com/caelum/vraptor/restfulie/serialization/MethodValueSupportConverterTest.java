@@ -40,7 +40,7 @@ public class MethodValueSupportConverterTest {
 		x.alias("player", Player.class);
 		x.registerConverter(new MethodValueSupportConverter(new ReflectionConverter(x.getMapper(), x.getReflectionProvider())), XStream.PRIORITY_LOW);
 		String content = x.toXML(new Friend());
-		assertThat(content, is(equalTo("<friend>\n  <player>\n    <name>custom_name</name>\n  </player>\n</friend>")));
+		assertThat(content, is(equalTo("<friend>\n  <player>\n	<name>custom_name</name>\n  </player>\n</friend>")));
 	}
 
 }

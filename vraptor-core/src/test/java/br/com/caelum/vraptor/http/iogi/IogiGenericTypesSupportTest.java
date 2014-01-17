@@ -56,70 +56,70 @@ import br.com.caelum.iogi.util.NullDependencyProvider;
 public class IogiGenericTypesSupportTest {
 	private Iogi iogi;
 
-    @Before
-    public void setup() {
-        this.iogi = new Iogi(new NullDependencyProvider(), new DefaultLocaleProvider());
-    }
+	@Before
+	public void setup() {
+	this.iogi = new Iogi(new NullDependencyProvider(), new DefaultLocaleProvider());
+	}
 
-    public static class Cat {
-        private List<String> legLength;
+	public static class Cat {
+	private List<String> legLength;
 
-        public void setLegLength(List<String> legLength) {
-            this.legLength = legLength;
-        }
+	public void setLegLength(List<String> legLength) {
+		this.legLength = legLength;
+	}
 
-        public List<String> getLegLength() {
-            return legLength;
-        }
+	public List<String> getLegLength() {
+		return legLength;
+	}
 
-        public void setLegs(List<Leg> legs) {
-            this.legs = legs;
-        }
+	public void setLegs(List<Leg> legs) {
+		this.legs = legs;
+	}
 
-        public List<Leg> getLegs() {
-            return legs;
-        }
+	public List<Leg> getLegs() {
+		return legs;
+	}
 
-        public void setIds(Long[] ids) {
-            this.ids = ids;
-        }
+	public void setIds(Long[] ids) {
+		this.ids = ids;
+	}
 
-        public Long[] getIds() {
-            return ids;
-        }
+	public Long[] getIds() {
+		return ids;
+	}
 
-        public void setEyeColorCode(List<Long> eyeColorCode) {
-            this.eyeColorCode = eyeColorCode;
-        }
+	public void setEyeColorCode(List<Long> eyeColorCode) {
+		this.eyeColorCode = eyeColorCode;
+	}
 
-        public List<Long> getEyeColorCode() {
-            return eyeColorCode;
-        }
+	public List<Long> getEyeColorCode() {
+		return eyeColorCode;
+	}
 
-        private List<Leg> legs;
-        private Long[] ids;
-        private List<Long> eyeColorCode;
-    }
+	private List<Leg> legs;
+	private Long[] ids;
+	private List<Long> eyeColorCode;
+	}
 
-    public static class Leg {
-        private String color;
+	public static class Leg {
+	private String color;
 
-        public void setColor(String color) {
-            this.color = color;
-        }
+	public void setColor(String color) {
+		this.color = color;
+	}
 
-        public String getColor() {
-            return color;
-        }
-    }
+	public String getColor() {
+		return color;
+	}
+	}
 
-    @Test
-    public void canInstantiatingStringsInAListSettingItsInternalValueWithoutInvokingConverters1() throws Exception {
-        final Type type = ContainsParameterizedList.class.getField("listOfString").getGenericType();
+	@Test
+	public void canInstantiatingStringsInAListSettingItsInternalValueWithoutInvokingConverters1() throws Exception {
+	final Type type = ContainsParameterizedList.class.getField("listOfString").getGenericType();
 		final Target<List<String>> target = new Target<List<String>>(type, "legLength");
 		final List<String> legs = iogi.instantiate(target , new Parameter("legLength[0]", "small"), new Parameter("legLength[1]", "big"));
-        assertThat(legs.get(1), is(equalTo("big")));
-    }
+	assertThat(legs.get(1), is(equalTo("big")));
+	}
 	
 	@Test
 	public void canInstantiatingStringsInAListSettingItsInternalValueWithoutInvokingConverters2() throws Exception {
@@ -129,12 +129,12 @@ public class IogiGenericTypesSupportTest {
 	}
 	
 	@Test
-    public void canInstantiateAndPopulateAnArrayOfWrappers1() {
+	public void canInstantiateAndPopulateAnArrayOfWrappers1() {
 		final Target<long[]> target = Target.create(long[].class, "ids");
 		final long[] ids = iogi.instantiate(target, new Parameter("ids[0]", "3"), new Parameter("ids[1]", "5"));
 		assertThat(ids[0], is(equalTo(3L)));
-        assertThat(ids[1], is(equalTo(5L)));
-    }
+	assertThat(ids[1], is(equalTo(5L)));
+	}
 	
 	@Test
 	public void canInstantiateAndPopulateAnArrayOfWrappers2() {
@@ -144,26 +144,26 @@ public class IogiGenericTypesSupportTest {
 		assertThat(cat.ids[1], is(equalTo(5L)));
 	}
 
-    @Test
-    public void canInstantiateAndPopulateAListOfWrappers1() throws Exception {
-    	final Type type = ContainsParameterizedList.class.getField("listOfLong").getGenericType();
+	@Test
+	public void canInstantiateAndPopulateAListOfWrappers1() throws Exception {
+		final Type type = ContainsParameterizedList.class.getField("listOfLong").getGenericType();
 		final Target<List<Long>> target = new Target<List<Long>>(type, "eyeColorCode");
-    	final List<Long> eyeColorCode = iogi.instantiate(target, new Parameter("eyeColorCode[0]", "3"), new Parameter("eyeColorCode[1]", "5"));
-        assertThat(eyeColorCode.get(0), is(equalTo(3L)));
-        assertThat(eyeColorCode.get(1), is(equalTo(5L)));
-    }
-    
-    @Test
-    public void canInstantiateAndPopulateAListOfWrappers() {
-    	final Target<Cat> target = Target.create(Cat.class, "myCat");
-        final Cat myCat = iogi.instantiate(target, new Parameter("myCat.eyeColorCode[0]", "3"), new Parameter("myCat.eyeColorCode[1]", "5"));
+		final List<Long> eyeColorCode = iogi.instantiate(target, new Parameter("eyeColorCode[0]", "3"), new Parameter("eyeColorCode[1]", "5"));
+	assertThat(eyeColorCode.get(0), is(equalTo(3L)));
+	assertThat(eyeColorCode.get(1), is(equalTo(5L)));
+	}
+	
+	@Test
+	public void canInstantiateAndPopulateAListOfWrappers() {
+		final Target<Cat> target = Target.create(Cat.class, "myCat");
+	final Cat myCat = iogi.instantiate(target, new Parameter("myCat.eyeColorCode[0]", "3"), new Parameter("myCat.eyeColorCode[1]", "5"));
 		assertThat(myCat.eyeColorCode.get(0), is(equalTo(3L)));
-        assertThat(myCat.eyeColorCode.get(1), is(equalTo(5L)));
-    }
-    
-    static class ContainsParameterizedList {
-    	public List<Integer> listOfInteger;
-    	public List<Long> listOfLong;
-    	public List<String> listOfString;
-    }
+	assertThat(myCat.eyeColorCode.get(1), is(equalTo(5L)));
+	}
+	
+	static class ContainsParameterizedList {
+		public List<Integer> listOfInteger;
+		public List<Long> listOfLong;
+		public List<String> listOfString;
+	}
 }

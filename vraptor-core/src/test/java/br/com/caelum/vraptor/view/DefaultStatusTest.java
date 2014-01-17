@@ -140,7 +140,7 @@ public class DefaultStatusTest {
 	public void shouldSetMovedPermanentlyStatusOfLogic() throws Exception {
 		when(config.getApplicationPath()).thenReturn("http://myapp.com");
 		Method method = Resource.class.getDeclaredMethod("method");
-        when(router.urlFor(eq(Resource.class), eq(method), Mockito.anyVararg())).thenReturn("/resource/method");
+	when(router.urlFor(eq(Resource.class), eq(method), Mockito.anyVararg())).thenReturn("/resource/method");
 
 		status.movedPermanentlyTo(Resource.class).method();
 

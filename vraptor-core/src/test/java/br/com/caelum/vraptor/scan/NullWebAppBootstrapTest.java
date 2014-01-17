@@ -11,16 +11,16 @@ import br.com.caelum.vraptor.ComponentRegistry;
 
 public class NullWebAppBootstrapTest {
 	
-    private @Mock ComponentRegistry registry;
-    
-    @Before
-    public void setup() throws Exception {
-    	MockitoAnnotations.initMocks(this);
-    }
-    
+	private @Mock ComponentRegistry registry;
+	
+	@Before
+	public void setup() throws Exception {
+		MockitoAnnotations.initMocks(this);
+	}
+	
 	@Test
 	public void shouldNotDoAnything() {
-        new NullWebAppBootstrap().configure(registry);
-        verifyZeroInteractions(registry);
+	new NullWebAppBootstrap().configure(registry);
+	verifyZeroInteractions(registry);
 	}
 }

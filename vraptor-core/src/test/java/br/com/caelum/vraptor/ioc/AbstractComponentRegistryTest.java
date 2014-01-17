@@ -55,38 +55,38 @@ public class AbstractComponentRegistryTest {
 		};
 	}
 	@Test
-    public void shouldRegisterComponentAndImplementedInterfaces() {
-        abstractRegistry.deepRegister(RunnableComponent.class);
-        
-        verify(registry).register(Runnable.class, RunnableComponent.class);
-        verify(registry).register(RunnableComponent.class, RunnableComponent.class);
-    }
+	public void shouldRegisterComponentAndImplementedInterfaces() {
+	abstractRegistry.deepRegister(RunnableComponent.class);
+	
+	verify(registry).register(Runnable.class, RunnableComponent.class);
+	verify(registry).register(RunnableComponent.class, RunnableComponent.class);
+	}
 
-    @Test
-    public void shouldRegisterComponentUsingAllPossibleSupertypes() {
-        abstractRegistry.deepRegister(ArrayListSubclass.class);
-        
-        verify(registry).register(ArrayListSubclass.class, ArrayListSubclass.class);
-        verify(registry).register(ArrayList.class, ArrayListSubclass.class);
-        verify(registry).register(List.class, ArrayListSubclass.class);
-        verify(registry).register(Collection.class, ArrayListSubclass.class);
-        verify(registry).register(Iterable.class, ArrayListSubclass.class);
-        verify(registry).register(Cloneable.class, ArrayListSubclass.class);
-        verify(registry).register(Serializable.class, ArrayListSubclass.class);
-        verify(registry).register(RandomAccess.class, ArrayListSubclass.class);
-        verify(registry).register(AbstractList.class, ArrayListSubclass.class);
-        verify(registry).register(AbstractCollection.class, ArrayListSubclass.class);
-    }
+	@Test
+	public void shouldRegisterComponentUsingAllPossibleSupertypes() {
+	abstractRegistry.deepRegister(ArrayListSubclass.class);
+	
+	verify(registry).register(ArrayListSubclass.class, ArrayListSubclass.class);
+	verify(registry).register(ArrayList.class, ArrayListSubclass.class);
+	verify(registry).register(List.class, ArrayListSubclass.class);
+	verify(registry).register(Collection.class, ArrayListSubclass.class);
+	verify(registry).register(Iterable.class, ArrayListSubclass.class);
+	verify(registry).register(Cloneable.class, ArrayListSubclass.class);
+	verify(registry).register(Serializable.class, ArrayListSubclass.class);
+	verify(registry).register(RandomAccess.class, ArrayListSubclass.class);
+	verify(registry).register(AbstractList.class, ArrayListSubclass.class);
+	verify(registry).register(AbstractCollection.class, ArrayListSubclass.class);
+	}
 
 
 	@Component
-    static class RunnableComponent implements Runnable {
-        public void run() {
-        }
-    }
+	static class RunnableComponent implements Runnable {
+	public void run() {
+	}
+	}
 
-    @SuppressWarnings("serial")
-    @Component
-    public static class ArrayListSubclass extends ArrayList<Object> {
-    }
+	@SuppressWarnings("serial")
+	@Component
+	public static class ArrayListSubclass extends ArrayList<Object> {
+	}
 }

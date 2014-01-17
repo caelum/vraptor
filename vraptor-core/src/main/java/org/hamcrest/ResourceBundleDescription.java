@@ -26,24 +26,24 @@ import java.io.IOException;
  */
 public class ResourceBundleDescription extends BaseDescription {
 
-    private final Appendable out;
+	private final Appendable out;
 
-    public ResourceBundleDescription() {
+	public ResourceBundleDescription() {
 		this(new StringBuilder());
 	}
 
-    public ResourceBundleDescription(Appendable out) {
+	public ResourceBundleDescription(Appendable out) {
 		this.out = out;
 	}
 
 	@Override
-    protected void append(char c) {
-        try {
-            out.append(c);
-        } catch (IOException e) {
-            throw new RuntimeException("Could not write description", e);
-        }
-    }
+	protected void append(char c) {
+	try {
+		out.append(c);
+	} catch (IOException e) {
+		throw new RuntimeException("Could not write description", e);
+	}
+	}
 
 	/**
 	 * Append the String <var>str</var> to the description. The default
@@ -79,8 +79,8 @@ public class ResourceBundleDescription extends BaseDescription {
 	}
 
 	/**
-     * Appends the string straight to the buffer.
-     */
+	 * Appends the string straight to the buffer.
+	 */
 	protected void directAppend(String str) {
 		try {
 			out.append(str);

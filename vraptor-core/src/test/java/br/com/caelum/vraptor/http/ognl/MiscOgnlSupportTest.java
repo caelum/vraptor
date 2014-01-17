@@ -59,94 +59,94 @@ import br.com.caelum.vraptor.proxy.ReflectionInstanceCreator;
  */
 public class MiscOgnlSupportTest {
 
-    private OgnlContext context;
-    private House house;
-    private ResourceBundle bundle;
+	private OgnlContext context;
+	private House house;
+	private ResourceBundle bundle;
 	private @Mock Converters converters;
 	private @Mock EmptyElementsRemoval removal;
 
 	@Before
-    public void setup() throws Exception {
+	public void setup() throws Exception {
 		MockitoAnnotations.initMocks(this);
 		AbstractOgnlTestSupport.configOgnl(converters);
-        this.house = new House();
-        this.context = (OgnlContext) Ognl.createDefaultContext(house);
-        context.setTraceEvaluations(true);
-        context.put("nullHandler", new GenericNullHandler(removal));
-        // OgnlRuntime.setPropertyAccessor(Set.class, new SetAccessor());
-        // OgnlRuntime.setPropertyAccessor(Map.class, new MapAccessor());
-        this.bundle = ResourceBundle.getBundle("messages");
-        Ognl.setTypeConverter(context, new VRaptorConvertersAdapter(converters, bundle));
-        when(converters.to(String.class)).thenReturn(new StringConverter());
+	this.house = new House();
+	this.context = (OgnlContext) Ognl.createDefaultContext(house);
+	context.setTraceEvaluations(true);
+	context.put("nullHandler", new GenericNullHandler(removal));
+	// OgnlRuntime.setPropertyAccessor(Set.class, new SetAccessor());
+	// OgnlRuntime.setPropertyAccessor(Map.class, new MapAccessor());
+	this.bundle = ResourceBundle.getBundle("messages");
+	Ognl.setTypeConverter(context, new VRaptorConvertersAdapter(converters, bundle));
+	when(converters.to(String.class)).thenReturn(new StringConverter());
 		when(converters.to(Long.class)).thenReturn(new LongConverter());
 		
 		context.put("proxifier", new JavassistProxifier(new ReflectionInstanceCreator()));
-    }
+	}
 
 
-    public static class Cat {
-        private Leg firstLeg;
+	public static class Cat {
+	private Leg firstLeg;
 
-        public void setFirstLeg(Leg firstLeg) {
-            this.firstLeg = firstLeg;
-        }
+	public void setFirstLeg(Leg firstLeg) {
+		this.firstLeg = firstLeg;
+	}
 
-        public Leg getFirstLeg() {
-            return firstLeg;
-        }
-    }
+	public Leg getFirstLeg() {
+		return firstLeg;
+	}
+	}
 
-    public static class Leg {
-        private Integer id;
-        private Calendar birthDay; // weird leg birthday!!
+	public static class Leg {
+	private Integer id;
+	private Calendar birthDay; // weird leg birthday!!
 
-        public void setId(Integer id) {
-            this.id = id;
-        }
+	public void setId(Integer id) {
+		this.id = id;
+	}
 
-        public Integer getId() {
-            return id;
-        }
+	public Integer getId() {
+		return id;
+	}
 
-        public void setBirthDay(Calendar birthDay) {
-            this.birthDay = birthDay;
-        }
+	public void setBirthDay(Calendar birthDay) {
+		this.birthDay = birthDay;
+	}
 
-        public Calendar getBirthDay() {
-            return birthDay;
-        }
-    }
+	public Calendar getBirthDay() {
+		return birthDay;
+	}
+	}
 
-    public static class House {
-        private Cat cat;
+	public static class House {
+	private Cat cat;
 
-        public void setCat(Cat cat) {
-            this.cat = cat;
-        }
+	public void setCat(Cat cat) {
+		this.cat = cat;
+	}
 
-        public Cat getCat() {
-            return cat;
-        }
+	public Cat getCat() {
+		return cat;
+	}
 
-    }
+	}
 
-    @Test
-    public void isCapableOfDealingWithEmptyParameterForInternalWrapperValue() throws OgnlException {
-        when(converters.to(Integer.class)).thenReturn(new IntegerConverter());
-        Ognl.setValue("cat.firstLeg.id", context, house, "");
-        assertThat(house.cat.firstLeg.id, is(equalTo(null)));
-    }
+	@Test
+	public void isCapableOfDealingWithEmptyParameterForInternalWrapperValue() throws OgnlException {
+	when(converters.to(Integer.class)).thenReturn(new IntegerConverter());
+	Ognl.setValue("cat.firstLeg.id", context, house, "");
+	assertThat(house.cat.firstLeg.id, is(equalTo(null)));
+	}
 
-    @Test
-    public void isCapableOfDealingWithEmptyParameterForInternalValueWhichNeedsAConverter() throws OgnlException {
-        final MutableRequest request = mock(MutableRequest.class);
-        final RequestInfo webRequest = new RequestInfo(null, null, request, null);
-        final JstlLocalization jstlLocalization = new JstlLocalization(webRequest);
+	@Test
+	public void isCapableOfDealingWithEmptyParameterForInternalValueWhichNeedsAConverter() throws OgnlException {
+	final MutableRequest request = mock(MutableRequest.class);
+	final RequestInfo webRequest = new RequestInfo(null, null, request, null);
+	final JstlLocalization jstlLocalization = new JstlLocalization(webRequest);
 
-        when(request.getAttribute("javax.servlet.jsp.jstl.fmt.locale.request")).thenReturn("pt_br");
-        when(converters.to(Calendar.class)).thenReturn(new LocaleBasedCalendarConverter(jstlLocalization));
-        Ognl.setValue("cat.firstLeg.birthDay", context, house, "10/5/2010");
-        assertThat(house.cat.firstLeg.birthDay, is(equalTo((Calendar) new GregorianCalendar(2010, 4, 10))));
-    }
+	when(request.getAttribute("javax.servlet.jsp.jstl.fmt.locale.request")).thenReturn("pt_br");
+	when(converters.to(Calendar.class)).thenReturn(new LocaleBasedCalendarConverter(jstlLocalization));
+	Ognl.setValue("cat.firstLeg.birthDay", context, house, "10/5/2010");
+	assertThat(house.cat.firstLeg.birthDay, is(equalTo((Calendar) new GregorianCalendar(2010, 4, 10))));
+	}
 
 }

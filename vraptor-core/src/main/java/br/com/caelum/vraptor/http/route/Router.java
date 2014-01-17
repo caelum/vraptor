@@ -42,9 +42,9 @@ public interface Router {
 	/**
 	 * Find a {@link ResourceMethod} that can handle this request.
 	 * @throws ResourceNotFoundException when there is no {@link ResourceMethod} that can handle
-	 *         this request
+	 *	 this request
 	 * @throws MethodNotAllowedException when there is no {@link ResourceMethod} that can handle
-	 *         given URI with given {@link HttpMethod}
+	 *	 given URI with given {@link HttpMethod}
 	 * @throws IllegalStateException when more than one {@link ResourceMethod} can handle this
 	 * 		   request.
 	 */

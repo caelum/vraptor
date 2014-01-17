@@ -42,16 +42,16 @@ import br.com.caelum.vraptor.test.HttpServletRequestMock;
 import br.com.caelum.vraptor.test.HttpSessionMock;
 
 public class SpringProviderRegisteringComponentsTest extends GenericContainerTest {
-    protected int counter;
+	protected int counter;
 
-    @Override
+	@Override
 	protected ContainerProvider getProvider() {
-        return new SpringProvider();
-    }
-    
-    @Override
+	return new SpringProvider();
+	}
+	
+	@Override
 	protected <T> T executeInsideRequest(final WhatToDo<T> execution) {
-        Callable<T> task = new Callable<T>(){
+	Callable<T> task = new Callable<T>(){
 			public T call() throws Exception {
 				T result = null;
 				HttpSessionMock session = new HttpSessionMock(context, "session" + ++counter);
@@ -80,15 +80,15 @@ public class SpringProviderRegisteringComponentsTest extends GenericContainerTes
 		catch (Exception e) {
 			throw new RuntimeException(e);
 		}
-    }
+	}
 
-    @Override
-    protected void configureExpectations() {
+	@Override
+	protected void configureExpectations() {
 		when(context.getRealPath(anyString()))
 			.thenReturn(SpringBasedContainer.class.getResource("../fixture").getFile());
 
-    	Enumeration<String> emptyEnumeration = Collections.enumeration(Collections.<String>emptyList());
-    	when(context.getInitParameterNames()).thenReturn(emptyEnumeration);
-    	when(context.getAttributeNames()).thenReturn(emptyEnumeration);
+		Enumeration<String> emptyEnumeration = Collections.enumeration(Collections.<String>emptyList());
+		when(context.getInitParameterNames()).thenReturn(emptyEnumeration);
+		when(context.getAttributeNames()).thenReturn(emptyEnumeration);
    }
 }

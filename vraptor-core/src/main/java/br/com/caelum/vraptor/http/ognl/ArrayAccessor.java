@@ -36,53 +36,53 @@ import br.com.caelum.vraptor.util.StringUtils;
  */
 public class ArrayAccessor extends ArrayPropertyAccessor {
 
-    @Override
-    public Object getProperty(Map context, Object target, Object object) throws OgnlException {
-        try {
-            return super.getProperty(context, target, object);
-        } catch (IndexOutOfBoundsException ex) {
-            return null;
-        }
-    }
+	@Override
+	public Object getProperty(Map context, Object target, Object object) throws OgnlException {
+	try {
+		return super.getProperty(context, target, object);
+	} catch (IndexOutOfBoundsException ex) {
+		return null;
+	}
+	}
 
-    @Override
-    public void setProperty(Map context, Object array, Object key, Object value) throws OgnlException {
+	@Override
+	public void setProperty(Map context, Object array, Object key, Object value) throws OgnlException {
 
-        int index = (Integer) key;
-        int length = Array.getLength(array);
-        if (length <= index) {
-            Object newArray = copyOf(array, index, length);
-            OgnlContext ctx = (OgnlContext) context;
-            if (array == ctx.getRoot()) {
-            	ctx.setRoot(newArray);
-            } else {
-	            String fieldName = ctx.getCurrentEvaluation().getPrevious().getNode().toString();
-	            Object origin = ctx.getCurrentEvaluation().getPrevious().getSource();
-	            
-	            Proxifier proxifier = (Proxifier) context.get("proxifier");
-	            Method setter = new ReflectionBasedNullHandler(proxifier).findMethod(origin.getClass(),
-	                    "set" + StringUtils.capitalize(fieldName), origin.getClass(), null);
-	            
-	            EmptyElementsRemoval removal = (EmptyElementsRemoval) context.get("removal");
-	            removal.add(newArray, setter, origin);
+	int index = (Integer) key;
+	int length = Array.getLength(array);
+	if (length <= index) {
+		Object newArray = copyOf(array, index, length);
+		OgnlContext ctx = (OgnlContext) context;
+		if (array == ctx.getRoot()) {
+			ctx.setRoot(newArray);
+		} else {
+			String fieldName = ctx.getCurrentEvaluation().getPrevious().getNode().toString();
+			Object origin = ctx.getCurrentEvaluation().getPrevious().getSource();
+			
+			Proxifier proxifier = (Proxifier) context.get("proxifier");
+			Method setter = new ReflectionBasedNullHandler(proxifier).findMethod(origin.getClass(),
+				"set" + StringUtils.capitalize(fieldName), origin.getClass(), null);
+			
+			EmptyElementsRemoval removal = (EmptyElementsRemoval) context.get("removal");
+			removal.add(newArray, setter, origin);
 
-	            new Mirror().on(origin).invoke().method(setter).withArgs(newArray);
-            }
-            array = newArray;
-        }
-        super.setProperty(context, array, key, value);
-    }
+			new Mirror().on(origin).invoke().method(setter).withArgs(newArray);
+		}
+		array = newArray;
+	}
+	super.setProperty(context, array, key, value);
+	}
 
-    private Object copyOf(Object array, int desiredLength, int currentLength) {
-        Object newArray = Array.newInstance(array.getClass().getComponentType(), desiredLength + 1);
-        for (int i = 0; i < currentLength; i++) {
-            Array.set(newArray, i, Array.get(array, i));
-        }
-        for (int i = currentLength; i < desiredLength; i++) {
-            Array.set(newArray, i, null);
-        }
-        array = newArray;
-        return array;
-    }
+	private Object copyOf(Object array, int desiredLength, int currentLength) {
+	Object newArray = Array.newInstance(array.getClass().getComponentType(), desiredLength + 1);
+	for (int i = 0; i < currentLength; i++) {
+		Array.set(newArray, i, Array.get(array, i));
+	}
+	for (int i = currentLength; i < desiredLength; i++) {
+		Array.set(newArray, i, null);
+	}
+	array = newArray;
+	return array;
+	}
 
 }

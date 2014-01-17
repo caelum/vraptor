@@ -40,102 +40,102 @@ import br.com.caelum.vraptor.core.Converters;
 
 public class VRaptorConvertersAdapterTest {
 
-    private @Mock Converters converters;
+	private @Mock Converters converters;
 	private @Mock Converter converter;
-    private VRaptorConvertersAdapter adapter;
-    private Cat myCat;
+	private VRaptorConvertersAdapter adapter;
+	private Cat myCat;
 	private ResourceBundle bundle;
 
-    @Before
-    public void setup() {
-    	MockitoAnnotations.initMocks(this);
-        bundle = ResourceBundle.getBundle("messages");
-        adapter = new VRaptorConvertersAdapter(converters, bundle);
-        myCat = new Cat();
-    }
+	@Before
+	public void setup() {
+		MockitoAnnotations.initMocks(this);
+	bundle = ResourceBundle.getBundle("messages");
+	adapter = new VRaptorConvertersAdapter(converters, bundle);
+	myCat = new Cat();
+	}
 
-    public static class Cat {
-        private int length;
-        private Tail tail;
-        private List<Leg> legs = new ArrayList<Leg>();
+	public static class Cat {
+	private int length;
+	private Tail tail;
+	private List<Leg> legs = new ArrayList<Leg>();
 
-        public void setLength(int length) {
-            this.length = length;
-        }
+	public void setLength(int length) {
+		this.length = length;
+	}
 
-        public int getLength() {
-            return length;
-        }
+	public int getLength() {
+		return length;
+	}
 
-        public void setTail(Tail tail) {
-            this.tail = tail;
-        }
+	public void setTail(Tail tail) {
+		this.tail = tail;
+	}
 
-        public Tail getTail() {
-            return tail;
-        }
+	public Tail getTail() {
+		return tail;
+	}
 
-        public void setLegs(List<Leg> legs) {
-            this.legs = legs;
-        }
+	public void setLegs(List<Leg> legs) {
+		this.legs = legs;
+	}
 
-        public List<Leg> getLegs() {
-            return legs;
-        }
+	public List<Leg> getLegs() {
+		return legs;
+	}
 
-    }
+	}
 
-    public static class Leg {
-        @SuppressWarnings("unused")
-        private final int length;
+	public static class Leg {
+	@SuppressWarnings("unused")
+	private final int length;
 
-        public Leg(int length) {
-            this.length = length;
-        }
-    }
+	public Leg(int length) {
+		this.length = length;
+	}
+	}
 
-    public static class Tail {
-        public Tail(int l) {
-            length = l;
-        }
+	public static class Tail {
+	public Tail(int l) {
+		length = l;
+	}
 
-        private final int length;
-    }
+	private final int length;
+	}
 
 	@Test
 	@SuppressWarnings("unchecked")
-    public void shouldInvokePrimitiveConverter() throws OgnlException {
+	public void shouldInvokePrimitiveConverter() throws OgnlException {
 		when(converters.to(int.class)).thenReturn(converter);
 		when(converter.convert("2", int.class, bundle)).thenReturn(2);
-        
-        Map<?,?> context = Ognl.createDefaultContext(myCat);
-        Ognl.setTypeConverter(context, adapter);
-        Ognl.setValue("length", context, myCat, "2");
-        assertThat(myCat.length, is(equalTo(2)));
-    }
+	
+	Map<?,?> context = Ognl.createDefaultContext(myCat);
+	Ognl.setTypeConverter(context, adapter);
+	Ognl.setValue("length", context, myCat, "2");
+	assertThat(myCat.length, is(equalTo(2)));
+	}
 
-    @SuppressWarnings("unchecked")
+	@SuppressWarnings("unchecked")
 	@Test
-    public void shouldInvokeCustomTypeConverter() throws OgnlException {
-        when(converters.to(Tail.class)).thenReturn(converter);
-        when(converter.convert("15", Tail.class, bundle)).thenReturn(new Tail(15));
-                
-        Map<?,?> context = Ognl.createDefaultContext(myCat);
-        Ognl.setTypeConverter(context, adapter);
-        Ognl.setValue("tail", context, myCat, "15");
-        assertThat(myCat.tail.length, is(equalTo(15)));
-    }
+	public void shouldInvokeCustomTypeConverter() throws OgnlException {
+	when(converters.to(Tail.class)).thenReturn(converter);
+	when(converter.convert("15", Tail.class, bundle)).thenReturn(new Tail(15));
+		
+	Map<?,?> context = Ognl.createDefaultContext(myCat);
+	Ognl.setTypeConverter(context, adapter);
+	Ognl.setValue("tail", context, myCat, "15");
+	assertThat(myCat.tail.length, is(equalTo(15)));
+	}
 
-    @Test(expected=IllegalArgumentException.class)
-    public void shouldThrowExceptionIfNoConverterIsFound() throws Throwable {
-        when(converters.to(Tail.class)).thenReturn(null);
-        
-        Map<?,?> context = Ognl.createDefaultContext(myCat);
-        Ognl.setTypeConverter(context, adapter);
-        try {
-            Ognl.setValue("tail", context, myCat, "15");
-        } catch (OgnlException e) {
-            throw e.getCause();
-        }
-    }
+	@Test(expected=IllegalArgumentException.class)
+	public void shouldThrowExceptionIfNoConverterIsFound() throws Throwable {
+	when(converters.to(Tail.class)).thenReturn(null);
+	
+	Map<?,?> context = Ognl.createDefaultContext(myCat);
+	Ognl.setTypeConverter(context, adapter);
+	try {
+		Ognl.setValue("tail", context, myCat, "15");
+	} catch (OgnlException e) {
+		throw e.getCause();
+	}
+	}
 }

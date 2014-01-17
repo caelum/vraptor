@@ -34,14 +34,14 @@ import br.com.caelum.vraptor.ioc.ApplicationScoped;
 @ApplicationScoped
 public class DefaultInterceptorRegistry implements InterceptorRegistry {
 
-    private final List<Class<? extends Interceptor>> interceptors = new ArrayList<Class<? extends Interceptor>>();
+	private final List<Class<? extends Interceptor>> interceptors = new ArrayList<Class<? extends Interceptor>>();
 
-    public void register(Class<? extends Interceptor>... interceptors) {
-        this.interceptors.addAll(Arrays.asList(interceptors));
-    }
+	public void register(Class<? extends Interceptor>... interceptors) {
+	this.interceptors.addAll(Arrays.asList(interceptors));
+	}
 
-    public List<Class<? extends Interceptor>> all() {
-        return interceptors;
-    }
+	public List<Class<? extends Interceptor>> all() {
+	return interceptors;
+	}
 
 }

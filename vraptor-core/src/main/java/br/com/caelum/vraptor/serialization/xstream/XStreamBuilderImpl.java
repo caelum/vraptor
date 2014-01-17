@@ -54,21 +54,21 @@ public class XStreamBuilderImpl implements XStreamBuilder {
 	}
 
 	public static XStreamBuilder cleanInstance(Converter...converters) {
-        return new XStreamBuilderImpl(
-                new XStreamConverters(Arrays.asList(converters), Collections.<SingleValueConverter>emptyList()),
-                new DefaultTypeNameExtractor());
-    }
+	return new XStreamBuilderImpl(
+		new XStreamConverters(Arrays.asList(converters), Collections.<SingleValueConverter>emptyList()),
+		new DefaultTypeNameExtractor());
+	}
 
 	public XStream xmlInstance() {
 		return configure(new VRaptorXStream(extractor));
 	}
 	
 	protected static final String DEFAULT_NEW_LINE = "";
-    protected static final char[] DEFAULT_LINE_INDENTER = {};
-    
-    protected static final String INDENTED_NEW_LINE = "\n";
-    protected static final char[] INDENTED_LINE_INDENTER = { ' ', ' '};
-    
+	protected static final char[] DEFAULT_LINE_INDENTER = {};
+	
+	protected static final String INDENTED_NEW_LINE = "\n";
+	protected static final char[] INDENTED_LINE_INDENTER = { ' ', ' '};
+	
 	public XStream jsonInstance() {
 		return configure(new VRaptorXStream(extractor, getHierarchicalStreamDriver()));
 	}
@@ -78,33 +78,33 @@ public class XStreamBuilderImpl implements XStreamBuilder {
 		return xstream;
 	}
 
-    /**
-      * You can override this method for configuring Driver before serialization
-      * @return configured hierarchical driver
-      */
-    protected HierarchicalStreamDriver getHierarchicalStreamDriver() {
-        final String newLine = (indented ? INDENTED_NEW_LINE : DEFAULT_NEW_LINE);
-        final char[] lineIndenter = (indented ? INDENTED_LINE_INDENTER : DEFAULT_LINE_INDENTER);
+	/**
+	  * You can override this method for configuring Driver before serialization
+	  * @return configured hierarchical driver
+	  */
+	protected HierarchicalStreamDriver getHierarchicalStreamDriver() {
+	final String newLine = (indented ? INDENTED_NEW_LINE : DEFAULT_NEW_LINE);
+	final char[] lineIndenter = (indented ? INDENTED_LINE_INDENTER : DEFAULT_LINE_INDENTER);
 
-        return new JsonHierarchicalStreamDriver() {
-            public HierarchicalStreamWriter createWriter(Writer writer) {
-                if (withoutRoot) {
-                    return new JsonWriter(writer, lineIndenter, newLine, JsonWriter.DROP_ROOT_MODE);
-                }
+	return new JsonHierarchicalStreamDriver() {
+		public HierarchicalStreamWriter createWriter(Writer writer) {
+		if (withoutRoot) {
+			return new JsonWriter(writer, lineIndenter, newLine, JsonWriter.DROP_ROOT_MODE);
+		}
 
-                return new JsonWriter(writer, lineIndenter, newLine);
-            }
-        };
-    }
+		return new JsonWriter(writer, lineIndenter, newLine);
+		}
+	};
+	}
 
 	public XStreamBuilder indented() {
 		indented = true;
-        return this;
+	return this;
 	}
 
 	public XStreamBuilder withoutRoot() {
 		withoutRoot = true;
-        return this;
+	return this;
 	}
 	
 }

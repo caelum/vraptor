@@ -38,22 +38,22 @@ import br.com.caelum.vraptor.core.Localization;
 @Convert(LocalTime.class)
 public class LocalTimeConverter implements Converter<LocalTime> {
 	
-    private final Localization localization;
+	private final Localization localization;
 
 	public LocalTimeConverter(Localization localization) {
-        this.localization = localization;
-    }
+	this.localization = localization;
+	}
 
-    public LocalTime convert(String value, Class<? extends LocalTime> type, ResourceBundle bundle) {
-        try {
-            DateTime out = new LocaleBasedJodaTimeConverter(localization).convert(value, shortTime());
-            if (out == null) {
-                return null;
-            }
-            
-            return out.toLocalTime();
-        } catch (Exception e) {
+	public LocalTime convert(String value, Class<? extends LocalTime> type, ResourceBundle bundle) {
+	try {
+		DateTime out = new LocaleBasedJodaTimeConverter(localization).convert(value, shortTime());
+		if (out == null) {
+		return null;
+		}
+		
+		return out.toLocalTime();
+	} catch (Exception e) {
 			throw new ConversionError(MessageFormat.format(bundle.getString("is_not_a_valid_time"), value));
-        } 
+	} 
 	}
 }

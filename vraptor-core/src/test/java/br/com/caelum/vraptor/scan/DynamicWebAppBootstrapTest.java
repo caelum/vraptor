@@ -17,16 +17,16 @@ import br.com.caelum.vraptor.ComponentRegistry;
 
 public class DynamicWebAppBootstrapTest {
 	
-    private @Mock ComponentRegistry registry;
-    
-    @Before
-    public void setup() throws Exception {
-    	MockitoAnnotations.initMocks(this);
-    }
-    
+	private @Mock ComponentRegistry registry;
+	
+	@Before
+	public void setup() throws Exception {
+		MockitoAnnotations.initMocks(this);
+	}
+	
 	@Test
 	public void shouldConfigureAllClasses() {
-	    Collection<String> classNames = asList(ResourceA.class.getName());
+		Collection<String> classNames = asList(ResourceA.class.getName());
 		new DynamicWebAppBootstrap(classNames).configure(registry);
 		
 		verify(registry).deepRegister(ResourceA.class);
@@ -34,7 +34,7 @@ public class DynamicWebAppBootstrapTest {
 	
 	@Test
 	public void shouldNotDoAnythingIfHasNoClasses() {
-	    Collection<String> classNames = emptyList();
+		Collection<String> classNames = emptyList();
 		new DynamicWebAppBootstrap(classNames).configure(registry);
 		
 		verify(registry, never()).deepRegister(any(Class.class));
@@ -42,8 +42,8 @@ public class DynamicWebAppBootstrapTest {
 	
 	@Test(expected=ScannerException.class)
 	public void shouldThrowScannerExceptionIfClassNotExists() {
-	    Collection<String> classNames = asList("a.resource.that.NotExists");
-	    
-    	new DynamicWebAppBootstrap(classNames).configure(registry);
+		Collection<String> classNames = asList("a.resource.that.NotExists");
+		
+		new DynamicWebAppBootstrap(classNames).configure(registry);
 	}
 }

@@ -32,16 +32,16 @@ import javax.servlet.http.HttpServletResponse;
  */
 public interface StaticContentHandler {
 
-    /**
-     * Return true if the requested file is a static content, false otherwise.
-     */
-    boolean requestingStaticFile(HttpServletRequest request) throws MalformedURLException;
+	/**
+	 * Return true if the requested file is a static content, false otherwise.
+	 */
+	boolean requestingStaticFile(HttpServletRequest request) throws MalformedURLException;
 
-    /**
-     * Defer the process to container.
-     */
-    void deferProcessingToContainer(FilterChain filterChain, HttpServletRequest request,
-            HttpServletResponse response) throws IOException, ServletException;
+	/**
+	 * Defer the process to container.
+	 */
+	void deferProcessingToContainer(FilterChain filterChain, HttpServletRequest request,
+		HttpServletResponse response) throws IOException, ServletException;
 
 
 }

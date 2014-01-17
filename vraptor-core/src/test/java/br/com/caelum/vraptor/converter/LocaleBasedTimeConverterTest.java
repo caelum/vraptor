@@ -47,31 +47,31 @@ import br.com.caelum.vraptor.http.MutableRequest;
 
 public class LocaleBasedTimeConverterTest {
 
-    static final String LOCALE_KEY = "javax.servlet.jsp.jstl.fmt.locale";
-    
-    private LocaleBasedTimeConverter converter;
-    private @Mock MutableRequest request;
-    private @Mock HttpSession session;
-    private @Mock ServletContext context;
-    private @Mock ResourceBundle bundle;
-    private @Mock JstlLocalization jstlLocalization;
-    
+	static final String LOCALE_KEY = "javax.servlet.jsp.jstl.fmt.locale";
+	
+	private LocaleBasedTimeConverter converter;
+	private @Mock MutableRequest request;
+	private @Mock HttpSession session;
+	private @Mock ServletContext context;
+	private @Mock ResourceBundle bundle;
+	private @Mock JstlLocalization jstlLocalization;
+	
 	@Before
 	public void setup() {
-        MockitoAnnotations.initMocks(this);
-        
-        FilterChain chain = mock(FilterChain.class);
-        final RequestInfo webRequest = new RequestInfo(context, chain, request, null);
-        jstlLocalization = new JstlLocalization(webRequest);
-        converter = new LocaleBasedTimeConverter(jstlLocalization);
-        bundle = ResourceBundle.getBundle("messages");
-        Locale.setDefault(Locale.ENGLISH);
+	MockitoAnnotations.initMocks(this);
+	
+	FilterChain chain = mock(FilterChain.class);
+	final RequestInfo webRequest = new RequestInfo(context, chain, request, null);
+	jstlLocalization = new JstlLocalization(webRequest);
+	converter = new LocaleBasedTimeConverter(jstlLocalization);
+	bundle = ResourceBundle.getBundle("messages");
+	Locale.setDefault(Locale.ENGLISH);
 	}
 
 	@Test
 	public void shouldBeAbleToConvert() throws ParseException {
-        when(request.getAttribute(LOCALE_KEY + ".request")).thenReturn("pt_br");
-        
+	when(request.getAttribute(LOCALE_KEY + ".request")).thenReturn("pt_br");
+	
 		Date date = new SimpleDateFormat("HH:mm:ss").parse("23:52:00");
 		assertThat(converter.convert("23:52", Time.class, bundle), is(equalTo(date)));
 		assertThat(converter.convert("23:52:00", Time.class, bundle), is(equalTo(date)));
@@ -79,13 +79,13 @@ public class LocaleBasedTimeConverterTest {
 
 	@Test
 	public void shouldUseTheDefaultLocale() throws ParseException {
-        when(request.getAttribute(LOCALE_KEY + ".request")).thenReturn(null);
-        when(request.getSession()).thenReturn(session);
-        when(session.getAttribute(LOCALE_KEY + ".session")). thenReturn(null);
-        when(context.getAttribute(LOCALE_KEY + ".application")). thenReturn(null);
-        when(context.getInitParameter(LOCALE_KEY)). thenReturn(null);
-        when(request.getLocale()).thenReturn(null);
-        
+	when(request.getAttribute(LOCALE_KEY + ".request")).thenReturn(null);
+	when(request.getSession()).thenReturn(session);
+	when(session.getAttribute(LOCALE_KEY + ".session")). thenReturn(null);
+	when(context.getAttribute(LOCALE_KEY + ".application")). thenReturn(null);
+	when(context.getInitParameter(LOCALE_KEY)). thenReturn(null);
+	when(request.getLocale()).thenReturn(null);
+	
 		Date date = new SimpleDateFormat("HH:mm:ss").parse("23:52:00");
 		String formattedHour = DateFormat.getTimeInstance(DateFormat.SHORT).format(date);
 		assertThat(converter.convert(formattedHour, Time.class, bundle), is(equalTo(date)));
@@ -104,8 +104,8 @@ public class LocaleBasedTimeConverterTest {
 
 	@Test
 	public void shouldThrowExceptionWhenUnableToParse() {
-        when(request.getAttribute(LOCALE_KEY + ".request")).thenReturn("pt_br");
-        
+	when(request.getAttribute(LOCALE_KEY + ".request")).thenReturn("pt_br");
+	
 		try {
 			converter.convert("25:dd:88", Time.class, bundle);
 		} catch (ConversionError e) {

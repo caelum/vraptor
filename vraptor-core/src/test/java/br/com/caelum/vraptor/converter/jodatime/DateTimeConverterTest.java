@@ -42,7 +42,7 @@ public class DateTimeConverterTest {
 		FilterChain chain = mock(FilterChain.class);
 
 		final RequestInfo webRequest = new RequestInfo(context, chain, request, null);
-        jstlLocalization = new JstlLocalization(webRequest);
+	jstlLocalization = new JstlLocalization(webRequest);
 
 		converter = new DateTimeConverter(jstlLocalization);
 	}

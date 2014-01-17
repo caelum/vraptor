@@ -34,35 +34,35 @@ import br.com.caelum.vraptor.interceptor.ExceptionHandlerInterceptor;
  * @since 3.2
  */
 class ExceptionRecorderParameter {
-    public Object[] args;
-    public Method method;
+	public Object[] args;
+	public Method method;
 
-    public ExceptionRecorderParameter(Object[] args, Method method) {
-        this.args = args;
-        this.method = method;
-    }
+	public ExceptionRecorderParameter(Object[] args, Method method) {
+	this.args = args;
+	this.method = method;
+	}
 
-    /**
-     * Gets the method arguments.
-     *
-     * @return
-     */
-    public Object[] getArgs() {
-        return args;
-    }
+	/**
+	 * Gets the method arguments.
+	 *
+	 * @return
+	 */
+	public Object[] getArgs() {
+	return args;
+	}
 
-    /**
-     * Gets the {@link Method}.
-     *
-     * @return
-     */
-    public Method getMethod() {
-        return method;
-    }
+	/**
+	 * Gets the {@link Method}.
+	 *
+	 * @return
+	 */
+	public Method getMethod() {
+	return method;
+	}
 
-    @Override
-    public String toString() {
-        return new StringBuilder().append(Arrays.toString(args)).append(method.getName()).toString();
-    }
+	@Override
+	public String toString() {
+	return new StringBuilder().append(Arrays.toString(args)).append(method.getName()).toString();
+	}
 
 }

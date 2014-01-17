@@ -26,9 +26,9 @@ public class DefaultJsonDeserializers implements JsonDeserializers {
 	}
 	
 	/**
-     * Override this method if you want another ordering strategy.
-     */
+	 * Override this method if you want another ordering strategy.
+	 */
 	protected void sortDeserializers() {
-        Collections.sort(this.deserializers, new PackageComparator());
-    }
+	Collections.sort(this.deserializers, new PackageComparator());
+	}
 }

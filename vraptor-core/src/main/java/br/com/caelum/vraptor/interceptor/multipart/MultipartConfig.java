@@ -26,11 +26,11 @@ import java.io.File;
  */
 public interface MultipartConfig {
 
-    /**
-     * The max size of uploaded files (in bytes).
-     * 
-     * @return
-     */
+	/**
+	 * The max size of uploaded files (in bytes).
+	 * 
+	 * @return
+	 */
 	long getSizeLimit();
 
 	/**

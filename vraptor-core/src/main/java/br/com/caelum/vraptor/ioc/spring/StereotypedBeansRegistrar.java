@@ -34,12 +34,12 @@ import br.com.caelum.vraptor.ioc.StereotypeHandler;
  */
 @ApplicationScoped
 public class StereotypedBeansRegistrar implements ApplicationListener<ApplicationEvent> {
-    private static final Logger LOGGER = LoggerFactory.getLogger(StereotypedBeansRegistrar.class);
+	private static final Logger LOGGER = LoggerFactory.getLogger(StereotypedBeansRegistrar.class);
 	private final List<StereotypeHandler> stereotypeHandlers;
 
-    public StereotypedBeansRegistrar(List<StereotypeHandler> stereotypeHandlers) {
+	public StereotypedBeansRegistrar(List<StereotypeHandler> stereotypeHandlers) {
 		this.stereotypeHandlers = stereotypeHandlers;
-    }
+	}
 
 	public void onApplicationEvent(ApplicationEvent event) {
 		if (event instanceof ContextRefreshedEvent) {

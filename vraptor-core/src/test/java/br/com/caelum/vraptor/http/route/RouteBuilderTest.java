@@ -188,14 +188,14 @@ public class RouteBuilderTest {
 			return def;
 		}
 	}
-    static class AbcResource {
-    	public void abc(Abc abc) {
-    	}
-    }
+	static class AbcResource {
+		public void abc(Abc abc) {
+		}
+	}
 
-    @Test
-    public void shouldSupportPathsWithDotsAndAsterisks() throws SecurityException, NoSuchMethodException {
-    	builder = newBuilder("/my/{abc.def*}");
+	@Test
+	public void shouldSupportPathsWithDotsAndAsterisks() throws SecurityException, NoSuchMethodException {
+		builder = newBuilder("/my/{abc.def*}");
 
 		Method method = AbcResource.class.getDeclaredMethods()[0];
 		builder.is(AbcResource.class, method);
@@ -203,41 +203,41 @@ public class RouteBuilderTest {
 		Route route = builder.build();
 
 		assertTrue(route.canHandle("/my/troublesome/uri"));
-    }
+	}
 
-    static class Generic<T> {
+	static class Generic<T> {
 
-    	public void gee(T abc) {
+		public void gee(T abc) {
 
-    	}
-    }
+		}
+	}
 
-    static class Specific extends Generic<X> {
+	static class Specific extends Generic<X> {
 
-    }
-    static class X {
-    	private Integer y;
+	}
+	static class X {
+		private Integer y;
 
-    	public Integer getY() {
+		public Integer getY() {
 			return y;
 		}
-    	public void setY(Integer y) {
+		public void setY(Integer y) {
 			this.y = y;
 		}
-    }
+	}
 
-    @Test
-    @Ignore("Should it work someday?")
-    public void shouldUseGenericParameters() throws SecurityException, NoSuchMethodException {
-    	builder = newBuilder("/my/{abc.y}");
+	@Test
+	@Ignore("Should it work someday?")
+	public void shouldUseGenericParameters() throws SecurityException, NoSuchMethodException {
+		builder = newBuilder("/my/{abc.y}");
 
-    	Method method = Generic.class.getDeclaredMethods()[0];
-    	builder.is(Specific.class, method);
+		Method method = Generic.class.getDeclaredMethods()[0];
+		builder.is(Specific.class, method);
 
-    	Route route = builder.build();
+		Route route = builder.build();
 
-    	assertTrue(route.canHandle("/my/123"));
-    	assertFalse(route.canHandle("/my/abc"));
-    }
+		assertTrue(route.canHandle("/my/123"));
+		assertFalse(route.canHandle("/my/abc"));
+	}
 
 }

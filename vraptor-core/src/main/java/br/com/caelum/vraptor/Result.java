@@ -31,59 +31,59 @@ import br.com.caelum.vraptor.view.Status;
  */
 public interface Result {
 
-    /**
-     * Stores an attribute in the result.
-     * 
-     * @param key a String specifying the key of the attribute
-     * @param value the object to be stored
-     * @return this own class
-     */
-    Result include(String key, Object value);
-    
-    /**
-     * Stores an attribute in the result. The key for the object is defined by 
-     * extracting the value class.
-     * 
-     * @param value the object to be stored
-     * @return this own class
-     * @see TypeNameExtractor
-     */
-    Result include(Object value);
+	/**
+	 * Stores an attribute in the result.
+	 * 
+	 * @param key a String specifying the key of the attribute
+	 * @param value the object to be stored
+	 * @return this own class
+	 */
+	Result include(String key, Object value);
+	
+	/**
+	 * Stores an attribute in the result. The key for the object is defined by 
+	 * extracting the value class.
+	 * 
+	 * @param value the object to be stored
+	 * @return this own class
+	 * @see TypeNameExtractor
+	 */
+	Result include(Object value);
 
-    /**
-     * Force result to use the defined view.
-     */
+	/**
+	 * Force result to use the defined view.
+	 */
 	<T extends View> T use(Class<T> view);
 	
-    /**
-     * Add an {@link Exception} to be handled by Exception Handler.
-     * 
-     * @param exception The exception to handle.
-     * @throws A {@link NullPointerException} if exception is null.
-     */
+	/**
+	 * Add an {@link Exception} to be handled by Exception Handler.
+	 * 
+	 * @param exception The exception to handle.
+	 * @throws A {@link NullPointerException} if exception is null.
+	 */
 	Result on(Class<? extends Exception> exception);
 
 	/**
 	 * Whether this result was used.
 	 */
-    boolean used();
+	boolean used();
 
-    /**
-     * Return all included attributes via Result.include();
-     * @return
-     */
-    Map<String, Object> included();
+	/**
+	 * Return all included attributes via Result.include();
+	 * @return
+	 */
+	Map<String, Object> included();
 
-    /**
-     * A shortcut to result.use(page()).forwardTo(uri);
-     * @see PageResult#forwardTo(String)
-     */
+	/**
+	 * A shortcut to result.use(page()).forwardTo(uri);
+	 * @see PageResult#forwardTo(String)
+	 */
 	void forwardTo(String uri);
 
 	/**
-     * A shortcut to result.use(page()).redirectTo(uri);
-     * @see PageResult#forwardTo(String)
-     */
+	 * A shortcut to result.use(page()).redirectTo(uri);
+	 * @see PageResult#forwardTo(String)
+	 */
 	void redirectTo(String uri);
 
 	/**

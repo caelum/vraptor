@@ -54,11 +54,11 @@ public class ValidatorFactoryCreator implements ComponentFactory<ValidatorFactor
 	@PostConstruct
 	public void buildFactory() {
 		factory = Validation.byDefaultProvider()
-		        .configure()
-		        .messageInterpolator(interpolator)
-		        .buildValidatorFactory();
+			.configure()
+			.messageInterpolator(interpolator)
+			.buildValidatorFactory();
 
-        logger.debug("Initializing Bean Validation (1.0 supported)");
+	logger.debug("Initializing Bean Validation (1.0 supported)");
 	}
 
 	@Default

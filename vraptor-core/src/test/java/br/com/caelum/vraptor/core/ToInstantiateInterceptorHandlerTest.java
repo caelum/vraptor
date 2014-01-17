@@ -39,59 +39,59 @@ public class ToInstantiateInterceptorHandlerTest {
 	private @Mock InterceptorStack stack;
 	private @Mock ResourceMethod method;
 
-    @Before
-    public void setup() {
-        MockitoAnnotations.initMocks(this);
-    }
+	@Before
+	public void setup() {
+	MockitoAnnotations.initMocks(this);
+	}
 
-    public static class MyWeirdInterceptor implements Interceptor {
-        public MyWeirdInterceptor(Dependency d) {
-        }
+	public static class MyWeirdInterceptor implements Interceptor {
+	public MyWeirdInterceptor(Dependency d) {
+	}
 
-        public void intercept(InterceptorStack stack, ResourceMethod method, Object resourceInstance)
-                throws InterceptionException {
-        }
+	public void intercept(InterceptorStack stack, ResourceMethod method, Object resourceInstance)
+		throws InterceptionException {
+	}
 
-        public boolean accepts(ResourceMethod method) {
-            return true;
-        }
-    }
+	public boolean accepts(ResourceMethod method) {
+		return true;
+	}
+	}
 
-    public static class Dependency {
+	public static class Dependency {
 
-    }
+	}
 
-    @Test(expected = InterceptionException.class)
-    public void shouldComplainWhenUnableToInstantiateAnInterceptor() throws InterceptionException, IOException {
-        when(container.instanceFor(MyWeirdInterceptor.class)).thenReturn(null);
-        
-        ToInstantiateInterceptorHandler handler = new ToInstantiateInterceptorHandler(container,
-                MyWeirdInterceptor.class);
-        handler.execute(null, null, null);
-    }
+	@Test(expected = InterceptionException.class)
+	public void shouldComplainWhenUnableToInstantiateAnInterceptor() throws InterceptionException, IOException {
+	when(container.instanceFor(MyWeirdInterceptor.class)).thenReturn(null);
+	
+	ToInstantiateInterceptorHandler handler = new ToInstantiateInterceptorHandler(container,
+		MyWeirdInterceptor.class);
+	handler.execute(null, null, null);
+	}
 
-    @Test
-    public void shouldInvokeInterceptorsMethodIfAbleToInstantiateIt() throws InterceptionException, IOException {
-        final Object instance = new Object();
-        
-        when(container.instanceFor(Interceptor.class)).thenReturn(interceptor);
-        when(interceptor.accepts(method)).thenReturn(true);
+	@Test
+	public void shouldInvokeInterceptorsMethodIfAbleToInstantiateIt() throws InterceptionException, IOException {
+	final Object instance = new Object();
+	
+	when(container.instanceFor(Interceptor.class)).thenReturn(interceptor);
+	when(interceptor.accepts(method)).thenReturn(true);
 
-        ToInstantiateInterceptorHandler handler = new ToInstantiateInterceptorHandler(container, Interceptor.class);
-        handler.execute(stack, method, instance);
+	ToInstantiateInterceptorHandler handler = new ToInstantiateInterceptorHandler(container, Interceptor.class);
+	handler.execute(stack, method, instance);
 
-        verify(interceptor).intercept(stack, method, instance);
-    }
-    @Test
-    public void shouldNotInvokeInterceptorsMethodIfInterceptorDoesntAcceptsResource() throws InterceptionException, IOException {
-    	final Object instance = new Object();
-        when(container.instanceFor(Interceptor.class)).thenReturn(interceptor);
-        when(interceptor.accepts(method)).thenReturn(false);
+	verify(interceptor).intercept(stack, method, instance);
+	}
+	@Test
+	public void shouldNotInvokeInterceptorsMethodIfInterceptorDoesntAcceptsResource() throws InterceptionException, IOException {
+		final Object instance = new Object();
+	when(container.instanceFor(Interceptor.class)).thenReturn(interceptor);
+	when(interceptor.accepts(method)).thenReturn(false);
 
-    	ToInstantiateInterceptorHandler handler = new ToInstantiateInterceptorHandler(container, Interceptor.class);
-    	handler.execute(stack, method, instance);
-    	
-        verify(interceptor, never()).intercept(stack, method, instance);
-        verify(stack).next(method, instance);
-    }
+		ToInstantiateInterceptorHandler handler = new ToInstantiateInterceptorHandler(container, Interceptor.class);
+		handler.execute(stack, method, instance);
+		
+	verify(interceptor, never()).intercept(stack, method, instance);
+	verify(stack).next(method, instance);
+	}
 }

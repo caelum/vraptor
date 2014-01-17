@@ -23,12 +23,12 @@ package br.com.caelum.vraptor.proxy;
  */
 public interface InstanceCreator {
 
-    /**
-     * Creates an instance for a class.
-     * 
-     * @param clazz The instance class.
-     * @return The instance for class.
-     */
-    <T> T instanceFor(Class<T> clazz);
+	/**
+	 * Creates an instance for a class.
+	 * 
+	 * @param clazz The instance class.
+	 * @return The instance for class.
+	 */
+	<T> T instanceFor(Class<T> clazz);
 
 }

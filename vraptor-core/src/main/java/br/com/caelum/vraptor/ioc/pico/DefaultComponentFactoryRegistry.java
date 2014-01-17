@@ -35,42 +35,42 @@ import br.com.caelum.vraptor.ioc.SessionScoped;
 @ApplicationScoped
 public class DefaultComponentFactoryRegistry implements ComponentFactoryRegistry {
 
-    private static final Logger logger = LoggerFactory.getLogger(DefaultComponentFactoryRegistry.class);
+	private static final Logger logger = LoggerFactory.getLogger(DefaultComponentFactoryRegistry.class);
 
-    /* maps from targetClass to componentFactoryClass */
-    private final Map<Class<?>, Class<? extends ComponentFactory>> applicationScoped =
-            new HashMap<Class<?>, Class<? extends ComponentFactory>>();
-    private final Map<Class<?>, Class<? extends ComponentFactory>> sessionScoped =
-            new HashMap<Class<?>, Class<? extends ComponentFactory>>();
-    private final Map<Class<?>, Class<? extends ComponentFactory>> requestScoped =
-            new HashMap<Class<?>, Class<? extends ComponentFactory>>();
+	/* maps from targetClass to componentFactoryClass */
+	private final Map<Class<?>, Class<? extends ComponentFactory>> applicationScoped =
+		new HashMap<Class<?>, Class<? extends ComponentFactory>>();
+	private final Map<Class<?>, Class<? extends ComponentFactory>> sessionScoped =
+		new HashMap<Class<?>, Class<? extends ComponentFactory>>();
+	private final Map<Class<?>, Class<? extends ComponentFactory>> requestScoped =
+		new HashMap<Class<?>, Class<? extends ComponentFactory>>();
 
-    private ComponentFactoryIntrospector componentFactoryIntrospector = new ComponentFactoryIntrospector();
+	private ComponentFactoryIntrospector componentFactoryIntrospector = new ComponentFactoryIntrospector();
 
-    public void register(Class<? extends ComponentFactory> componentFactoryClass) {
-        Class<?> targetType = componentFactoryIntrospector.targetTypeForComponentFactory(componentFactoryClass);
+	public void register(Class<? extends ComponentFactory> componentFactoryClass) {
+	Class<?> targetType = componentFactoryIntrospector.targetTypeForComponentFactory(componentFactoryClass);
 
-        if (componentFactoryClass.isAnnotationPresent(ApplicationScoped.class)) {
+	if (componentFactoryClass.isAnnotationPresent(ApplicationScoped.class)) {
 			logger.debug("Registering a ComponentFactory for {} in app scope", targetType.getName());
-            applicationScoped.put(targetType, componentFactoryClass);
-        } else if (componentFactoryClass.isAnnotationPresent(SessionScoped.class)) {
+		applicationScoped.put(targetType, componentFactoryClass);
+	} else if (componentFactoryClass.isAnnotationPresent(SessionScoped.class)) {
 			logger.debug("Registering a ComponentFactory for {} in session scope", targetType.getName());
-            sessionScoped.put(targetType, componentFactoryClass);
-        } else { // @RequestScoped
+		sessionScoped.put(targetType, componentFactoryClass);
+	} else { // @RequestScoped
 			logger.debug("Registering a ComponentFactory for {} in request scope", targetType.getName());
-            requestScoped.put(targetType, componentFactoryClass);
-        }
-    }
+		requestScoped.put(targetType, componentFactoryClass);
+	}
+	}
 
-    public Map<Class<?>, Class<? extends ComponentFactory>> getApplicationMap() {
-        return applicationScoped;
-    }
+	public Map<Class<?>, Class<? extends ComponentFactory>> getApplicationMap() {
+	return applicationScoped;
+	}
 
-    public Map<Class<?>, Class<? extends ComponentFactory>> getSessionMap() {
-        return sessionScoped;
-    }
+	public Map<Class<?>, Class<? extends ComponentFactory>> getSessionMap() {
+	return sessionScoped;
+	}
 
-    public Map<Class<?>, Class<? extends ComponentFactory>> getRequestMap() {
-        return requestScoped;
-    }
+	public Map<Class<?>, Class<? extends ComponentFactory>> getRequestMap() {
+	return requestScoped;
+	}
 }

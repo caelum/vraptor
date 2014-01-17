@@ -29,44 +29,44 @@ import br.com.caelum.vraptor.interceptor.DefaultTypeNameExtractor;
 
 public class DefaultParameterNameProviderTest {
 
-    private DefaultParameterNameProvider provider;
+	private DefaultParameterNameProvider provider;
 
-    @Before
-    public void setup() {
-        this.provider = new DefaultParameterNameProvider(new DefaultTypeNameExtractor());
-    }
+	@Before
+	public void setup() {
+	this.provider = new DefaultParameterNameProvider(new DefaultTypeNameExtractor());
+	}
 
-    class Field {
+	class Field {
 
-    }
-    interface Horse {
-        void runThrough(Field f);
-        void rest(int hours);
-        void setLeg(int[] length);
-    }
+	}
+	interface Horse {
+	void runThrough(Field f);
+	void rest(int hours);
+	void setLeg(int[] length);
+	}
 
-    @Test
-    public void shouldNameObjectTypeAsItsSimpleName() throws SecurityException, NoSuchMethodException {
-        assertThat(provider.parameterNamesFor(Horse.class.getMethod("runThrough", Field.class))[0], is(equalTo("field")));
-    }
+	@Test
+	public void shouldNameObjectTypeAsItsSimpleName() throws SecurityException, NoSuchMethodException {
+	assertThat(provider.parameterNamesFor(Horse.class.getMethod("runThrough", Field.class))[0], is(equalTo("field")));
+	}
 
-    @Test
-    public void shouldNamePrimitiveTypeAsItsSimpleName() throws SecurityException, NoSuchMethodException {
-        assertThat(provider.parameterNamesFor(Horse.class.getMethod("rest", int.class))[0], is(equalTo("int")));
-    }
+	@Test
+	public void shouldNamePrimitiveTypeAsItsSimpleName() throws SecurityException, NoSuchMethodException {
+	assertThat(provider.parameterNamesFor(Horse.class.getMethod("rest", int.class))[0], is(equalTo("int")));
+	}
 
-    @Test
-    public void shouldNameArrayAsItsSimpleTypeName() throws SecurityException, NoSuchMethodException {
-        assertThat(provider.parameterNamesFor(Horse.class.getMethod("setLeg", int[].class))[0], is(equalTo("intList")));
-    }
+	@Test
+	public void shouldNameArrayAsItsSimpleTypeName() throws SecurityException, NoSuchMethodException {
+	assertThat(provider.parameterNamesFor(Horse.class.getMethod("setLeg", int[].class))[0], is(equalTo("intList")));
+	}
 
-    @Test
-    public void shouldNameGenericCollectionUsingOf() throws SecurityException, NoSuchMethodException {
-        assertThat(provider.parameterNamesFor(Cat.class.getDeclaredMethod("fightWith", List.class))[0], is(equalTo("stringList")));
-    }
+	@Test
+	public void shouldNameGenericCollectionUsingOf() throws SecurityException, NoSuchMethodException {
+	assertThat(provider.parameterNamesFor(Cat.class.getDeclaredMethod("fightWith", List.class))[0], is(equalTo("stringList")));
+	}
 
-    static public interface Cat {
-        void fightWith(List<String> cats);
-    }
+	static public interface Cat {
+	void fightWith(List<String> cats);
+	}
 
 }

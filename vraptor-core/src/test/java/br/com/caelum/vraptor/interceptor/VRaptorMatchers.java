@@ -35,42 +35,42 @@ import br.com.caelum.vraptor.validator.ValidationMessage;
  */
 public class VRaptorMatchers {
 
-    public static TypeSafeMatcher<ResourceMethod> resourceMethod(final Method method) {
-        return new TypeSafeMatcher<ResourceMethod>() {
+	public static TypeSafeMatcher<ResourceMethod> resourceMethod(final Method method) {
+	return new TypeSafeMatcher<ResourceMethod>() {
 
-            public boolean matchesSafely(ResourceMethod other) {
-                return other.getMethod().equals(method);
-            }
+		public boolean matchesSafely(ResourceMethod other) {
+		return other.getMethod().equals(method);
+		}
 
-            public void describeTo(Description description) {
-                description.appendText(" an instance of a resource method for method " + method.getName() + " declared at " + method.getDeclaringClass().getName());
-            }
+		public void describeTo(Description description) {
+		description.appendText(" an instance of a resource method for method " + method.getName() + " declared at " + method.getDeclaringClass().getName());
+		}
 
 			@Override
 			protected void describeMismatchSafely(ResourceMethod item, Description mismatchDescription) {
 				mismatchDescription.appendText(" an instance of a resource method for method " + item.getMethod().getName() + " declared at " + item.getMethod().getDeclaringClass().getName());
 			}
 
-        };
-    }
+	};
+	}
 
-    public static Matcher<ResourceClass> resource(final Class<?> type) {
-        return new BaseMatcher<ResourceClass>() {
+	public static Matcher<ResourceClass> resource(final Class<?> type) {
+	return new BaseMatcher<ResourceClass>() {
 
-            public boolean matches(Object item) {
-                if (!(item instanceof ResourceClass)) {
-                    return false;
-                }
-                ResourceClass other = (ResourceClass) item;
-                return other.getType().equals(type);
-            }
+		public boolean matches(Object item) {
+		if (!(item instanceof ResourceClass)) {
+			return false;
+		}
+		ResourceClass other = (ResourceClass) item;
+		return other.getType().equals(type);
+		}
 
-            public void describeTo(Description description) {
-                description.appendText(" resource for " + type.getName());
-            }
+		public void describeTo(Description description) {
+		description.appendText(" resource for " + type.getName());
+		}
 
-        };
-    }
+	};
+	}
 
 	public static Matcher<ValidationMessage> error(final String category, final String message) {
 		return new TypeSafeMatcher<ValidationMessage>() {
@@ -80,8 +80,8 @@ public class VRaptorMatchers {
 			}
 
 			protected boolean matchesSafely(ValidationMessage m) {
-                return message.equals(m.getMessage()) && category.equals(m.getCategory());
-            }
+		return message.equals(m.getMessage()) && category.equals(m.getCategory());
+		}
 
 			public void describeTo(Description description) {
 				description.appendText(" validation message='" +message + "', category = '"+category+"'");

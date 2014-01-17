@@ -59,7 +59,7 @@ import br.com.caelum.vraptor.resource.ResourceMethod;
  */
 public class DefaultRouterTest {
 
-    private Proxifier proxifier;
+	private Proxifier proxifier;
 	private DefaultRouter router;
 	private VRaptorRequest request;
 	private ResourceMethod method;

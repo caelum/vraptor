@@ -37,9 +37,9 @@ public class DefaultJsonSerializers implements JsonSerializers {
 	}
 	
 	/**
-     * Override this method if you want another ordering strategy.
-     */
+	 * Override this method if you want another ordering strategy.
+	 */
 	protected void sortSerializers() {
-        Collections.sort(this.serializers, new PackageComparator());
-    }
+	Collections.sort(this.serializers, new PackageComparator());
+	}
 }

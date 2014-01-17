@@ -43,38 +43,38 @@ import br.com.caelum.vraptor.ioc.ComponentFactory;
  */
 @ApplicationScoped
 public class MethodValidatorFactoryCreator
-    implements ComponentFactory<ValidatorFactory> {
+	implements ComponentFactory<ValidatorFactory> {
 
-    private static final Logger logger = LoggerFactory.getLogger(MethodValidatorFactoryCreator.class);
-    private static final List<Method> OBJECT_METHODS = asList(Object.class.getDeclaredMethods());
+	private static final Logger logger = LoggerFactory.getLogger(MethodValidatorFactoryCreator.class);
+	private static final List<Method> OBJECT_METHODS = asList(Object.class.getDeclaredMethods());
 
-    private ValidatorFactory instance;
-    private final ParameterNameProvider nameProvider;
-    private final DIConstraintValidatorFactory constraintValidatorFactory;
+	private ValidatorFactory instance;
+	private final ParameterNameProvider nameProvider;
+	private final DIConstraintValidatorFactory constraintValidatorFactory;
 
-    public MethodValidatorFactoryCreator(ParameterNameProvider nameProvider,
-            DIConstraintValidatorFactory constraintValidatorFactory) {
-        this.nameProvider = nameProvider;
-        this.constraintValidatorFactory = constraintValidatorFactory;
-    }
+	public MethodValidatorFactoryCreator(ParameterNameProvider nameProvider,
+		DIConstraintValidatorFactory constraintValidatorFactory) {
+	this.nameProvider = nameProvider;
+	this.constraintValidatorFactory = constraintValidatorFactory;
+	}
 
-    @PostConstruct
-    public void buildFactory() {
-        instance = Validation.byDefaultProvider().configure()
-                .constraintValidatorFactory(constraintValidatorFactory).buildValidatorFactory();
+	@PostConstruct
+	public void buildFactory() {
+	instance = Validation.byDefaultProvider().configure()
+		.constraintValidatorFactory(constraintValidatorFactory).buildValidatorFactory();
 
-        logger.debug("Initializing Bean Validation (1.1 supported)");
-    }
+	logger.debug("Initializing Bean Validation (1.1 supported)");
+	}
 
-    @PreDestroy
-    public void close() {
-        instance.close();
-    }
+	@PreDestroy
+	public void close() {
+	instance.close();
+	}
 
-    public ValidatorFactory getInstance() {
-        if (instance == null) { // pico don't call PostConstruct
-            buildFactory();
-        }
-        return instance;
-    }
+	public ValidatorFactory getInstance() {
+	if (instance == null) { // pico don't call PostConstruct
+		buildFactory();
+	}
+	return instance;
+	}
 }

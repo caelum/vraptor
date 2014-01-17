@@ -35,16 +35,16 @@ import br.com.caelum.vraptor.ioc.ApplicationScoped;
 @ApplicationScoped
 public class LongConverter implements Converter<Long> {
 
-    public Long convert(String value, Class<? extends Long> type, ResourceBundle bundle) {
-        if (isNullOrEmpty(value)) {
-            return null;
-        }
-        
-        try {
-            return Long.valueOf(value);
-        } catch (NumberFormatException e) {
+	public Long convert(String value, Class<? extends Long> type, ResourceBundle bundle) {
+	if (isNullOrEmpty(value)) {
+		return null;
+	}
+	
+	try {
+		return Long.valueOf(value);
+	} catch (NumberFormatException e) {
 			throw new ConversionError(MessageFormat.format(bundle.getString("is_not_a_valid_integer"), value));
-        }
-    }
+	}
+	}
 
 }

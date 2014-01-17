@@ -27,11 +27,11 @@ import br.com.caelum.vraptor.ioc.ApplicationScoped;
  */
 @ApplicationScoped
 public class ObjenesisInstanceCreator
-    implements InstanceCreator {
+	implements InstanceCreator {
 
-    @SuppressWarnings("unchecked")
-    public <T> T instanceFor(Class<T> clazz) {
-        return (T) new ObjenesisStd().newInstance(clazz);
-    }
+	@SuppressWarnings("unchecked")
+	public <T> T instanceFor(Class<T> clazz) {
+	return (T) new ObjenesisStd().newInstance(clazz);
+	}
 
 }

@@ -44,59 +44,59 @@ import br.com.caelum.vraptor.ioc.Container;
 
 public class PicoComponentRegistryTest {
 
-    private MutablePicoContainer container;
-    private PicoComponentRegistry provider;
-    private @Mock MutableRequest request;
-    private RequestInfo webRequest;
-    private @Mock Router router;
+	private MutablePicoContainer container;
+	private PicoComponentRegistry provider;
+	private @Mock MutableRequest request;
+	private RequestInfo webRequest;
+	private @Mock Router router;
 	private @Mock HttpSession session;
 
-    @Before
-    public void setup() {
-    	MockitoAnnotations.initMocks(this);
-    	
-        container = new PicoBuilder().withCaching().build();
-        container.addComponent(DefaultInterceptorRegistry.class);
-        container.addComponent(TypeNameExtractor.class, DefaultTypeNameExtractor.class);
-        container.addComponent(router);
-        
-        when(request.getSession()).thenReturn(session);
-        when(session.getAttribute(anyString())).thenReturn(null);
-        
-        webRequest = new RequestInfo(null, null, request, mock(MutableResponse.class));
-        provider = new PicoComponentRegistry(container, new DefaultComponentFactoryRegistry());
-        provider.init();
-    }
+	@Before
+	public void setup() {
+		MockitoAnnotations.initMocks(this);
+		
+	container = new PicoBuilder().withCaching().build();
+	container.addComponent(DefaultInterceptorRegistry.class);
+	container.addComponent(TypeNameExtractor.class, DefaultTypeNameExtractor.class);
+	container.addComponent(router);
+	
+	when(request.getSession()).thenReturn(session);
+	when(session.getAttribute(anyString())).thenReturn(null);
+	
+	webRequest = new RequestInfo(null, null, request, mock(MutableResponse.class));
+	provider = new PicoComponentRegistry(container, new DefaultComponentFactoryRegistry());
+	provider.init();
+	}
 
-    interface Base {
-    }
+	interface Base {
+	}
 
-    public static class MyFirstImplementation implements Base {
-    }
+	public static class MyFirstImplementation implements Base {
+	}
 
-    public static class MySecondImplementation implements Base {
-    }
+	public static class MySecondImplementation implements Base {
+	}
 
-    @ApplicationScoped
-    public static class AppImplementation implements Base {
-    }
+	@ApplicationScoped
+	public static class AppImplementation implements Base {
+	}
 
-    @Test
-    public void shouldRemovePreviouslyRegisteredComponentIfRegisteringAgain() {
-        provider.register(Base.class, MyFirstImplementation.class);
-        provider.register(Base.class,MySecondImplementation.class);
-        Container container = provider.provideRequestContainer(webRequest);
-        Base instance = container.instanceFor(Base.class);
-        assertThat(instance.getClass(), is(typeCompatibleWith(MySecondImplementation.class)));
-    }
+	@Test
+	public void shouldRemovePreviouslyRegisteredComponentIfRegisteringAgain() {
+	provider.register(Base.class, MyFirstImplementation.class);
+	provider.register(Base.class,MySecondImplementation.class);
+	Container container = provider.provideRequestContainer(webRequest);
+	Base instance = container.instanceFor(Base.class);
+	assertThat(instance.getClass(), is(typeCompatibleWith(MySecondImplementation.class)));
+	}
 
-    @Test
-    public void shouldRemovePreviouslyRegisteredComponentIfRegisteringAgainInAnotherScope() {
-        provider.register(Base.class, MyFirstImplementation.class);
-        provider.register(Base.class,AppImplementation.class);
-        Container container = provider.provideRequestContainer(webRequest);
-        Base instance = container.instanceFor(Base.class);
-        assertThat(instance.getClass(), is(typeCompatibleWith(AppImplementation.class)));
-    }
+	@Test
+	public void shouldRemovePreviouslyRegisteredComponentIfRegisteringAgainInAnotherScope() {
+	provider.register(Base.class, MyFirstImplementation.class);
+	provider.register(Base.class,AppImplementation.class);
+	Container container = provider.provideRequestContainer(webRequest);
+	Base instance = container.instanceFor(Base.class);
+	assertThat(instance.getClass(), is(typeCompatibleWith(AppImplementation.class)));
+	}
 
 }

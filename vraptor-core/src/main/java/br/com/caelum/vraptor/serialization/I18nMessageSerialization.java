@@ -39,7 +39,7 @@ public class I18nMessageSerialization implements View{
 	public I18nMessageSerialization(Container container, Localization localization) {
 		this.container = container;
 		this.localization = localization;
-    }
+	}
 
 	public I18nMessageSerialization from(String category, String key, Object...params) {
 		I18nMessage i18nMessage = new I18nMessage(category, key, params);

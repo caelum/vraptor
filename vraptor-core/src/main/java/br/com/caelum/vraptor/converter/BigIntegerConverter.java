@@ -36,10 +36,10 @@ import br.com.caelum.vraptor.ioc.ApplicationScoped;
 public class BigIntegerConverter implements Converter<BigInteger>{
 
 	public BigInteger convert(String value, Class<? extends BigInteger> type, ResourceBundle bundle) {
-	    if (isNullOrEmpty(value)) {
+		if (isNullOrEmpty(value)) {
 			return null;
 		}
-	    
+		
 		try {
 			return new BigInteger(value);
 		} catch (NumberFormatException e) {

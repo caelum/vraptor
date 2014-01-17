@@ -40,7 +40,7 @@ public final class ISO8601Util {
 	private static final String DEFAULT_ISO8601_FORMAT = "yyyy-MM-dd'T'HH:mm:ss.SSSZ";
 	
 	private static final String REGEX_ISO8601 = "^(\\d{4})-?(\\d\\d)-?(\\d\\d)(?:T(\\d\\d)(?::?(\\d\\d)(?::?(\\d\\d)(?:\\.(\\d+))?)?)?(Z|([+-])(\\d\\d):?(\\d\\d)?)?)?$";
-	//                                            1         2         3           4            5            6             7           8  9     10        11
+	//						1	 2	 3	   4		5		6		 7	   8  9	 10	11
 
 	private final SimpleDateFormat formatter = new SimpleDateFormat(DEFAULT_ISO8601_FORMAT); 
 	

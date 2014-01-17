@@ -45,54 +45,54 @@ import br.com.caelum.vraptor.resource.ResourceNotFoundHandler;
 
 public class ResourceLookupInterceptorTest {
 
-    private @Mock UrlToResourceTranslator translator;
-    private @Mock MutableRequest webRequest;
-    private @Mock MutableResponse webResponse;
-    private @Mock RequestInfo info;
-    private ResourceLookupInterceptor lookup;
-    private @Mock MethodInfo methodInfo;
+	private @Mock UrlToResourceTranslator translator;
+	private @Mock MutableRequest webRequest;
+	private @Mock MutableResponse webResponse;
+	private @Mock RequestInfo info;
+	private ResourceLookupInterceptor lookup;
+	private @Mock MethodInfo methodInfo;
 	private @Mock ResourceNotFoundHandler notFoundHandler;
 	private @Mock MethodNotAllowedHandler methodNotAllowedHandler;
 
-    @Before
-    public void config() {
-    	MockitoAnnotations.initMocks(this);
-        info = new RequestInfo(null, null, webRequest, webResponse);
-        lookup = new ResourceLookupInterceptor(translator, methodInfo, notFoundHandler, methodNotAllowedHandler, info);
-    }
-    
-    @Test
-    public void shouldAcceptAlways() {
-    	assertTrue(lookup.accepts(null));
-    }
+	@Before
+	public void config() {
+		MockitoAnnotations.initMocks(this);
+	info = new RequestInfo(null, null, webRequest, webResponse);
+	lookup = new ResourceLookupInterceptor(translator, methodInfo, notFoundHandler, methodNotAllowedHandler, info);
+	}
+	
+	@Test
+	public void shouldAcceptAlways() {
+		assertTrue(lookup.accepts(null));
+	}
 
-    @Test
-    public void shouldHandle404() throws IOException, InterceptionException {
-        when(translator.translate(info)).thenThrow(new ResourceNotFoundException());
-                
-        lookup.intercept(null, null, null);
-        verify(notFoundHandler).couldntFind(info);
-    }
+	@Test
+	public void shouldHandle404() throws IOException, InterceptionException {
+	when(translator.translate(info)).thenThrow(new ResourceNotFoundException());
+		
+	lookup.intercept(null, null, null);
+	verify(notFoundHandler).couldntFind(info);
+	}
 
-    @Test
-    public void shouldHandle405() throws IOException, InterceptionException {
-    	EnumSet<HttpMethod> allowedMethods = EnumSet.of(HttpMethod.GET);
-    	
-        when(translator.translate(info)).thenThrow(new MethodNotAllowedException(allowedMethods, HttpMethod.POST.toString()));
-                
-        lookup.intercept(null, null, null);
-        verify(methodNotAllowedHandler).deny(info, allowedMethods);
-    }
+	@Test
+	public void shouldHandle405() throws IOException, InterceptionException {
+		EnumSet<HttpMethod> allowedMethods = EnumSet.of(HttpMethod.GET);
+		
+	when(translator.translate(info)).thenThrow(new MethodNotAllowedException(allowedMethods, HttpMethod.POST.toString()));
+		
+	lookup.intercept(null, null, null);
+	verify(methodNotAllowedHandler).deny(info, allowedMethods);
+	}
 
-    @Test
-    public void shouldUseResourceMethodFoundWithNextInterceptor() throws IOException, InterceptionException {
-        final ResourceMethod method = mock(ResourceMethod.class);
-        final InterceptorStack stack = mock(InterceptorStack.class);
-        
-        when(translator.translate(info)).thenReturn(method);
-        
-        lookup.intercept(stack, null, null);
-        verify(stack).next(method, null);
-        verify(methodInfo).setResourceMethod(method);
-    }
+	@Test
+	public void shouldUseResourceMethodFoundWithNextInterceptor() throws IOException, InterceptionException {
+	final ResourceMethod method = mock(ResourceMethod.class);
+	final InterceptorStack stack = mock(InterceptorStack.class);
+	
+	when(translator.translate(info)).thenReturn(method);
+	
+	lookup.intercept(stack, null, null);
+	verify(stack).next(method, null);
+	verify(methodInfo).setResourceMethod(method);
+	}
 }

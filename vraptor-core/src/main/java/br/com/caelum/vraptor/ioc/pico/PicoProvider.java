@@ -54,13 +54,13 @@ import br.com.caelum.vraptor.scan.WebAppBootstrapFactory;
 public class PicoProvider implements ContainerProvider {
 
 	private final MutablePicoContainer picoContainer;
-    private MutablePicoContainer childContainer;
-    private final ThreadLocal<Container> containersByThread = new ThreadLocal<Container>();
+	private MutablePicoContainer childContainer;
+	private final ThreadLocal<Container> containersByThread = new ThreadLocal<Container>();
 
-    private static final Logger logger = LoggerFactory.getLogger(PicoProvider.class);
+	private static final Logger logger = LoggerFactory.getLogger(PicoProvider.class);
 	private final Container container;
 
-    private final class AppScopedContainer implements Container {
+	private final class AppScopedContainer implements Container {
 		public <T> T instanceFor(Class<T> type) {
 			Container container = containersByThread.get();
 			if (container == null) {
@@ -73,60 +73,60 @@ public class PicoProvider implements ContainerProvider {
 			return instanceFor(type) != null;
 		}
 	}
-    public PicoProvider() {
-        this.picoContainer = new DefaultPicoContainer(new Caching(),
-                new JavaEE5LifecycleStrategy(new NullComponentMonitor()), null);
+	public PicoProvider() {
+	this.picoContainer = new DefaultPicoContainer(new Caching(),
+		new JavaEE5LifecycleStrategy(new NullComponentMonitor()), null);
 
-        ComponentFactoryRegistry componentFactoryRegistry = new DefaultComponentFactoryRegistry();
-        PicoComponentRegistry componentRegistry = new PicoComponentRegistry(this.picoContainer, componentFactoryRegistry);
+	ComponentFactoryRegistry componentFactoryRegistry = new DefaultComponentFactoryRegistry();
+	PicoComponentRegistry componentRegistry = new PicoComponentRegistry(this.picoContainer, componentFactoryRegistry);
 
-        this.picoContainer.addComponent(componentRegistry);
-        this.picoContainer.addComponent(componentFactoryRegistry);
+	this.picoContainer.addComponent(componentRegistry);
+	this.picoContainer.addComponent(componentFactoryRegistry);
 
-        container = new AppScopedContainer();
+	container = new AppScopedContainer();
 		picoContainer.addComponent(Container.class, container);
-    }
-
-    public final void start(ServletContext context) {
-	    ComponentRegistry componentRegistry = getComponentRegistry();
-	    registerBundledComponents(componentRegistry);
-
-	    this.picoContainer.addComponent(context);
-	    BasicConfiguration config = new BasicConfiguration(context);
-
-	    // using the new vraptor.scan
-	    WebAppBootstrap webAppBootstrap = new WebAppBootstrapFactory().create(config);
-	    webAppBootstrap.configure(componentRegistry);
-
-	    // call old-style custom components registration
-	    registerCustomComponents(componentRegistry);
-
-	    // start the container
-	    getComponentRegistry().init();
-	    picoContainer.start();
-	    registerCacheComponents();
-
-	    // call all handlers for registered components
-    	Collection<Class<?>> components = getComponentRegistry().getAllRegisteredApplicationScopedComponents();
-    	List<StereotypeHandler> handlers = picoContainer.getComponents(StereotypeHandler.class);
-
-    	for (Class<?> type : components) {
-	        for (StereotypeHandler handler : handlers) {
-	    		if (type.isAnnotationPresent(handler.stereotype())) {
-	    			handler.handle(type);
-	    		}
-	    	}
-    	}
 	}
-    
-    public Container getContainer() {
-    	return container;
-    }
 
-    /**
-     * Create a child container, and register cached components. This way, Cached components will use registered implementations
-     * for their types, and will be used on dependency injection
-     */
+	public final void start(ServletContext context) {
+		ComponentRegistry componentRegistry = getComponentRegistry();
+		registerBundledComponents(componentRegistry);
+
+		this.picoContainer.addComponent(context);
+		BasicConfiguration config = new BasicConfiguration(context);
+
+		// using the new vraptor.scan
+		WebAppBootstrap webAppBootstrap = new WebAppBootstrapFactory().create(config);
+		webAppBootstrap.configure(componentRegistry);
+
+		// call old-style custom components registration
+		registerCustomComponents(componentRegistry);
+
+		// start the container
+		getComponentRegistry().init();
+		picoContainer.start();
+		registerCacheComponents();
+
+		// call all handlers for registered components
+		Collection<Class<?>> components = getComponentRegistry().getAllRegisteredApplicationScopedComponents();
+		List<StereotypeHandler> handlers = picoContainer.getComponents(StereotypeHandler.class);
+
+		for (Class<?> type : components) {
+		for (StereotypeHandler handler : handlers) {
+				if (type.isAnnotationPresent(handler.stereotype())) {
+					handler.handle(type);
+				}
+			}
+		}
+	}
+	
+	public Container getContainer() {
+		return container;
+	}
+
+	/**
+	 * Create a child container, and register cached components. This way, Cached components will use registered implementations
+	 * for their types, and will be used on dependency injection
+	 */
 	private void registerCacheComponents() {
 		PicoComponentRegistry registry = getComponentRegistry();
 		this.childContainer = registry.makeChildContainer();
@@ -143,23 +143,23 @@ public class PicoProvider implements ContainerProvider {
 	 * Register default vraptor-pico implementation components.
 	 */
 	protected void registerBundledComponents(ComponentRegistry registry) {
-	    logger.debug("Registering base pico container related implementation components");
-	    for (Class<? extends StereotypeHandler> entry : BaseComponents.getStereotypeHandlers()) {
+		logger.debug("Registering base pico container related implementation components");
+		for (Class<? extends StereotypeHandler> entry : BaseComponents.getStereotypeHandlers()) {
 			registry.register(entry, entry);
 		}
-	    registerAll(registry, BaseComponents.getApplicationScoped());
-	    registerAll(registry, BaseComponents.getRequestScoped());
-	    registerAll(registry, BaseComponents.getPrototypeScoped());
-	    for (Class<? extends Converter<?>> converterType : BaseComponents.getBundledConverters()) {
-	        registry.register(converterType, converterType);
-	    }
+		registerAll(registry, BaseComponents.getApplicationScoped());
+		registerAll(registry, BaseComponents.getRequestScoped());
+		registerAll(registry, BaseComponents.getPrototypeScoped());
+		for (Class<? extends Converter<?>> converterType : BaseComponents.getBundledConverters()) {
+		registry.register(converterType, converterType);
+		}
 	}
 
 	private void registerAll(ComponentRegistry registry, Map<Class<?>, Class<?>> scope) {
 		for (Map.Entry<Class<?>, Class<?>> entry : scope.entrySet()) {
-	        registry.register(entry.getKey(), entry.getValue());
-	        registry.register(entry.getValue(), entry.getValue());
-	    }
+		registry.register(entry.getKey(), entry.getValue());
+		registry.register(entry.getValue(), entry.getValue());
+		}
 	}
 
 	protected void registerCustomComponents(ComponentRegistry registry) {
@@ -172,29 +172,29 @@ public class PicoProvider implements ContainerProvider {
 	}
 
 	public void stop() {
-	    picoContainer.stop();
-	    picoContainer.dispose();
+		picoContainer.stop();
+		picoContainer.dispose();
 	}
 
 	public <T> T provideForRequest(RequestInfo request, Execution<T> execution) {
-        PicoBasedContainer container = null;
-        try {
-            container = getComponentRegistry().provideRequestContainer(request);
-            container.getContainer().start();
+	PicoBasedContainer container = null;
+	try {
+		container = getComponentRegistry().provideRequestContainer(request);
+		container.getContainer().start();
 
-            containersByThread.set(container);
-            return execution.insideRequest(container);
-        } finally {
-            if (container != null) {
-                MutablePicoContainer picoContainer = container.getContainer();
-                picoContainer.stop();
-                picoContainer.dispose();
-            }
-            containersByThread.set(null);
-        }
-    }
+		containersByThread.set(container);
+		return execution.insideRequest(container);
+	} finally {
+		if (container != null) {
+		MutablePicoContainer picoContainer = container.getContainer();
+		picoContainer.stop();
+		picoContainer.dispose();
+		}
+		containersByThread.set(null);
+	}
+	}
 
-    protected PicoComponentRegistry getComponentRegistry() {
-    	return this.picoContainer.getComponent(PicoComponentRegistry.class);
-    }
+	protected PicoComponentRegistry getComponentRegistry() {
+		return this.picoContainer.getComponent(PicoComponentRegistry.class);
+	}
 }

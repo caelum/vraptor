@@ -35,16 +35,16 @@ import br.com.caelum.vraptor.ioc.ApplicationScoped;
 @ApplicationScoped
 public class DoubleConverter implements Converter<Double> {
 
-    public Double convert(String value, Class<? extends Double> type, ResourceBundle bundle) {
-        if (isNullOrEmpty(value)) {
-            return null;
-        }
-        
-        try {
-            return Double.valueOf(value);
-        } catch (NumberFormatException e) {
+	public Double convert(String value, Class<? extends Double> type, ResourceBundle bundle) {
+	if (isNullOrEmpty(value)) {
+		return null;
+	}
+	
+	try {
+		return Double.valueOf(value);
+	} catch (NumberFormatException e) {
 			throw new ConversionError(MessageFormat.format(bundle.getString("is_not_a_valid_number"), value));
-        }
-    }
+	}
+	}
 
 }

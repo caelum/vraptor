@@ -41,31 +41,31 @@ import br.com.caelum.vraptor.ioc.RequestScoped;
 @RequestScoped
 public class LocaleBasedCalendarConverter implements Converter<Calendar> {
 
-    private final Localization localization;
-    
-    public LocaleBasedCalendarConverter(Localization localization) {
-        this.localization = localization;
-    }
+	private final Localization localization;
+	
+	public LocaleBasedCalendarConverter(Localization localization) {
+	this.localization = localization;
+	}
 
-    public Calendar convert(String value, Class<? extends Calendar> type, ResourceBundle bundle) {
-        if (isNullOrEmpty(value)) {
-            return null;
-        }
-        
-        Locale locale = localization.getLocale();
-        if (locale == null) {
-            locale = Locale.getDefault();
-        }
-        
-        DateFormat format = DateFormat.getDateInstance(DateFormat.SHORT, locale);
-        try {
-            Date date = format.parse(value);
-            Calendar calendar = new GregorianCalendar();
-            calendar.setTime(date);
-            return calendar;
-        } catch (ParseException e) {
+	public Calendar convert(String value, Class<? extends Calendar> type, ResourceBundle bundle) {
+	if (isNullOrEmpty(value)) {
+		return null;
+	}
+	
+	Locale locale = localization.getLocale();
+	if (locale == null) {
+		locale = Locale.getDefault();
+	}
+	
+	DateFormat format = DateFormat.getDateInstance(DateFormat.SHORT, locale);
+	try {
+		Date date = format.parse(value);
+		Calendar calendar = new GregorianCalendar();
+		calendar.setTime(date);
+		return calendar;
+	} catch (ParseException e) {
 			throw new ConversionError(MessageFormat.format(bundle.getString("is_not_a_valid_date"), value));
-        }
-    }
+	}
+	}
 
 }

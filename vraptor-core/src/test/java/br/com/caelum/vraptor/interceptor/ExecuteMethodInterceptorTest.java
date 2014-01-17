@@ -59,11 +59,11 @@ public class ExecuteMethodInterceptorTest {
 		interceptor = new ExecuteMethodInterceptor(info, validator);
 	}
 
-    @Test
-    public void shouldAcceptAlways() {
-    	assertTrue(interceptor.accepts(null));
-    }
-    
+	@Test
+	public void shouldAcceptAlways() {
+		assertTrue(interceptor.accepts(null));
+	}
+	
 	@Test
 	public void shouldInvokeTheMethodAndNotProceedWithInterceptorStack() throws SecurityException,
 			NoSuchMethodException, IOException, InterceptionException {

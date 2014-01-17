@@ -202,105 +202,105 @@ import com.thoughtworks.xstream.converters.SingleValueConverter;
  */
 public class BaseComponents {
 
-    static final Logger logger = LoggerFactory.getLogger(BaseComponents.class);
+	static final Logger logger = LoggerFactory.getLogger(BaseComponents.class);
 
-    private final static Map<Class<?>, Class<?>> APPLICATION_COMPONENTS = classMap(
-    		EncodingHandlerFactory.class, 	EncodingHandlerFactory.class,
-    		AcceptHeaderToFormat.class, 	DefaultAcceptHeaderToFormat.class,
-    		Converters.class, 				DefaultConverters.class,
-            InterceptorRegistry.class, 		TopologicalSortedInterceptorRegistry.class,
-            InterceptorHandlerFactory.class,DefaultInterceptorHandlerFactory.class,
-            MultipartConfig.class, 			DefaultMultipartConfig.class,
-            UrlToResourceTranslator.class, 	DefaultResourceTranslator.class,
-            Router.class, 					DefaultRouter.class,
-            TypeNameExtractor.class, 		DefaultTypeNameExtractor.class,
-            ResourceNotFoundHandler.class, 	DefaultResourceNotFoundHandler.class,
-            MethodNotAllowedHandler.class,	DefaultMethodNotAllowedHandler.class,
-            RoutesConfiguration.class, 		NoRoutesConfiguration.class,
-            Deserializers.class,			DefaultDeserializers.class,
-            Proxifier.class, 				JavassistProxifier.class,
-            InstanceCreator.class,          getInstanceCreator(),
-            ParameterNameProvider.class, 	ParanamerNameProvider.class,
-            TypeFinder.class, 				DefaultTypeFinder.class,
-            RoutesParser.class, 			PathAnnotationRoutesParser.class,
-            Routes.class,					DefaultRoutes.class,
-            RestDefaults.class,				DefaultRestDefaults.class,
-            Evaluator.class,				JavaEvaluator.class,
-            StaticContentHandler.class,		DefaultStaticContentHandler.class,
-            SingleValueConverter.class,     XStreamConverters.NullConverter.class,
-            ProxyInitializer.class,			getProxyInitializerImpl()
-    );
+	private final static Map<Class<?>, Class<?>> APPLICATION_COMPONENTS = classMap(
+			EncodingHandlerFactory.class, 	EncodingHandlerFactory.class,
+			AcceptHeaderToFormat.class, 	DefaultAcceptHeaderToFormat.class,
+			Converters.class, 				DefaultConverters.class,
+		InterceptorRegistry.class, 		TopologicalSortedInterceptorRegistry.class,
+		InterceptorHandlerFactory.class,DefaultInterceptorHandlerFactory.class,
+		MultipartConfig.class, 			DefaultMultipartConfig.class,
+		UrlToResourceTranslator.class, 	DefaultResourceTranslator.class,
+		Router.class, 					DefaultRouter.class,
+		TypeNameExtractor.class, 		DefaultTypeNameExtractor.class,
+		ResourceNotFoundHandler.class, 	DefaultResourceNotFoundHandler.class,
+		MethodNotAllowedHandler.class,	DefaultMethodNotAllowedHandler.class,
+		RoutesConfiguration.class, 		NoRoutesConfiguration.class,
+		Deserializers.class,			DefaultDeserializers.class,
+		Proxifier.class, 				JavassistProxifier.class,
+		InstanceCreator.class,	  getInstanceCreator(),
+		ParameterNameProvider.class, 	ParanamerNameProvider.class,
+		TypeFinder.class, 				DefaultTypeFinder.class,
+		RoutesParser.class, 			PathAnnotationRoutesParser.class,
+		Routes.class,					DefaultRoutes.class,
+		RestDefaults.class,				DefaultRestDefaults.class,
+		Evaluator.class,				JavaEvaluator.class,
+		StaticContentHandler.class,		DefaultStaticContentHandler.class,
+		SingleValueConverter.class,	 XStreamConverters.NullConverter.class,
+		ProxyInitializer.class,			getProxyInitializerImpl()
+	);
 
-    private final static Map<Class<?>, Class<?>> CACHED_COMPONENTS = classMap(
-    );
+	private final static Map<Class<?>, Class<?>> CACHED_COMPONENTS = classMap(
+	);
 
-    private static final Map<Class<?>, Class<?>> PROTOTYPE_COMPONENTS = classMap(
-    		InterceptorStack.class, 						DefaultInterceptorStack.class,
-    		RequestExecution.class, 						EnhancedRequestExecution.class,
-    		XStreamBuilder.class, 							XStreamBuilderImpl.class
-    );
+	private static final Map<Class<?>, Class<?>> PROTOTYPE_COMPONENTS = classMap(
+			InterceptorStack.class, 						DefaultInterceptorStack.class,
+			RequestExecution.class, 						EnhancedRequestExecution.class,
+			XStreamBuilder.class, 							XStreamBuilderImpl.class
+	);
 
-    private static final Map<Class<?>, Class<?>> REQUEST_COMPONENTS = classMap(
-            MethodInfo.class, 								DefaultMethodInfo.class,
-            LogicResult.class, 								DefaultLogicResult.class,
-            PageResult.class, 								DefaultPageResult.class,
-            HttpResult.class, 								DefaultHttpResult.class,
-            RefererResult.class, 							DefaultRefererResult.class,
-            PathResolver.class, 							DefaultPathResolver.class,
-            ValidationViewsFactory.class,					DefaultValidationViewsFactory.class,
-            Result.class, 									DefaultResult.class,
-            Validator.class, 								DefaultValidator.class,
-            Outjector.class, 								ReplicatorOutjector.class,
-            DownloadInterceptor.class, 						DownloadInterceptor.class,
-            EmptyResult.class, 								EmptyResult.class,
-            ExecuteMethodInterceptor.class, 				ExecuteMethodInterceptor.class,
-            ExceptionHandlerInterceptor.class,              ExceptionHandlerInterceptor.class,
-            ExceptionMapper.class,                          DefaultExceptionMapper.class,
-            FlashInterceptor.class, 						FlashInterceptor.class,
-            ForwardToDefaultViewInterceptor.class, 			ForwardToDefaultViewInterceptor.class,
-            InstantiateInterceptor.class, 					InstantiateInterceptor.class,
-            DeserializingInterceptor.class, 				DeserializingInterceptor.class,
-            JsonDeserializer.class,							JsonDeserializer.class,
-            FormDeserializer.class,							FormDeserializer.class,
-            Localization.class, 							JstlLocalization.class,
-            OutjectResult.class, 							OutjectResult.class,
-            ParametersInstantiatorInterceptor.class, 		ParametersInstantiatorInterceptor.class,
-            ResourceLookupInterceptor.class, 				ResourceLookupInterceptor.class,
-            Status.class,									DefaultStatus.class,
-            XMLDeserializer.class,			                XStreamXMLDeserializer.class,
-            XMLSerialization.class,							XStreamXMLSerialization.class,
-            JSONSerialization.class,						XStreamJSONSerialization.class,
-            JSONPSerialization.class,						XStreamJSONPSerialization.class,
-            HTMLSerialization.class,						HTMLSerialization.class,
-            I18nMessageSerialization.class,					I18nMessageSerialization.class,
-            RepresentationResult.class,						DefaultRepresentationResult.class,
-            FormatResolver.class,							DefaultFormatResolver.class,
-            Configuration.class,							ApplicationConfiguration.class,
-            RestHeadersHandler.class,						DefaultRestHeadersHandler.class,
-            FlashScope.class,								SessionFlashScope.class,
-            XStreamConverters.class,                        XStreamConverters.class,
-            MessageConverter.class,							MessageConverter.class
-    );
+	private static final Map<Class<?>, Class<?>> REQUEST_COMPONENTS = classMap(
+		MethodInfo.class, 								DefaultMethodInfo.class,
+		LogicResult.class, 								DefaultLogicResult.class,
+		PageResult.class, 								DefaultPageResult.class,
+		HttpResult.class, 								DefaultHttpResult.class,
+		RefererResult.class, 							DefaultRefererResult.class,
+		PathResolver.class, 							DefaultPathResolver.class,
+		ValidationViewsFactory.class,					DefaultValidationViewsFactory.class,
+		Result.class, 									DefaultResult.class,
+		Validator.class, 								DefaultValidator.class,
+		Outjector.class, 								ReplicatorOutjector.class,
+		DownloadInterceptor.class, 						DownloadInterceptor.class,
+		EmptyResult.class, 								EmptyResult.class,
+		ExecuteMethodInterceptor.class, 				ExecuteMethodInterceptor.class,
+		ExceptionHandlerInterceptor.class,		  ExceptionHandlerInterceptor.class,
+		ExceptionMapper.class,			  DefaultExceptionMapper.class,
+		FlashInterceptor.class, 						FlashInterceptor.class,
+		ForwardToDefaultViewInterceptor.class, 			ForwardToDefaultViewInterceptor.class,
+		InstantiateInterceptor.class, 					InstantiateInterceptor.class,
+		DeserializingInterceptor.class, 				DeserializingInterceptor.class,
+		JsonDeserializer.class,							JsonDeserializer.class,
+		FormDeserializer.class,							FormDeserializer.class,
+		Localization.class, 							JstlLocalization.class,
+		OutjectResult.class, 							OutjectResult.class,
+		ParametersInstantiatorInterceptor.class, 		ParametersInstantiatorInterceptor.class,
+		ResourceLookupInterceptor.class, 				ResourceLookupInterceptor.class,
+		Status.class,									DefaultStatus.class,
+		XMLDeserializer.class,					XStreamXMLDeserializer.class,
+		XMLSerialization.class,							XStreamXMLSerialization.class,
+		JSONSerialization.class,						XStreamJSONSerialization.class,
+		JSONPSerialization.class,						XStreamJSONPSerialization.class,
+		HTMLSerialization.class,						HTMLSerialization.class,
+		I18nMessageSerialization.class,					I18nMessageSerialization.class,
+		RepresentationResult.class,						DefaultRepresentationResult.class,
+		FormatResolver.class,							DefaultFormatResolver.class,
+		Configuration.class,							ApplicationConfiguration.class,
+		RestHeadersHandler.class,						DefaultRestHeadersHandler.class,
+		FlashScope.class,								SessionFlashScope.class,
+		XStreamConverters.class,			XStreamConverters.class,
+		MessageConverter.class,							MessageConverter.class
+	);
 
-    @SuppressWarnings({"unchecked", "rawtypes"})
+	@SuppressWarnings({"unchecked", "rawtypes"})
 	private static final Set<Class<? extends Converter<?>>> BUNDLED_CONVERTERS = new HashSet(Arrays.asList(
-    		BigDecimalConverter.class,
-    		BigIntegerConverter.class,
-    		BooleanConverter.class,
-    		ByteConverter.class,
-    		CharacterConverter.class,
-    		DoubleConverter.class,
-    		EnumConverter.class,
-    		FloatConverter.class,
-    		IntegerConverter.class,
-    		LocaleBasedCalendarConverter.class,
-    		LocaleBasedDateConverter.class,
-    		LongConverter.class,
-    		PrimitiveBooleanConverter.class,
-    		PrimitiveByteConverter.class,
-    		PrimitiveCharConverter.class,
-    		PrimitiveDoubleConverter.class,
-    		PrimitiveFloatConverter.class,
+			BigDecimalConverter.class,
+			BigIntegerConverter.class,
+			BooleanConverter.class,
+			ByteConverter.class,
+			CharacterConverter.class,
+			DoubleConverter.class,
+			EnumConverter.class,
+			FloatConverter.class,
+			IntegerConverter.class,
+			LocaleBasedCalendarConverter.class,
+			LocaleBasedDateConverter.class,
+			LongConverter.class,
+			PrimitiveBooleanConverter.class,
+			PrimitiveByteConverter.class,
+			PrimitiveCharConverter.class,
+			PrimitiveDoubleConverter.class,
+			PrimitiveFloatConverter.class,
 			PrimitiveIntConverter.class,
 			PrimitiveLongConverter.class,
 			PrimitiveShortConverter.class,
@@ -309,7 +309,7 @@ public class BaseComponents {
 			UploadedFileConverter.class));
 
 
-    @SuppressWarnings("unchecked")
+	@SuppressWarnings("unchecked")
 	private static final Class<? extends StereotypeHandler>[] STEREOTYPE_HANDLERS = new Class[] {
 		ResourceHandler.class,
 		ConverterHandler.class,
@@ -317,26 +317,26 @@ public class BaseComponents {
 		DeserializesHandler.class
 	};
 
-    @SuppressWarnings("unchecked")
-    private static final Class<? extends Annotation>[] STEREOTYPES = new Class[] {
-    	Resource.class,
-    	Convert.class,
-    	Component.class,
-    	Deserializes.class,
-    	Intercepts.class
-    };
+	@SuppressWarnings("unchecked")
+	private static final Class<? extends Annotation>[] STEREOTYPES = new Class[] {
+		Resource.class,
+		Convert.class,
+		Component.class,
+		Deserializes.class,
+		Intercepts.class
+	};
 
-    @SuppressWarnings({ "unchecked", "rawtypes" })
+	@SuppressWarnings({ "unchecked", "rawtypes" })
 	private static final Set<Class<? extends Deserializer>> DESERIALIZERS = new HashSet(Arrays.asList(
-    		XMLDeserializer.class, 
-    		JsonDeserializer.class,
-    		FormDeserializer.class));
+			XMLDeserializer.class, 
+			JsonDeserializer.class,
+			FormDeserializer.class));
 
-    public static Set<Class<? extends Deserializer>> getDeserializers() {
+	public static Set<Class<? extends Deserializer>> getDeserializers() {
 		return DESERIALIZERS;
 	}
 
-    private static Class<? extends ProxyInitializer> getProxyInitializerImpl() {
+	private static Class<? extends ProxyInitializer> getProxyInitializerImpl() {
 		try {
 			Class.forName("org.hibernate.proxy.HibernateProxy");
 			return HibernateProxyInitializer.class;
@@ -345,83 +345,83 @@ public class BaseComponents {
 		}
 	}
 
-    private static Class<? extends InstanceCreator> getInstanceCreator() {
-        if (isClassPresent("org.objenesis.ObjenesisStd")) {
-            return ObjenesisInstanceCreator.class;
-        }
+	private static Class<? extends InstanceCreator> getInstanceCreator() {
+	if (isClassPresent("org.objenesis.ObjenesisStd")) {
+		return ObjenesisInstanceCreator.class;
+	}
 
-        return ReflectionInstanceCreator.class;
-    }
+	return ReflectionInstanceCreator.class;
+	}
 
 	public static Map<Class<?>, Class<?>> getCachedComponents() {
 		return Collections.unmodifiableMap(CACHED_COMPONENTS);
 	}
 
-    public static Map<Class<?>, Class<?>> getApplicationScoped() {
-        if (!isClassPresent("ognl.OgnlRuntime")) {
-            APPLICATION_COMPONENTS.put(DependencyProvider.class, VRaptorDependencyProvider.class);
-        }
-    	
-        // try put beanval 1.1 or beanval 1.0 if available
-        if (isClassPresent("javax.validation.executable.ExecutableValidator")) {
-            APPLICATION_COMPONENTS.put(ValidatorCreator.class, ValidatorCreator.class);
-            APPLICATION_COMPONENTS.put(MethodValidatorFactoryCreator.class, MethodValidatorFactoryCreator.class);
-            APPLICATION_COMPONENTS.put(DIConstraintValidatorFactory.class, DIConstraintValidatorFactory.class);
-            APPLICATION_COMPONENTS.put(MessageInterpolatorFactory.class, MessageInterpolatorFactory.class);
-        } else if (isClassPresent("javax.validation.Validation")) {
-            APPLICATION_COMPONENTS.put(ValidatorCreator.class, ValidatorCreator.class);
-            APPLICATION_COMPONENTS.put(ValidatorFactoryCreator.class, ValidatorFactoryCreator.class);
-            APPLICATION_COMPONENTS.put(MessageInterpolatorFactory.class, MessageInterpolatorFactory.class);
-        }
-        
-    	return Collections.unmodifiableMap(APPLICATION_COMPONENTS);
-    }
+	public static Map<Class<?>, Class<?>> getApplicationScoped() {
+	if (!isClassPresent("ognl.OgnlRuntime")) {
+		APPLICATION_COMPONENTS.put(DependencyProvider.class, VRaptorDependencyProvider.class);
+	}
+		
+	// try put beanval 1.1 or beanval 1.0 if available
+	if (isClassPresent("javax.validation.executable.ExecutableValidator")) {
+		APPLICATION_COMPONENTS.put(ValidatorCreator.class, ValidatorCreator.class);
+		APPLICATION_COMPONENTS.put(MethodValidatorFactoryCreator.class, MethodValidatorFactoryCreator.class);
+		APPLICATION_COMPONENTS.put(DIConstraintValidatorFactory.class, DIConstraintValidatorFactory.class);
+		APPLICATION_COMPONENTS.put(MessageInterpolatorFactory.class, MessageInterpolatorFactory.class);
+	} else if (isClassPresent("javax.validation.Validation")) {
+		APPLICATION_COMPONENTS.put(ValidatorCreator.class, ValidatorCreator.class);
+		APPLICATION_COMPONENTS.put(ValidatorFactoryCreator.class, ValidatorFactoryCreator.class);
+		APPLICATION_COMPONENTS.put(MessageInterpolatorFactory.class, MessageInterpolatorFactory.class);
+	}
+	
+		return Collections.unmodifiableMap(APPLICATION_COMPONENTS);
+	}
 
-    public static Map<Class<?>, Class<?>> getRequestScoped() {
-        // try put beanval 1.1 or beanval 1.0 if available
-        if (isClassPresent("javax.validation.executable.ExecutableValidator")) {
-            REQUEST_COMPONENTS.put(BeanValidator.class, DefaultBeanValidator.class);
-            REQUEST_COMPONENTS.put(MethodValidatorInterceptor.class, MethodValidatorInterceptor.class);
-        } else if (isClassPresent("javax.validation.Validation")) {
-            REQUEST_COMPONENTS.put(BeanValidator.class, DefaultBeanValidator.class);
-        } else {
-            REQUEST_COMPONENTS.put(BeanValidator.class, NullBeanValidator.class);
-        }
-        
-        if (isClassPresent("org.apache.commons.fileupload.FileItem")) {
-            REQUEST_COMPONENTS.put(MultipartInterceptor.class, CommonsUploadMultipartInterceptor.class);
-            REQUEST_COMPONENTS.put(ServletFileUploadCreator.class, DefaultServletFileUploadCreator.class);
-        } else if (isClassPresent("javax.servlet.http.Part")) {
-            REQUEST_COMPONENTS.put(MultipartInterceptor.class, Servlet3MultipartInterceptor.class);
-        } else {
-    	    logger.warn("There is neither commons-fileupload nor servlet3 handlers registered. " +
-    	    		"If you are willing to upload a file, please add the commons-fileupload in " +
-    	    		"your classpath or use a Servlet 3 Container");
-            REQUEST_COMPONENTS.put(MultipartInterceptor.class, NullMultipartInterceptor.class);
-    	}
-        
-        if (isClassPresent("ognl.OgnlRuntime")) {
-            REQUEST_COMPONENTS.put(ParametersProvider.class, OgnlParametersProvider.class);
-            REQUEST_COMPONENTS.put(EmptyElementsRemoval.class, EmptyElementsRemoval.class);
-            REQUEST_COMPONENTS.put(OgnlFacade.class, OgnlFacade.class);
-        } else {
-            REQUEST_COMPONENTS.put(ParametersProvider.class, IogiParametersProvider.class);
-            REQUEST_COMPONENTS.put(ParameterNamesProvider.class, VRaptorParameterNamesProvider.class);
-            REQUEST_COMPONENTS.put(InstantiatorWithErrors.class, VRaptorInstantiator.class);
-            REQUEST_COMPONENTS.put(Instantiator.class, VRaptorInstantiator.class);
-        }
+	public static Map<Class<?>, Class<?>> getRequestScoped() {
+	// try put beanval 1.1 or beanval 1.0 if available
+	if (isClassPresent("javax.validation.executable.ExecutableValidator")) {
+		REQUEST_COMPONENTS.put(BeanValidator.class, DefaultBeanValidator.class);
+		REQUEST_COMPONENTS.put(MethodValidatorInterceptor.class, MethodValidatorInterceptor.class);
+	} else if (isClassPresent("javax.validation.Validation")) {
+		REQUEST_COMPONENTS.put(BeanValidator.class, DefaultBeanValidator.class);
+	} else {
+		REQUEST_COMPONENTS.put(BeanValidator.class, NullBeanValidator.class);
+	}
+	
+	if (isClassPresent("org.apache.commons.fileupload.FileItem")) {
+		REQUEST_COMPONENTS.put(MultipartInterceptor.class, CommonsUploadMultipartInterceptor.class);
+		REQUEST_COMPONENTS.put(ServletFileUploadCreator.class, DefaultServletFileUploadCreator.class);
+	} else if (isClassPresent("javax.servlet.http.Part")) {
+		REQUEST_COMPONENTS.put(MultipartInterceptor.class, Servlet3MultipartInterceptor.class);
+	} else {
+			logger.warn("There is neither commons-fileupload nor servlet3 handlers registered. " +
+					"If you are willing to upload a file, please add the commons-fileupload in " +
+					"your classpath or use a Servlet 3 Container");
+		REQUEST_COMPONENTS.put(MultipartInterceptor.class, NullMultipartInterceptor.class);
+		}
+	
+	if (isClassPresent("ognl.OgnlRuntime")) {
+		REQUEST_COMPONENTS.put(ParametersProvider.class, OgnlParametersProvider.class);
+		REQUEST_COMPONENTS.put(EmptyElementsRemoval.class, EmptyElementsRemoval.class);
+		REQUEST_COMPONENTS.put(OgnlFacade.class, OgnlFacade.class);
+	} else {
+		REQUEST_COMPONENTS.put(ParametersProvider.class, IogiParametersProvider.class);
+		REQUEST_COMPONENTS.put(ParameterNamesProvider.class, VRaptorParameterNamesProvider.class);
+		REQUEST_COMPONENTS.put(InstantiatorWithErrors.class, VRaptorInstantiator.class);
+		REQUEST_COMPONENTS.put(Instantiator.class, VRaptorInstantiator.class);
+	}
 
-        return Collections.unmodifiableMap(REQUEST_COMPONENTS);
-    }
+	return Collections.unmodifiableMap(REQUEST_COMPONENTS);
+	}
 
-    private static boolean isClassPresent(String className) {
-        try {
-            Class.forName(className);
-            return true;
-        } catch (ClassNotFoundException e) {
-            return false;
-        }
-    }
+	private static boolean isClassPresent(String className) {
+	try {
+		Class.forName(className);
+		return true;
+	} catch (ClassNotFoundException e) {
+		return false;
+	}
+	}
 
 	private static boolean registerIfClassPresent(Map<Class<?>, Class<?>> components, String className, Class<?>... types) {
 		try {
@@ -441,46 +441,46 @@ public class BaseComponents {
 			return;
 		}
 		try {
-    		Class.forName(className);
-    		for (Class<? extends Converter<?>> type : types) {
-    			components.add(type);
+			Class.forName(className);
+			for (Class<? extends Converter<?>> type : types) {
+				components.add(type);
 			}
-    	} catch (ClassNotFoundException e) { /*ok, don't register*/ }
+		} catch (ClassNotFoundException e) { /*ok, don't register*/ }
 	}
 
-    public static Map<Class<?>, Class<?>> getPrototypeScoped() {
+	public static Map<Class<?>, Class<?>> getPrototypeScoped() {
 		return Collections.unmodifiableMap(PROTOTYPE_COMPONENTS);
 	}
 
-    @SuppressWarnings("unchecked")
+	@SuppressWarnings("unchecked")
 	public static Set<Class<? extends Converter<?>>> getBundledConverters() {
-    	registerIfClassPresent(BUNDLED_CONVERTERS, "org.joda.time.LocalDate",
-    			LocalDateConverter.class, LocalTimeConverter.class, LocalDateTimeConverter.class,
-    			DateTimeConverter.class, DateMidnightConverter.class);
-        return BUNDLED_CONVERTERS;
-    }
+		registerIfClassPresent(BUNDLED_CONVERTERS, "org.joda.time.LocalDate",
+				LocalDateConverter.class, LocalTimeConverter.class, LocalDateTimeConverter.class,
+				DateTimeConverter.class, DateMidnightConverter.class);
+	return BUNDLED_CONVERTERS;
+	}
 
-    public static Class<? extends Annotation>[] getStereotypes() {
-    	return STEREOTYPES;
-    }
+	public static Class<? extends Annotation>[] getStereotypes() {
+		return STEREOTYPES;
+	}
 
-    public static Class<? extends StereotypeHandler>[] getStereotypeHandlers() {
-    	return STEREOTYPE_HANDLERS;
-    }
+	public static Class<? extends StereotypeHandler>[] getStereotypeHandlers() {
+		return STEREOTYPE_HANDLERS;
+	}
 
-    private static Map<Class<?>, Class<?>> classMap(Class<?>... items) {
-        HashMap<Class<?>, Class<?>> map = new HashMap<Class<?>, Class<?>>();
-        Iterator<Class<?>> it = Arrays.asList(items).iterator();
-        while (it.hasNext()) {
-            Class<?> key = it.next();
-            Class<?> value = it.next();
-            if (value == null) {
-                throw new IllegalArgumentException("The number of items should be even.");
-            }
-            map.put(key, value);
-        }
-        return map;
-    }
+	private static Map<Class<?>, Class<?>> classMap(Class<?>... items) {
+	HashMap<Class<?>, Class<?>> map = new HashMap<Class<?>, Class<?>>();
+	Iterator<Class<?>> it = Arrays.asList(items).iterator();
+	while (it.hasNext()) {
+		Class<?> key = it.next();
+		Class<?> value = it.next();
+		if (value == null) {
+		throw new IllegalArgumentException("The number of items should be even.");
+		}
+		map.put(key, value);
+	}
+	return map;
+	}
 
 
 }

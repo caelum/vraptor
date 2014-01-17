@@ -28,27 +28,27 @@ import br.com.caelum.vraptor.ioc.Container;
 @SuppressWarnings({ "rawtypes" })
 public class ComponentFactoryBean<T extends ComponentFactory<Object>> implements FactoryBean {
 
-    private Container container;
+	private Container container;
 
-    private Class<T> factoryType;
-    private Class<?> targetType;
+	private Class<T> factoryType;
+	private Class<?> targetType;
 
-    public ComponentFactoryBean(Container container, Class<T> factoryType) {
-        this.container = container;
-        this.factoryType = factoryType;
-        this.targetType = new ComponentFactoryIntrospector().targetTypeForComponentFactory(factoryType);
-    }
+	public ComponentFactoryBean(Container container, Class<T> factoryType) {
+	this.container = container;
+	this.factoryType = factoryType;
+	this.targetType = new ComponentFactoryIntrospector().targetTypeForComponentFactory(factoryType);
+	}
 
-    public Object getObject() {
-        return container.instanceFor(factoryType).getInstance();
-    }
+	public Object getObject() {
+	return container.instanceFor(factoryType).getInstance();
+	}
 
-    public Class<?> getObjectType() {
-        return targetType;
-    }
+	public Class<?> getObjectType() {
+	return targetType;
+	}
 
-    public boolean isSingleton() {
-        return false;
-    }
+	public boolean isSingleton() {
+	return false;
+	}
 
 }

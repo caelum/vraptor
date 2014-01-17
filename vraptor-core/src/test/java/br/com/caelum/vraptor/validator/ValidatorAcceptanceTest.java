@@ -38,35 +38,35 @@ import br.com.caelum.vraptor.view.ValidationViewsFactory;
 
 @RunWith(MockitoJUnitRunner.class)
 public class ValidatorAcceptanceTest {
-    private @Mock Result result;
+	private @Mock Result result;
 	private @Mock Localization localization;
 	private @Mock ValidationViewsFactory viewsFactory;
 	private @Mock Outjector outjector;
 	private DefaultValidator validator;
 
-    class Student {
-        private Long id;
-    }
+	class Student {
+	private Long id;
+	}
 
-    @Before
-    public void setup() {
-        Proxifier proxifier = new JavassistProxifier(new ObjenesisInstanceCreator());
-        validator = new DefaultValidator(result, viewsFactory, outjector, proxifier, null, localization);
-        when(localization.getBundle()).thenReturn(new EmptyBundle());
-    }
+	@Before
+	public void setup() {
+	Proxifier proxifier = new JavassistProxifier(new ObjenesisInstanceCreator());
+	validator = new DefaultValidator(result, viewsFactory, outjector, proxifier, null, localization);
+	when(localization.getBundle()).thenReturn(new EmptyBundle());
+	}
 
-    @Test
-    public void validDataDoesntThrowException() {
-        //TODO testing
-        final Student guilherme = new Student();
-        guilherme.id = 15L;
-        validator.checking(new Validations() {
-            {
-                // this is the Assertion itself
-                that(guilherme.id, is(notNullValue()), "id");
-            }
-        });
-        assertFalse(validator.hasErrors());
-    }
+	@Test
+	public void validDataDoesntThrowException() {
+	//TODO testing
+	final Student guilherme = new Student();
+	guilherme.id = 15L;
+	validator.checking(new Validations() {
+		{
+		// this is the Assertion itself
+		that(guilherme.id, is(notNullValue()), "id");
+		}
+	});
+	assertFalse(validator.hasErrors());
+	}
 
 }

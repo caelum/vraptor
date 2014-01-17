@@ -40,170 +40,170 @@ import br.com.caelum.vraptor.resource.ResourceMethod;
 
 public class DefaultResourceTranslatorTest {
 
-    private @Mock Router router;
-    private @Mock HttpServletRequest request;
+	private @Mock Router router;
+	private @Mock HttpServletRequest request;
 
-    private @Mock ResourceMethod method;
+	private @Mock ResourceMethod method;
 
-    private VRaptorRequest webRequest;
+	private VRaptorRequest webRequest;
 	private RequestInfo info;
 
 
 	private DefaultResourceTranslator translator;
 
-    @Before
-    public void setup() {
-    	MockitoAnnotations.initMocks(this);
+	@Before
+	public void setup() {
+		MockitoAnnotations.initMocks(this);
 
-        this.webRequest = new VRaptorRequest(request);
-        this.translator = new DefaultResourceTranslator(router);
-        this.info = new RequestInfo(null,null, webRequest,null);
-        when(request.getContextPath()).thenReturn("");
-    }
+	this.webRequest = new VRaptorRequest(request);
+	this.translator = new DefaultResourceTranslator(router);
+	this.info = new RequestInfo(null,null, webRequest,null);
+	when(request.getContextPath()).thenReturn("");
+	}
 
-    @Test
-    public void handlesInclude() {
+	@Test
+	public void handlesInclude() {
 
-    	when(request.getAttribute(RequestInfo.INCLUDE_REQUEST_URI)).thenReturn("/url");
-    	when(request.getMethod()).thenReturn("POST");
-    	when(router.parse("/url", HttpMethod.POST, webRequest)).thenReturn(method);
+		when(request.getAttribute(RequestInfo.INCLUDE_REQUEST_URI)).thenReturn("/url");
+		when(request.getMethod()).thenReturn("POST");
+		when(router.parse("/url", HttpMethod.POST, webRequest)).thenReturn(method);
 
-        ResourceMethod resource = translator.translate(info);
-        assertThat(resource, is(sameInstance(method)));
-    }
+	ResourceMethod resource = translator.translate(info);
+	assertThat(resource, is(sameInstance(method)));
+	}
 
-    @Test
-    public void canHandleTheCorrectMethod() {
+	@Test
+	public void canHandleTheCorrectMethod() {
 
-    	when(request.getRequestURI()).thenReturn("/url");
-    	when(request.getMethod()).thenReturn("POST");
-    	when(router.parse("/url", HttpMethod.POST,webRequest)).thenReturn(method);
+		when(request.getRequestURI()).thenReturn("/url");
+		when(request.getMethod()).thenReturn("POST");
+		when(router.parse("/url", HttpMethod.POST,webRequest)).thenReturn(method);
 
-        ResourceMethod resource = translator.translate(info);
-        assertThat(resource, is(equalTo(method)));
-    }
+	ResourceMethod resource = translator.translate(info);
+	assertThat(resource, is(equalTo(method)));
+	}
 
-    @Test
-    public void shouldAcceptCaseInsensitiveRequestMethods() {
-    	when(request.getRequestURI()).thenReturn("/url");
-    	when(request.getMethod()).thenReturn("pOsT");
-    	when(router.parse("/url", HttpMethod.POST,webRequest)).thenReturn(method);
+	@Test
+	public void shouldAcceptCaseInsensitiveRequestMethods() {
+		when(request.getRequestURI()).thenReturn("/url");
+		when(request.getMethod()).thenReturn("pOsT");
+		when(router.parse("/url", HttpMethod.POST,webRequest)).thenReturn(method);
 
-        ResourceMethod resource = translator.translate(info);
+	ResourceMethod resource = translator.translate(info);
 
-        assertThat(resource, is(equalTo(method)));
-    }
+	assertThat(resource, is(equalTo(method)));
+	}
 
-    @Test
-    public void shouldAcceptCaseInsensitiveGetRequestUsingThe_methodParameter() {
-    	when(request.getRequestURI()).thenReturn("/url");
-    	when(request.getParameter("_method")).thenReturn("gEt");
-    	when(request.getMethod()).thenReturn("POST");
-    	when(router.parse("/url", HttpMethod.GET, webRequest)).thenReturn(method);
+	@Test
+	public void shouldAcceptCaseInsensitiveGetRequestUsingThe_methodParameter() {
+		when(request.getRequestURI()).thenReturn("/url");
+		when(request.getParameter("_method")).thenReturn("gEt");
+		when(request.getMethod()).thenReturn("POST");
+		when(router.parse("/url", HttpMethod.GET, webRequest)).thenReturn(method);
 
-        ResourceMethod resource = translator.translate(info);
-        assertThat(resource, is(equalTo(method)));
-    }
+	ResourceMethod resource = translator.translate(info);
+	assertThat(resource, is(equalTo(method)));
+	}
 
 
-    @Test(expected=MethodNotAllowedException.class)
-    public void shouldThrowExceptionWhenRequestANotKnownMethod() {
-    	when(request.getRequestURI()).thenReturn("/url");
-    	when(request.getMethod()).thenReturn("COOK");
-    	when(router.parse(anyString(), any(HttpMethod.class), any(MutableRequest.class))).thenReturn(method);
+	@Test(expected=MethodNotAllowedException.class)
+	public void shouldThrowExceptionWhenRequestANotKnownMethod() {
+		when(request.getRequestURI()).thenReturn("/url");
+		when(request.getMethod()).thenReturn("COOK");
+		when(router.parse(anyString(), any(HttpMethod.class), any(MutableRequest.class))).thenReturn(method);
 
-        translator.translate(info);
-    }
+	translator.translate(info);
+	}
 
-    @Test
-    public void shouldOverrideTheHttpMethodByUsingThe_methodParameter() {
-    	when(request.getRequestURI()).thenReturn("/url");
-    	when(request.getParameter("_method")).thenReturn("DELETE");
-    	when(request.getMethod()).thenReturn("POST");
-    	when(router.parse("/url", HttpMethod.DELETE, webRequest)).thenReturn(method);
+	@Test
+	public void shouldOverrideTheHttpMethodByUsingThe_methodParameter() {
+		when(request.getRequestURI()).thenReturn("/url");
+		when(request.getParameter("_method")).thenReturn("DELETE");
+		when(request.getMethod()).thenReturn("POST");
+		when(router.parse("/url", HttpMethod.DELETE, webRequest)).thenReturn(method);
 
-        ResourceMethod resource = translator.translate(info);
-        assertThat(resource, is(equalTo(method)));
-    }
+	ResourceMethod resource = translator.translate(info);
+	assertThat(resource, is(equalTo(method)));
+	}
 
-    @Test
-    public void canHandleUrlIfRootContext() {
-    	when(request.getRequestURI()).thenReturn("/url");
-    	when(request.getContextPath()).thenReturn("");
-    	when(request.getMethod()).thenReturn("GET");
-    	when(router.parse("/url", HttpMethod.GET, webRequest)).thenReturn(method);
+	@Test
+	public void canHandleUrlIfRootContext() {
+		when(request.getRequestURI()).thenReturn("/url");
+		when(request.getContextPath()).thenReturn("");
+		when(request.getMethod()).thenReturn("GET");
+		when(router.parse("/url", HttpMethod.GET, webRequest)).thenReturn(method);
 
-    	ResourceMethod resource = translator.translate(info);
-    	assertThat(resource, is(equalTo(method)));
+		ResourceMethod resource = translator.translate(info);
+		assertThat(resource, is(equalTo(method)));
 
-    }
+	}
 
-    @Test
-    public void canHandleUrlIfNonRootContext() {
-    	when(request.getRequestURI()).thenReturn("/custom_context/url");
-    	when(request.getContextPath()).thenReturn("/custom_context");
-    	when(request.getMethod()).thenReturn("GET");
-    	when(router.parse("/url", HttpMethod.GET, webRequest)).thenReturn(method);
+	@Test
+	public void canHandleUrlIfNonRootContext() {
+		when(request.getRequestURI()).thenReturn("/custom_context/url");
+		when(request.getContextPath()).thenReturn("/custom_context");
+		when(request.getMethod()).thenReturn("GET");
+		when(router.parse("/url", HttpMethod.GET, webRequest)).thenReturn(method);
 
-    	ResourceMethod resource = translator.translate(info);
-    	assertThat(resource, is(equalTo(method)));
-    }
+		ResourceMethod resource = translator.translate(info);
+		assertThat(resource, is(equalTo(method)));
+	}
 
-    @Test
-    public void canHandleUrlIfPlainRootContext() {
-    	when(request.getRequestURI()).thenReturn("/");
-    	when(request.getMethod()).thenReturn("GET");
-    	when(router.parse("/", HttpMethod.GET, webRequest)).thenReturn(method);
+	@Test
+	public void canHandleUrlIfPlainRootContext() {
+		when(request.getRequestURI()).thenReturn("/");
+		when(request.getMethod()).thenReturn("GET");
+		when(router.parse("/", HttpMethod.GET, webRequest)).thenReturn(method);
 
-    	ResourceMethod resource = translator.translate(info);
-    	assertThat(resource, is(equalTo(method)));
+		ResourceMethod resource = translator.translate(info);
+		assertThat(resource, is(equalTo(method)));
    	}
 
-    @Test
-    public void canHandleComposedUrlIfPlainRootContext() {
-    	when(request.getRequestURI()).thenReturn("/products/1");
-    	when(request.getMethod()).thenReturn("GET");
-    	when(router.parse("/products/1", HttpMethod.GET, webRequest)).thenReturn(method);
+	@Test
+	public void canHandleComposedUrlIfPlainRootContext() {
+		when(request.getRequestURI()).thenReturn("/products/1");
+		when(request.getMethod()).thenReturn("GET");
+		when(router.parse("/products/1", HttpMethod.GET, webRequest)).thenReturn(method);
 
-    	ResourceMethod resource = translator.translate(info);
-    	assertThat(resource, is(equalTo(method)));
-    }
+		ResourceMethod resource = translator.translate(info);
+		assertThat(resource, is(equalTo(method)));
+	}
 
-    @Test
-    public void canHandleComposedUrlIfNonRootContext() {
-    	when(request.getRequestURI()).thenReturn("/custom_context/products/1");
-    	when(request.getContextPath()).thenReturn("/custom_context");
-    	when(request.getMethod()).thenReturn("GET");
-    	when(router.parse("/products/1", HttpMethod.GET, webRequest)).thenReturn(method);
+	@Test
+	public void canHandleComposedUrlIfNonRootContext() {
+		when(request.getRequestURI()).thenReturn("/custom_context/products/1");
+		when(request.getContextPath()).thenReturn("/custom_context");
+		when(request.getMethod()).thenReturn("GET");
+		when(router.parse("/products/1", HttpMethod.GET, webRequest)).thenReturn(method);
 
-    	ResourceMethod resource = translator.translate(info);
-    	assertThat(resource, is(equalTo(method)));
-    }
-    @Test
-    public void canHandleUrlWithAppendedJSessionID() {
-    	when(request.getRequestURI()).thenReturn(
-    			"/custom_context/products/1;jsessionid=aslfasfaslkj22234lkjsdfaklsf",
-    			"/custom_context/products/1;JSESSIONID=aslfasfaslkj22234lkjsdfaklsf",
-    			"/custom_context/products/1;jsessionID=aslfasfaslkj22234lkjsdfaklsf");
-    	when(request.getContextPath()).thenReturn("/custom_context");
-    	when(request.getMethod()).thenReturn("GET");
-    	when(router.parse("/products/1", HttpMethod.GET, webRequest)).thenReturn(method);
+		ResourceMethod resource = translator.translate(info);
+		assertThat(resource, is(equalTo(method)));
+	}
+	@Test
+	public void canHandleUrlWithAppendedJSessionID() {
+		when(request.getRequestURI()).thenReturn(
+				"/custom_context/products/1;jsessionid=aslfasfaslkj22234lkjsdfaklsf",
+				"/custom_context/products/1;JSESSIONID=aslfasfaslkj22234lkjsdfaklsf",
+				"/custom_context/products/1;jsessionID=aslfasfaslkj22234lkjsdfaklsf");
+		when(request.getContextPath()).thenReturn("/custom_context");
+		when(request.getMethod()).thenReturn("GET");
+		when(router.parse("/products/1", HttpMethod.GET, webRequest)).thenReturn(method);
 
-    	assertThat(translator.translate(info), is(equalTo(method)));
-    	assertThat(translator.translate(info), is(equalTo(method)));
-    	assertThat(translator.translate(info), is(equalTo(method)));
+		assertThat(translator.translate(info), is(equalTo(method)));
+		assertThat(translator.translate(info), is(equalTo(method)));
+		assertThat(translator.translate(info), is(equalTo(method)));
 
-    }
+	}
 
-    @Test
-    public void canHandleUrlIfNonRootContextButPlainRequest() {
-    	when(request.getRequestURI()).thenReturn("/custom_context/");
-    	when(request.getContextPath()).thenReturn("/custom_context");
-    	when(request.getMethod()).thenReturn("GET");
-    	when(router.parse("/", HttpMethod.GET, webRequest)).thenReturn(method);
+	@Test
+	public void canHandleUrlIfNonRootContextButPlainRequest() {
+		when(request.getRequestURI()).thenReturn("/custom_context/");
+		when(request.getContextPath()).thenReturn("/custom_context");
+		when(request.getMethod()).thenReturn("GET");
+		when(router.parse("/", HttpMethod.GET, webRequest)).thenReturn(method);
 
-    	ResourceMethod resource = translator.translate(info);
-    	assertThat(resource, is(equalTo(method)));
-    }
+		ResourceMethod resource = translator.translate(info);
+		assertThat(resource, is(equalTo(method)));
+	}
 
 }

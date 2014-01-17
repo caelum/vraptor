@@ -23,5 +23,5 @@ package br.com.caelum.vraptor.proxy;
  */
 public interface SuperMethod {
 
-    Object invoke(Object proxy, Object[] args);
+	Object invoke(Object proxy, Object[] args);
 }

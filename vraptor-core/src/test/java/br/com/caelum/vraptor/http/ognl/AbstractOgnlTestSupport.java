@@ -12,7 +12,7 @@ import br.com.caelum.vraptor.proxy.ReflectionInstanceCreator;
 public final class AbstractOgnlTestSupport {
 
 	public static void configOgnl(Converters converters) throws OgnlException {
-	    Proxifier proxifier = new JavassistProxifier(new ReflectionInstanceCreator());
+		Proxifier proxifier = new JavassistProxifier(new ReflectionInstanceCreator());
 		OgnlRuntime.setNullHandler(Object.class, new ReflectionBasedNullHandler(proxifier));
 
 		OgnlRuntime.setPropertyAccessor(List.class, new ListAccessor(converters));

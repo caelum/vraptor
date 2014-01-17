@@ -14,25 +14,25 @@ import org.junit.Test;
 
 public class EncodingHandlerFactoryTest {
 
-    private ServletContext context;
+	private ServletContext context;
 
-    @Before
-    public void setUp() throws Exception {
-        context = mock(ServletContext.class);
-    }
+	@Before
+	public void setUp() throws Exception {
+	context = mock(ServletContext.class);
+	}
 
-    @Test
-    public void shouldReturnANullHandlerWhenThereIsNoEncodingInitParameter() throws Exception {
-        when(context.getInitParameter(ENCODING)).thenReturn(null);
-        
-        EncodingHandlerFactory handlerFactory = new EncodingHandlerFactory(context);
-        assertThat(handlerFactory.getInstance(), is(instanceOf(NullEncodingHandler.class)));
-    }
-    @Test
-    public void shouldReturnAWebXmlHandlerWhenThereIsAnEncodingInitParameter() throws Exception {
-        when(context.getInitParameter(ENCODING)).thenReturn("UTF-8");
-        
-        EncodingHandlerFactory handlerFactory = new EncodingHandlerFactory(context);
-        assertThat(handlerFactory.getInstance(), is(instanceOf(WebXmlEncodingHandler.class)));
-    }
+	@Test
+	public void shouldReturnANullHandlerWhenThereIsNoEncodingInitParameter() throws Exception {
+	when(context.getInitParameter(ENCODING)).thenReturn(null);
+	
+	EncodingHandlerFactory handlerFactory = new EncodingHandlerFactory(context);
+	assertThat(handlerFactory.getInstance(), is(instanceOf(NullEncodingHandler.class)));
+	}
+	@Test
+	public void shouldReturnAWebXmlHandlerWhenThereIsAnEncodingInitParameter() throws Exception {
+	when(context.getInitParameter(ENCODING)).thenReturn("UTF-8");
+	
+	EncodingHandlerFactory handlerFactory = new EncodingHandlerFactory(context);
+	assertThat(handlerFactory.getInstance(), is(instanceOf(WebXmlEncodingHandler.class)));
+	}
 }

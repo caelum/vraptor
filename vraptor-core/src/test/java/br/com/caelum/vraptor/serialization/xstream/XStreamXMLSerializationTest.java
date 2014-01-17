@@ -36,14 +36,14 @@ public class XStreamXMLSerializationTest {
 	protected ByteArrayOutputStream stream;
 
 	@Before
-    public void setup() throws Exception {
-        this.stream = new ByteArrayOutputStream();
+	public void setup() throws Exception {
+	this.stream = new ByteArrayOutputStream();
 
-        HttpServletResponse response = mock(HttpServletResponse.class);
-        when(response.getWriter()).thenReturn(new PrintWriter(stream));
-        
+	HttpServletResponse response = mock(HttpServletResponse.class);
+	when(response.getWriter()).thenReturn(new PrintWriter(stream));
+	
 		this.serialization = new XStreamXMLSerialization(response, new DefaultTypeNameExtractor(), new NullProxyInitializer(), XStreamBuilderImpl.cleanInstance());
-    }
+	}
 
 	public static class Address {
 		String street;
@@ -119,8 +119,8 @@ public class XStreamXMLSerializationTest {
 	}
 
 	@Test
-    public void shouldSerializeGenericClass() {
-		String expectedResult = "<genericWrapper>\n  <entityList class=\"list\">\n    <client>\n      <name>washington botelho</name>\n    </client>\n    <client>\n      <name>washington botelho</name>\n    </client>\n  </entityList>\n  <total>2</total>\n</genericWrapper>";
+	public void shouldSerializeGenericClass() {
+		String expectedResult = "<genericWrapper>\n  <entityList class=\"list\">\n	<client>\n	  <name>washington botelho</name>\n	</client>\n	<client>\n	  <name>washington botelho</name>\n	</client>\n  </entityList>\n  <total>2</total>\n</genericWrapper>";
 
 		Collection<Client> entityList = new ArrayList<Client>();
 		entityList.add(new Client("washington botelho"));
@@ -128,14 +128,14 @@ public class XStreamXMLSerializationTest {
 
 		GenericWrapper<Client> wrapper = new GenericWrapper<Client>(entityList, entityList.size());
 
-        serialization.from(wrapper).include("entityList").serialize();
+	serialization.from(wrapper).include("entityList").serialize();
 
-        assertThat(result(), is(equalTo(expectedResult)));
-    }
+	assertThat(result(), is(equalTo(expectedResult)));
+	}
 
 	@Test
 	public void shouldSerializeMaps() {
-		String expectedResult = "<properties>\n  <map>\n    <entry>\n      <string>test</string>\n      <string>true</string>\n    </entry>\n  </map>\n</properties>";
+		String expectedResult = "<properties>\n  <map>\n	<entry>\n	  <string>test</string>\n	  <string>true</string>\n	</entry>\n  </map>\n</properties>";
 		serialization.from(new Properties("test", "true")).include("map").serialize();
 		assertThat(result(), is(equalTo(expectedResult)));
 	}
@@ -176,7 +176,7 @@ public class XStreamXMLSerializationTest {
 
 	@Test
 	public void shouldSerializeCollection() {
-		String expectedResult = "  <order>\n    <price>15.0</price>\n    <comments>pack it nicely, please</comments>\n  </order>\n";
+		String expectedResult = "  <order>\n	<price>15.0</price>\n	<comments>pack it nicely, please</comments>\n  </order>\n";
 		expectedResult += expectedResult;
 		expectedResult = "<list>\n" + expectedResult + "</list>";
 		Order order = new Order(new Client("guilherme silveira"), 15.0, "pack it nicely, please");
@@ -186,7 +186,7 @@ public class XStreamXMLSerializationTest {
 
 	@Test
 	public void shouldSerializeCollectionWithPrefixTag() {
-		String expectedResult = "  <order>\n    <price>15.0</price>\n    <comments>pack it nicely, please</comments>\n  </order>\n";
+		String expectedResult = "  <order>\n	<price>15.0</price>\n	<comments>pack it nicely, please</comments>\n  </order>\n";
 		expectedResult += expectedResult;
 		expectedResult = "<orders>\n" + expectedResult + "</orders>";
 		Order order = new Order(new Client("guilherme silveira"), 15.0, "pack it nicely, please");
@@ -370,7 +370,7 @@ public class XStreamXMLSerializationTest {
 		attribute.aliased = alias;
 
 		serialization.from(attribute).include("aliased").serialize();
-		assertThat(result(), is("<withAliasedAttribute>\n  <aliased>\n    <def>Duh!</def>\n  </aliased>\n</withAliasedAttribute>"));
+		assertThat(result(), is("<withAliasedAttribute>\n  <aliased>\n	<def>Duh!</def>\n  </aliased>\n</withAliasedAttribute>"));
 	}
 
 	private String result() {

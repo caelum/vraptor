@@ -42,42 +42,42 @@ import net.vidageek.mirror.dsl.Mirror;
  */
 public class GenericNullHandler implements NullHandler {
 
-    private static final Map<Class<?>, Class<?>> CONCRETE_TYPES = new HashMap<Class<?>, Class<?>>();
+	private static final Map<Class<?>, Class<?>> CONCRETE_TYPES = new HashMap<Class<?>, Class<?>>();
 	private final EmptyElementsRemoval removal;
 
-    static {
-        CONCRETE_TYPES.put(List.class, ArrayList.class);
-        CONCRETE_TYPES.put(Calendar.class, GregorianCalendar.class);
-        CONCRETE_TYPES.put(Collection.class, ArrayList.class);
-        CONCRETE_TYPES.put(Set.class, HashSet.class);
-        CONCRETE_TYPES.put(SortedSet.class, TreeSet.class);
-        CONCRETE_TYPES.put(Queue.class, LinkedList.class);
-    }
+	static {
+	CONCRETE_TYPES.put(List.class, ArrayList.class);
+	CONCRETE_TYPES.put(Calendar.class, GregorianCalendar.class);
+	CONCRETE_TYPES.put(Collection.class, ArrayList.class);
+	CONCRETE_TYPES.put(Set.class, HashSet.class);
+	CONCRETE_TYPES.put(SortedSet.class, TreeSet.class);
+	CONCRETE_TYPES.put(Queue.class, LinkedList.class);
+	}
 
-    public GenericNullHandler(EmptyElementsRemoval removal) {
+	public GenericNullHandler(EmptyElementsRemoval removal) {
 		this.removal = removal;
 	}
 
-    public <T> T instantiate(Class<T> baseType) {
-    	if (baseType.isArray()) {
-    		return baseType.cast(Array.newInstance(baseType.getComponentType(), 0));
-    	}
-        Class<?> typeToInstantiate = baseType;
-        if (baseType.isInterface() || Modifier.isAbstract(baseType.getModifiers())) {
-            if (!CONCRETE_TYPES.containsKey(baseType)) {
-                // TODO better
-                throw new IllegalArgumentException("Vraptor does not support this interface or abstract type: "
-                        + typeToInstantiate.getName());
-            }
-            typeToInstantiate = CONCRETE_TYPES.get(baseType);
-        }
-        Object instance = new Mirror().on(typeToInstantiate).invoke().constructor().withoutArgs();
+	public <T> T instantiate(Class<T> baseType) {
+		if (baseType.isArray()) {
+			return baseType.cast(Array.newInstance(baseType.getComponentType(), 0));
+		}
+	Class<?> typeToInstantiate = baseType;
+	if (baseType.isInterface() || Modifier.isAbstract(baseType.getModifiers())) {
+		if (!CONCRETE_TYPES.containsKey(baseType)) {
+		// TODO better
+		throw new IllegalArgumentException("Vraptor does not support this interface or abstract type: "
+			+ typeToInstantiate.getName());
+		}
+		typeToInstantiate = CONCRETE_TYPES.get(baseType);
+	}
+	Object instance = new Mirror().on(typeToInstantiate).invoke().constructor().withoutArgs();
 
-        if(Collection.class.isAssignableFrom(typeToInstantiate)) {
-        	removal.add((Collection)instance);
-        }
+	if(Collection.class.isAssignableFrom(typeToInstantiate)) {
+		removal.add((Collection)instance);
+	}
 
-        return baseType.cast(instance);
-    }
+	return baseType.cast(instance);
+	}
 
 }

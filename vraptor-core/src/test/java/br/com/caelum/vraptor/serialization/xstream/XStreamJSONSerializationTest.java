@@ -356,7 +356,7 @@ public class XStreamJSONSerializationTest {
 
 	@Test
 	public void shouldOptionallyRemoveRootIdented() {
-	String expected = "{\n  \"price\": 15.0,\n  \"comments\": \"pack it nicely, please\",\n  \"items\": [\n	{\n	  \"name\": \"any item\"\n	}\n  ]\n}";
+	String expected = "{\n  \"price\": 15.0,\n  \"comments\": \"pack it nicely, please\",\n  \"items\": [\n    {\n      \"name\": \"any item\"\n    }\n  ]\n}";
 	Order order = new Order(new Client("guilherme silveira"), 15.0, "pack it nicely, please",
 		new Item("any item", 12.99));
 	serialization.indented().withoutRoot().from(order).include("items").exclude("items.price").serialize();

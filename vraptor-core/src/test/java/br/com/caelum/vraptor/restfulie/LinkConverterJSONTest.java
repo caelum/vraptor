@@ -84,7 +84,7 @@ public class LinkConverterJSONTest {
 
 		when(builder.getRelations()).thenReturn(Arrays.asList(kill));
 		String json = xstream.toXML(resource);
-		String expectedLinks = "\"links\": [\n	{\n	  \"rel\": \"kill\",\n	  \"href\": \"http://www.caelum.com.br/kill\"\n	}\n  ]";
+		String expectedLinks = "\"links\": [\n    {\n      \"rel\": \"kill\",\n      \"href\": \"http://www.caelum.com.br/kill\"\n    }\n  ]";
 		assertThat(json, containsString(expectedLinks));
 	}
 	
@@ -100,7 +100,7 @@ public class LinkConverterJSONTest {
 
 		when(builder.getRelations()).thenReturn(Arrays.asList(kill, ressurect));
 		String json = xstream.toXML(resource);
-		String expectedLinks = "\"links\": [\n	{\n	  \"rel\": \"kill\",\n	  \"href\": \"http://www.caelum.com.br/kill\"\n	},\n	{\n	  \"rel\": \"ressurect\",\n	  \"href\": \"http://www.caelum.com.br/ressurect\"\n	}\n  ]";
+		String expectedLinks = "\"links\": [\n    {\n      \"rel\": \"kill\",\n      \"href\": \"http://www.caelum.com.br/kill\"\n    },\n    {\n      \"rel\": \"ressurect\",\n      \"href\": \"http://www.caelum.com.br/ressurect\"\n    }\n  ]";
 		assertThat(json, containsString(expectedLinks));
 	}
 }

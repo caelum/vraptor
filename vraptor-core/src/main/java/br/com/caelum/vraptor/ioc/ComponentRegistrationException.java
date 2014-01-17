@@ -23,15 +23,15 @@ import br.com.caelum.vraptor.VRaptorException;
  */
 @SuppressWarnings("serial")
 public class ComponentRegistrationException extends VRaptorException {
-    public ComponentRegistrationException(Throwable e) {
-        super(e);
-    }
+	public ComponentRegistrationException(Throwable e) {
+	super(e);
+	}
 
-    public ComponentRegistrationException(String msg) {
-        super(msg);
-    }
+	public ComponentRegistrationException(String msg) {
+	super(msg);
+	}
 
-    public ComponentRegistrationException(String msg, Throwable e) {
-        super(msg, e);
-    }
+	public ComponentRegistrationException(String msg, Throwable e) {
+	super(msg, e);
+	}
 }

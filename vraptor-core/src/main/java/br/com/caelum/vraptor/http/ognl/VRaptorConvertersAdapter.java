@@ -34,73 +34,73 @@ import br.com.caelum.vraptor.ioc.RequestScoped;
 @RequestScoped
 public class VRaptorConvertersAdapter implements TypeConverter {
 
-    private final Converters converters;
-    private final ResourceBundle bundle;
+	private final Converters converters;
+	private final ResourceBundle bundle;
 
-    public VRaptorConvertersAdapter(Converters converters, ResourceBundle bundle) {
-        this.converters = converters;
-        this.bundle = bundle;
-    }
+	public VRaptorConvertersAdapter(Converters converters, ResourceBundle bundle) {
+	this.converters = converters;
+	this.bundle = bundle;
+	}
 
-    public Object convertValue(Map context, Object target, Member member, String propertyName, Object value,
-            Class toType) {
-        Type genericType = genericTypeToConvert(target, member);
-        Class type = rawTypeOf(genericType);
-        if (type.isArray() && !value.getClass().isArray()) {
-        	Class arrayType = type.getComponentType();
-        	Object array = Array.newInstance(arrayType, 1);
-        	Array.set(array, 0, convert(value, arrayType));
-        	return array;
-        }
-        return convert(value, type);
-    }
+	public Object convertValue(Map context, Object target, Member member, String propertyName, Object value,
+		Class toType) {
+	Type genericType = genericTypeToConvert(target, member);
+	Class type = rawTypeOf(genericType);
+	if (type.isArray() && !value.getClass().isArray()) {
+		Class arrayType = type.getComponentType();
+		Object array = Array.newInstance(arrayType, 1);
+		Array.set(array, 0, convert(value, arrayType));
+		return array;
+	}
+	return convert(value, type);
+	}
 
 	Object convert(Object value, Class type) {
 		Converter<?> converter = converters.to(type);
-        if (converter == null) {
-            // TODO better, validation error?
-            throw new IllegalArgumentException("Cannot instantiate a converter for type " + type.getName());
-        }
-        return converter.convert((String) value, type, bundle);
+	if (converter == null) {
+		// TODO better, validation error?
+		throw new IllegalArgumentException("Cannot instantiate a converter for type " + type.getName());
+	}
+	return converter.convert((String) value, type, bundle);
 	}
 
-    private Type genericTypeToConvert(Object target, Member member) {
-        if (member instanceof Field) {
-            return extractFieldType(member);
-        } else if (member instanceof Method) {
-            return extractSetterMethodType(target, member);
-        } else if (member == null && target.getClass().isArray()) {
-            return extractArrayType(target);
-        }
-        // TODO better
-        throw new IllegalArgumentException("Vraptor can only navigate through getter/setter methods, not " + member
-                + " from " + target.getClass().getName());
-    }
+	private Type genericTypeToConvert(Object target, Member member) {
+	if (member instanceof Field) {
+		return extractFieldType(member);
+	} else if (member instanceof Method) {
+		return extractSetterMethodType(target, member);
+	} else if (member == null && target.getClass().isArray()) {
+		return extractArrayType(target);
+	}
+	// TODO better
+	throw new IllegalArgumentException("Vraptor can only navigate through getter/setter methods, not " + member
+		+ " from " + target.getClass().getName());
+	}
 
-    private static Class rawTypeOf(Type genericType) {
-        if (genericType instanceof ParameterizedType) {
-            return (Class) ((ParameterizedType) genericType).getRawType();
-        }
-        return (Class) genericType;
-    }
+	private static Class rawTypeOf(Type genericType) {
+	if (genericType instanceof ParameterizedType) {
+		return (Class) ((ParameterizedType) genericType).getRawType();
+	}
+	return (Class) genericType;
+	}
 
-    private Type extractArrayType(Object target) {
-        return target.getClass().getComponentType();
-    }
+	private Type extractArrayType(Object target) {
+	return target.getClass().getComponentType();
+	}
 
-    private Type extractFieldType(Member member) {
-        return ((Field) member).getGenericType();
-    }
+	private Type extractFieldType(Member member) {
+	return ((Field) member).getGenericType();
+	}
 
-    private Type extractSetterMethodType(Object target, Member member) {
-        Method method = (Method) member;
-        Type[] parameterTypes = method.getGenericParameterTypes();
-        if (parameterTypes.length != 1) {
-            // TODO better
-            throw new IllegalArgumentException("Vraptor can only navigate through setters with one parameter, not "
-                    + member + " from " + target.getClass().getName());
-        }
-        return parameterTypes[0];
-    }
+	private Type extractSetterMethodType(Object target, Member member) {
+	Method method = (Method) member;
+	Type[] parameterTypes = method.getGenericParameterTypes();
+	if (parameterTypes.length != 1) {
+		// TODO better
+		throw new IllegalArgumentException("Vraptor can only navigate through setters with one parameter, not "
+			+ member + " from " + target.getClass().getName());
+	}
+	return parameterTypes[0];
+	}
 
 }

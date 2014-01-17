@@ -45,50 +45,50 @@ import com.google.common.base.Throwables;
  */
 @Intercepts
 public class ExceptionHandlerInterceptor
-    implements Interceptor {
+	implements Interceptor {
 
-    private static final Logger logger = LoggerFactory.getLogger(ExceptionHandlerInterceptor.class);
+	private static final Logger logger = LoggerFactory.getLogger(ExceptionHandlerInterceptor.class);
 
-    private final ExceptionMapper exceptions;
-    private final Result result;
+	private final ExceptionMapper exceptions;
+	private final Result result;
 
-    public ExceptionHandlerInterceptor(ExceptionMapper exceptions, Result result) {
-        this.exceptions = exceptions;
-        this.result = result;
-    }
+	public ExceptionHandlerInterceptor(ExceptionMapper exceptions, Result result) {
+	this.exceptions = exceptions;
+	this.result = result;
+	}
 
-    public boolean accepts(ResourceMethod method) {
-        return true;
-    }
+	public boolean accepts(ResourceMethod method) {
+	return true;
+	}
 
-    public void intercept(InterceptorStack stack, ResourceMethod method, Object resourceInstance)
-        throws InterceptionException {
-        try {
-            stack.next(method, resourceInstance);
-        } catch (InterceptionException e) {
-            if (!(e.getCause() instanceof Exception) || !replay((Exception) e.getCause())) {
-                throw e;
-            }
-        }
-    }
+	public void intercept(InterceptorStack stack, ResourceMethod method, Object resourceInstance)
+	throws InterceptionException {
+	try {
+		stack.next(method, resourceInstance);
+	} catch (InterceptionException e) {
+		if (!(e.getCause() instanceof Exception) || !replay((Exception) e.getCause())) {
+		throw e;
+		}
+	}
+	}
 
-    protected void reportException(Exception e) {
-        result.include("exception", Throwables.getRootCause(e));
-    }
+	protected void reportException(Exception e) {
+	result.include("exception", Throwables.getRootCause(e));
+	}
 
-    protected boolean replay(Exception e) {
-        ExceptionRecorder<Result> exresult = exceptions.findByException(e);
+	protected boolean replay(Exception e) {
+	ExceptionRecorder<Result> exresult = exceptions.findByException(e);
 
-        if (exresult == null) {
+	if (exresult == null) {
 			return false;
 		}
 
-        reportException(e);
+	reportException(e);
 
-        logger.debug("handling exception {}", e.getClass());
-        exresult.replay(result);
+	logger.debug("handling exception {}", e.getClass());
+	exresult.replay(result);
 
-        return true;
-    }
+	return true;
+	}
 
 }

@@ -27,6 +27,6 @@ import java.util.ResourceBundle;
  */
 public interface Converter<T> {
 
-    T convert(String value, Class<? extends T> type, ResourceBundle bundle);
+	T convert(String value, Class<? extends T> type, ResourceBundle bundle);
 
 }

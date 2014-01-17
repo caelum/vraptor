@@ -70,7 +70,7 @@ public class ListNullHandler {
 		
 		Proxifier proxifier = (Proxifier) ctx.get("proxifier");
 		Method listSetter = new ReflectionBasedNullHandler(proxifier).findSetter(listHolder, StringUtils.capitalize(listPropertyName), 
-		        target.getClass());
+			target.getClass());
 		
 		Type[] types = listSetter.getGenericParameterTypes();
 		Type type = types[0];

@@ -38,20 +38,20 @@ import br.com.caelum.vraptor.core.Localization;
 @Convert(LocalDate.class)
 public class LocalDateConverter implements Converter<LocalDate> {
 
-    private final Localization localization;
+	private final Localization localization;
 
 	public LocalDateConverter(Localization localization) {
-        this.localization = localization;
-    }
+	this.localization = localization;
+	}
 
-    public LocalDate convert(String value, Class<? extends LocalDate> type, ResourceBundle bundle) {
-        try {
-            DateTime out = new LocaleBasedJodaTimeConverter(localization).convert(value, shortDate());
-            if (out == null) {
-                return null;
-            }
-            
-            return out.toLocalDate();
+	public LocalDate convert(String value, Class<? extends LocalDate> type, ResourceBundle bundle) {
+	try {
+		DateTime out = new LocaleBasedJodaTimeConverter(localization).convert(value, shortDate());
+		if (out == null) {
+		return null;
+		}
+		
+		return out.toLocalDate();
 		} catch (Exception e) {
 			throw new ConversionError(MessageFormat.format(bundle.getString("is_not_a_valid_date"), value));
 		}

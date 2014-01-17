@@ -89,7 +89,7 @@ public class XStreamXMLDeserializer implements XMLDeserializer {
 	/**
 	 * Extension point to configure your xstream instance.
 	 * @return the configured xstream instance
-     * @deprecated prefer overriding XStreamBuilder
+	 * @deprecated prefer overriding XStreamBuilder
 	 */
 	@Deprecated
 	protected XStream getXStream() {

@@ -78,7 +78,7 @@ public class ListAccessor extends ListPropertyAccessor {
 
 			Type genericType = extractGenericType(ctx, target);
 
-            Class type = getActualType(genericType);
+		Class type = getActualType(genericType);
 
 			// suckable ognl doesnt support dependency injection or
 			// anything alike... just that suckable context... therefore
@@ -99,9 +99,9 @@ public class ListAccessor extends ListPropertyAccessor {
 	private Class getActualType(Type genericType) {
 		Class type;
 		if (genericType instanceof ParameterizedType) {
-		    type = (Class) ((ParameterizedType) genericType).getActualTypeArguments()[0];
+			type = (Class) ((ParameterizedType) genericType).getActualTypeArguments()[0];
 		} else {
-		    type = (Class) genericType;
+			type = (Class) genericType;
 		}
 		return type;
 	}

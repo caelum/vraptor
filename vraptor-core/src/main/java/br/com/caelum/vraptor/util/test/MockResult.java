@@ -58,7 +58,7 @@ public class MockResult extends AbstractResult {
 	}
 
 	public MockResult() {
-	    this(new JavassistProxifier(new ObjenesisInstanceCreator()));
+		this(new JavassistProxifier(new ObjenesisInstanceCreator()));
 	}
 
 	public Result include(String key, Object value) {
@@ -67,7 +67,7 @@ public class MockResult extends AbstractResult {
 	}
 
 	public Result on(Class<? extends Exception> exception) {
-	    return this;
+		return this;
 	}
 
 	public <T extends View> T use(final Class<T> view) {

@@ -28,38 +28,38 @@ import org.junit.Before;
 import org.junit.Test;
 
 public class LongConverterTest {
-    
-    private LongConverter converter;
+	
+	private LongConverter converter;
 	private ResourceBundle bundle;
 
-    @Before
-    public void setup() {
-        this.converter = new LongConverter();
-        this.bundle = ResourceBundle.getBundle("messages");
-    }
-    
-    @Test
-    public void shouldBeAbleToConvertNumbers(){
-        assertThat(converter.convert("2", long.class, bundle), is(equalTo(2L)));
-    }
-    
-    @Test
-    public void shouldComplainAboutInvalidNumber() {
-        try {
+	@Before
+	public void setup() {
+	this.converter = new LongConverter();
+	this.bundle = ResourceBundle.getBundle("messages");
+	}
+	
+	@Test
+	public void shouldBeAbleToConvertNumbers(){
+	assertThat(converter.convert("2", long.class, bundle), is(equalTo(2L)));
+	}
+	
+	@Test
+	public void shouldComplainAboutInvalidNumber() {
+	try {
 			converter.convert("---", long.class, bundle);
 		} catch (ConversionError e) {
 			assertThat(e.getMessage(), is(equalTo("--- is not a valid integer.")));
 		}
-    }
-    
-    @Test
-    public void shouldNotComplainAboutNull() {
-        assertThat(converter.convert(null, long.class, bundle), is(nullValue()));
-    }
+	}
+	
+	@Test
+	public void shouldNotComplainAboutNull() {
+	assertThat(converter.convert(null, long.class, bundle), is(nullValue()));
+	}
 
-    @Test
-    public void shouldNotComplainAboutEmpty() {
-        assertThat(converter.convert("", long.class, bundle), is(nullValue()));
-    }
+	@Test
+	public void shouldNotComplainAboutEmpty() {
+	assertThat(converter.convert("", long.class, bundle), is(nullValue()));
+	}
 
 }

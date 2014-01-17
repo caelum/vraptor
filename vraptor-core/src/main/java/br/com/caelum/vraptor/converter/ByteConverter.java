@@ -35,16 +35,16 @@ import br.com.caelum.vraptor.ioc.ApplicationScoped;
 @ApplicationScoped
 public class ByteConverter implements Converter<Byte> {
 
-    public Byte convert(String value, Class<? extends Byte> type, ResourceBundle bundle) {
-        if (isNullOrEmpty(value)) {
-            return null;
-        }
-        
-        try {
-            return Byte.valueOf(value);
-        } catch (NumberFormatException e) {
+	public Byte convert(String value, Class<? extends Byte> type, ResourceBundle bundle) {
+	if (isNullOrEmpty(value)) {
+		return null;
+	}
+	
+	try {
+		return Byte.valueOf(value);
+	} catch (NumberFormatException e) {
 			throw new ConversionError(MessageFormat.format(bundle.getString("is_not_a_valid_integer"), value));
-        }
-    }
+	}
+	}
 
 }

@@ -63,11 +63,11 @@ public class GuiceProvider implements ContainerProvider {
 		}
 
 		public <T> boolean canProvide(Class<T> type) {
-            try {
-                return injector.getProvider(type) != null;
-            } catch (ConfigurationException e) {
-                return false;
-            }
+		try {
+		return injector.getProvider(type) != null;
+		} catch (ConfigurationException e) {
+		return false;
+		}
 		}
 	}
 
@@ -118,12 +118,12 @@ public class GuiceProvider implements ContainerProvider {
 				ComponentRegistry registry = new GuiceComponentRegistry(binder, Multibinder.newSetBinder(binder, StereotypeHandler.class));
 				BasicConfiguration config = new BasicConfiguration(context);
 
-			    // using the new vraptor.scan
-			    WebAppBootstrap webAppBootstrap = new WebAppBootstrapFactory().create(config);
-			    webAppBootstrap.configure(registry);
+				// using the new vraptor.scan
+				WebAppBootstrap webAppBootstrap = new WebAppBootstrapFactory().create(config);
+				webAppBootstrap.configure(registry);
 
-			    // call old-style custom components registration
-			    registerCustomComponents(registry);
+				// call old-style custom components registration
+				registerCustomComponents(registry);
 			}
 		};
 	}

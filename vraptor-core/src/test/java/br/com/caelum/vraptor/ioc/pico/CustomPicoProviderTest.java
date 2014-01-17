@@ -45,28 +45,28 @@ import br.com.caelum.vraptor.test.HttpServletRequestMock;
 import br.com.caelum.vraptor.test.HttpSessionMock;
 
 public class CustomPicoProviderTest extends GenericContainerTest {
-    private int counter;
+	private int counter;
 
-    static class CustomPicoProvider extends PicoProvider  {
-    	@Override
-    	protected void registerBundledComponents(ComponentRegistry registry) {
-    		super.registerBundledComponents(registry);
-    		registry.register(MyAppComponent.class, MyAppComponent.class);
-    		registry.register(MyAppComponentWithLifecycle.class, MyAppComponentWithLifecycle.class);
-    		registry.register(MyRequestComponent.class, MyRequestComponent.class);
-    		registry.register(MyFactory.class, MyFactory.class);
-    	}
-    }
+	static class CustomPicoProvider extends PicoProvider  {
+		@Override
+		protected void registerBundledComponents(ComponentRegistry registry) {
+			super.registerBundledComponents(registry);
+			registry.register(MyAppComponent.class, MyAppComponent.class);
+			registry.register(MyAppComponentWithLifecycle.class, MyAppComponentWithLifecycle.class);
+			registry.register(MyRequestComponent.class, MyRequestComponent.class);
+			registry.register(MyFactory.class, MyFactory.class);
+		}
+	}
 
-    @ApplicationScoped
-    public static class MyAppComponent {
+	@ApplicationScoped
+	public static class MyAppComponent {
 
-    }
+	}
 
-    @RequestScoped
-    public static class MyRequestComponent {
+	@RequestScoped
+	public static class MyRequestComponent {
 
-    }
+	}
 
 	@ApplicationScoped
 	public static class MyFactory implements ComponentFactory<Void> {
@@ -86,17 +86,17 @@ public class CustomPicoProviderTest extends GenericContainerTest {
 		}
 	}
 
-    @ApplicationScoped
-    public static class MyAppComponentWithLifecycle {
-    	private int calls = 0;
+	@ApplicationScoped
+	public static class MyAppComponentWithLifecycle {
+		private int calls = 0;
 
-    	@PreDestroy
-    	public void z() {
-    		calls++;
-    	}
-    }
+		@PreDestroy
+		public void z() {
+			calls++;
+		}
+	}
 
-    @Test
+	@Test
 	public void callsPredestroyExactlyOneTimeForAppScopedComponents() throws Exception {
 		MyAppComponentWithLifecycle component = getFromContainer(MyAppComponentWithLifecycle.class);
 		assertThat(0, is(equalTo(component.calls)));
@@ -106,55 +106,55 @@ public class CustomPicoProviderTest extends GenericContainerTest {
 		resetProvider();
 	}
 
-    @Test
-    public void callsPredestroyExactlyOneTimeForAppScopedComponentFactories() throws Exception {
-    	MyFactory component = getFromContainer(MyFactory.class);
-    	assertThat(0, is(equalTo(component.calls)));
-    	provider.stop();
-    	assertThat(1, is(equalTo(component.calls)));
+	@Test
+	public void callsPredestroyExactlyOneTimeForAppScopedComponentFactories() throws Exception {
+		MyFactory component = getFromContainer(MyFactory.class);
+		assertThat(0, is(equalTo(component.calls)));
+		provider.stop();
+		assertThat(1, is(equalTo(component.calls)));
 
-    	resetProvider();
-    }
+		resetProvider();
+	}
 
 	@Test
-    public void canProvideCustomApplicationScopedComponents() {
-    	MyAppComponent component = getFromContainer(MyAppComponent.class);
-        assertThat(component, is(notNullValue()));
-    }
+	public void canProvideCustomApplicationScopedComponents() {
+		MyAppComponent component = getFromContainer(MyAppComponent.class);
+	assertThat(component, is(notNullValue()));
+	}
 
-    @Test
-    public void canProvideCustomRequestScopedComponents() {
-        checkAvailabilityFor(false, Arrays.<Class<?>>asList(MyRequestComponent.class));
-    }
+	@Test
+	public void canProvideCustomRequestScopedComponents() {
+	checkAvailabilityFor(false, Arrays.<Class<?>>asList(MyRequestComponent.class));
+	}
 
-    @Override
+	@Override
 	public ContainerProvider getProvider() {
-        return new CustomPicoProvider();
-    }
+	return new CustomPicoProvider();
+	}
 
-    @Override
+	@Override
 	protected <T> T executeInsideRequest(WhatToDo<T> execution) {
-        final HttpSessionMock session = new HttpSessionMock(context, "session" + ++counter);
-        final MutableRequest request = mock(MutableRequest.class, "request" + ++counter);
-        
-        when(request.getRequestURI()).thenReturn("what.ever.request.uri");
-        when(request.getSession()).thenReturn(session);
-        when(request.getParameterMap()).thenReturn(new HashMap<String, String[]>());
-        when(request.getParameter("view")).thenReturn(null);
-        
-        MutableResponse response = mock(MutableResponse.class, "response" + counter);
-        RequestInfo webRequest = new RequestInfo(context, null, new HttpServletRequestMock(session, request), response);
-        return execution.execute(webRequest, counter);
-    }
+	final HttpSessionMock session = new HttpSessionMock(context, "session" + ++counter);
+	final MutableRequest request = mock(MutableRequest.class, "request" + ++counter);
+	
+	when(request.getRequestURI()).thenReturn("what.ever.request.uri");
+	when(request.getSession()).thenReturn(session);
+	when(request.getParameterMap()).thenReturn(new HashMap<String, String[]>());
+	when(request.getParameter("view")).thenReturn(null);
+	
+	MutableResponse response = mock(MutableResponse.class, "response" + counter);
+	RequestInfo webRequest = new RequestInfo(context, null, new HttpServletRequestMock(session, request), response);
+	return execution.execute(webRequest, counter);
+	}
 
-    @Override
-    protected void configureExpectations() {
-        try {
-            when(context.getRealPath("/WEB-INF/classes/vraptor.xml")).thenReturn("non-existing-vraptor.xml");
-            when(context.getRealPath("/WEB-INF/classes/views.properties")).thenReturn("views.properties");
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
-    }
+	@Override
+	protected void configureExpectations() {
+	try {
+		when(context.getRealPath("/WEB-INF/classes/vraptor.xml")).thenReturn("non-existing-vraptor.xml");
+		when(context.getRealPath("/WEB-INF/classes/views.properties")).thenReturn("views.properties");
+	} catch (Exception e) {
+		throw new RuntimeException(e);
+	}
+	}
 
 }

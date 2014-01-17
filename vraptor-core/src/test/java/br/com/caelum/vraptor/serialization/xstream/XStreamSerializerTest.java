@@ -29,17 +29,17 @@ public class XStreamSerializerTest extends XStreamXMLSerializationTest {
 
 	@Override
 	@Before
-    public void setup() throws Exception {
+	public void setup() throws Exception {
 		this.stream = new ByteArrayOutputStream();
 		
-        HttpServletResponse response = mock(HttpServletResponse.class);
-        when(response.getWriter()).thenReturn(new PrintWriter(stream));
-        
-        
+	HttpServletResponse response = mock(HttpServletResponse.class);
+	when(response.getWriter()).thenReturn(new PrintWriter(stream));
+	
+	
 		final DefaultTypeNameExtractor extractor = new DefaultTypeNameExtractor();
 		this.serialization = new XStreamXMLSerialization(response, extractor, new NullProxyInitializer(), new XStreamBuilderImpl(
-                new XStreamConverters(Collections.<Converter>emptyList(), Collections.<SingleValueConverter>emptyList()),
-                extractor) {
+		new XStreamConverters(Collections.<Converter>emptyList(), Collections.<SingleValueConverter>emptyList()),
+		extractor) {
 			@Override
 			public XStream xmlInstance() {
 				return configure(new XStream() {
@@ -47,21 +47,21 @@ public class XStreamSerializerTest extends XStreamXMLSerializationTest {
 					@Override
 					protected MapperWrapper wrapMapper(MapperWrapper next) {
 						
-					    return new MapperWrapper(next) {
-					    	@Override
-					    	public String serializedClass(Class type) {
-					    		String superName = super.serializedClass(type);
-					    		if (type.getName().equals(superName)) {
-					    			return extractor.nameFor(type);
-					    		}
-					    		return superName;
-					    	}
+						return new MapperWrapper(next) {
+							@Override
+							public String serializedClass(Class type) {
+								String superName = super.serializedClass(type);
+								if (type.getName().equals(superName)) {
+									return extractor.nameFor(type);
+								}
+								return superName;
+							}
 						};
 					}
 				});
 			}
 		});
-    }
+	}
 
 }
 

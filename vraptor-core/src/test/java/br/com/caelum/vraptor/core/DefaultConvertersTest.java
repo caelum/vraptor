@@ -59,107 +59,107 @@ import br.com.caelum.vraptor.ioc.Container;
 
 public class DefaultConvertersTest {
 
-    @Mock private Container container;
-    private DefaultConverters converters;
+	@Mock private Container container;
+	private DefaultConverters converters;
 
-    @Before
-    public void setup() {
-    	MockitoAnnotations.initMocks(this);
-        this.converters = new DefaultConverters(container);
-    }
+	@Before
+	public void setup() {
+		MockitoAnnotations.initMocks(this);
+	this.converters = new DefaultConverters(container);
+	}
 
 	@Test
-    public void shouldRegisterConvertersForAllDefaultTypes() {
-        final HashMap<Class, Class<? extends Converter>> EXPECTED_CONVERTERS = new HashMap<Class, Class<? extends Converter>>() {
-            {
-                put(int.class, PrimitiveIntConverter.class);
-                put(long.class, PrimitiveLongConverter.class);
-                put(short.class, PrimitiveShortConverter.class);
-                put(byte.class, PrimitiveByteConverter.class);
-                put(double.class, PrimitiveDoubleConverter.class);
-                put(float.class, PrimitiveFloatConverter.class);
-                put(boolean.class, PrimitiveBooleanConverter.class);
-                put(Integer.class, IntegerConverter.class);
-                put(Long.class, LongConverter.class);
-                put(Short.class, ShortConverter.class);
-                put(Byte.class, ByteConverter.class);
-                put(Double.class, DoubleConverter.class);
-                put(Float.class, FloatConverter.class);
-                put(Boolean.class, BooleanConverter.class);
-                put(Calendar.class, LocaleBasedCalendarConverter.class);
-                put(Date.class, LocaleBasedDateConverter.class);
-                put(Enum.class, EnumConverter.class);
-            }
-            private static final long serialVersionUID = 8559316558416038474L;
-        };
+	public void shouldRegisterConvertersForAllDefaultTypes() {
+	final HashMap<Class, Class<? extends Converter>> EXPECTED_CONVERTERS = new HashMap<Class, Class<? extends Converter>>() {
+		{
+		put(int.class, PrimitiveIntConverter.class);
+		put(long.class, PrimitiveLongConverter.class);
+		put(short.class, PrimitiveShortConverter.class);
+		put(byte.class, PrimitiveByteConverter.class);
+		put(double.class, PrimitiveDoubleConverter.class);
+		put(float.class, PrimitiveFloatConverter.class);
+		put(boolean.class, PrimitiveBooleanConverter.class);
+		put(Integer.class, IntegerConverter.class);
+		put(Long.class, LongConverter.class);
+		put(Short.class, ShortConverter.class);
+		put(Byte.class, ByteConverter.class);
+		put(Double.class, DoubleConverter.class);
+		put(Float.class, FloatConverter.class);
+		put(Boolean.class, BooleanConverter.class);
+		put(Calendar.class, LocaleBasedCalendarConverter.class);
+		put(Date.class, LocaleBasedDateConverter.class);
+		put(Enum.class, EnumConverter.class);
+		}
+		private static final long serialVersionUID = 8559316558416038474L;
+	};
 
-        for (Class<? extends Converter> converterType : EXPECTED_CONVERTERS.values()) {
-            Converter<?> expected = mock(converterType);
-            when((Converter)container.instanceFor(converterType)).thenReturn(expected);
-        }
+	for (Class<? extends Converter> converterType : EXPECTED_CONVERTERS.values()) {
+		Converter<?> expected = mock(converterType);
+		when((Converter)container.instanceFor(converterType)).thenReturn(expected);
+	}
 
-        for (Entry<Class, Class<? extends Converter>> entry : EXPECTED_CONVERTERS.entrySet()) {
-            Class<?> typeFor = entry.getKey();
-            Class<? extends Converter> converterType = entry.getValue();
-            Converter<?> converter = converters.to(typeFor);
-            assertThat(converter, is(instanceOf(converterType)));
-        }
-    }
+	for (Entry<Class, Class<? extends Converter>> entry : EXPECTED_CONVERTERS.entrySet()) {
+		Class<?> typeFor = entry.getKey();
+		Class<? extends Converter> converterType = entry.getValue();
+		Converter<?> converter = converters.to(typeFor);
+		assertThat(converter, is(instanceOf(converterType)));
+	}
+	}
 
-    @Test(expected = VRaptorException.class)
-    public void complainsIfNoConverterFound() {
-        converters.to(DefaultConvertersTest.class);
-    }
+	@Test(expected = VRaptorException.class)
+	public void complainsIfNoConverterFound() {
+	converters.to(DefaultConvertersTest.class);
+	}
 
-    @Test(expected = VRaptorException.class)
-    public void convertingANonAnnotatedConverterEndsUpComplaining() {
-        converters.register(WrongConverter.class);
-    }
+	@Test(expected = VRaptorException.class)
+	public void convertingANonAnnotatedConverterEndsUpComplaining() {
+	converters.register(WrongConverter.class);
+	}
 
-    class WrongConverter implements Converter<String> {
+	class WrongConverter implements Converter<String> {
 
-        public String convert(String value, Class<? extends String> type, ResourceBundle bundle) {
-            return null;
-        }
-    }
+	public String convert(String value, Class<? extends String> type, ResourceBundle bundle) {
+		return null;
+	}
+	}
 
-    class MyData {
-    }
+	class MyData {
+	}
 
-    @Convert(MyData.class)
-    class MyConverter implements Converter<MyData> {
-        public MyData convert(String value, Class<? extends MyData> type, ResourceBundle bundle) {
-            return null;
-        }
-    }
+	@Convert(MyData.class)
+	class MyConverter implements Converter<MyData> {
+	public MyData convert(String value, Class<? extends MyData> type, ResourceBundle bundle) {
+		return null;
+	}
+	}
 
-    @Convert(MyData.class)
-    class MySecondConverter implements Converter<MyData> {
-        public MyData convert(String value, Class<? extends MyData> type, ResourceBundle bundle) {
-            return null;
-        }
-    }
+	@Convert(MyData.class)
+	class MySecondConverter implements Converter<MyData> {
+	public MyData convert(String value, Class<? extends MyData> type, ResourceBundle bundle) {
+		return null;
+	}
+	}
 
-    @Test
-    public void registersAndUsesTheConverterInstaceForTheSpecifiedType() {
-        converters.register(MyConverter.class);
-        when(container.instanceFor(MyConverter.class)).thenReturn(new MyConverter());
+	@Test
+	public void registersAndUsesTheConverterInstaceForTheSpecifiedType() {
+	converters.register(MyConverter.class);
+	when(container.instanceFor(MyConverter.class)).thenReturn(new MyConverter());
 
-        Converter<?> found = converters.to(MyData.class);
-        assertThat(found.getClass(), is(typeCompatibleWith(MyConverter.class)));
-    }
+	Converter<?> found = converters.to(MyData.class);
+	assertThat(found.getClass(), is(typeCompatibleWith(MyConverter.class)));
+	}
 
-    @Test
-    public void usesTheLastConverterInstanceRegisteredForTheSpecifiedType() {
-        converters.register(MyConverter.class);
-        converters.register(MySecondConverter.class);
-        when(container.instanceFor(MySecondConverter.class)).thenReturn(new MySecondConverter());
+	@Test
+	public void usesTheLastConverterInstanceRegisteredForTheSpecifiedType() {
+	converters.register(MyConverter.class);
+	converters.register(MySecondConverter.class);
+	when(container.instanceFor(MySecondConverter.class)).thenReturn(new MySecondConverter());
 
-        Converter<?> found = converters.to(MyData.class);
-        assertThat(found.getClass(), is(typeCompatibleWith(MySecondConverter.class)));
-    }
+	Converter<?> found = converters.to(MyData.class);
+	assertThat(found.getClass(), is(typeCompatibleWith(MySecondConverter.class)));
+	}
 
-    @Test
+	@Test
 	public void existsForWillReturnTrueForRegisteredConverters() throws Exception {
 		converters.register(MyConverter.class);
 

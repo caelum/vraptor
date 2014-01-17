@@ -44,191 +44,191 @@ import br.com.caelum.vraptor.view.DefaultHttpResultTest.RandomController;
 
 public class DefaultResultTest {
 
-    @Mock private HttpServletRequest request;
-    @Mock private Container container;
+	@Mock private HttpServletRequest request;
+	@Mock private Container container;
 
 	private Result result;
 	@Mock private TypeNameExtractor extractor;
 
-    @Before
-    public void setup() {
-        MockitoAnnotations.initMocks(this);
-        result = new DefaultResult(request, container, null, extractor);
-    }
-
-    public static class MyView implements View {
-
-    }
-
-    @Test
-    public void shouldUseContainerForNewView() {
-        final MyView expectedView = new MyView();
-        when(container.instanceFor(MyView.class)).thenReturn(expectedView);
-
-        MyView view = result.use(MyView.class);
-        assertThat(view, is(expectedView));
-    }
-
-    @Test
-    public void shouldSetRequestAttribute() {
-
-        result.include("my_key", "my_value");
-
-        verify(request).setAttribute("my_key", "my_value");
-    }
-
-    @Test
-	public void shouldDelegateToPageResultOnForwardToURI() throws Exception {
-
-    	PageResult pageResult = mockResult(PageResult.class);
-
-    	result.forwardTo("/any/uri");
-
-    	verify(pageResult).forwardTo("/any/uri");
+	@Before
+	public void setup() {
+	MockitoAnnotations.initMocks(this);
+	result = new DefaultResult(request, container, null, extractor);
 	}
 
-    @Test
+	public static class MyView implements View {
+
+	}
+
+	@Test
+	public void shouldUseContainerForNewView() {
+	final MyView expectedView = new MyView();
+	when(container.instanceFor(MyView.class)).thenReturn(expectedView);
+
+	MyView view = result.use(MyView.class);
+	assertThat(view, is(expectedView));
+	}
+
+	@Test
+	public void shouldSetRequestAttribute() {
+
+	result.include("my_key", "my_value");
+
+	verify(request).setAttribute("my_key", "my_value");
+	}
+
+	@Test
+	public void shouldDelegateToPageResultOnForwardToURI() throws Exception {
+
+		PageResult pageResult = mockResult(PageResult.class);
+
+		result.forwardTo("/any/uri");
+
+		verify(pageResult).forwardTo("/any/uri");
+	}
+
+	@Test
 	public void shouldDelegateToPageResultOnRedirectToURI() throws Exception {
 
-    	PageResult pageResult = mockResult(PageResult.class);
+		PageResult pageResult = mockResult(PageResult.class);
 
-    	result.redirectTo("/any/uri");
+		result.redirectTo("/any/uri");
 
-    	verify(pageResult).redirectTo("/any/uri");
+		verify(pageResult).redirectTo("/any/uri");
 	}
 
 	private <T extends View> T mockResult(Class<T> view) {
 		T pageResult = mock(view);
 
-    	when(container.instanceFor(view)).thenReturn(pageResult);
+		when(container.instanceFor(view)).thenReturn(pageResult);
 
 		return pageResult;
 	}
-    @Test
-    public void shouldDelegateToPageResultOnPageOf() throws Exception {
+	@Test
+	public void shouldDelegateToPageResultOnPageOf() throws Exception {
 
-    	PageResult pageResult = mockResult(PageResult.class);
+		PageResult pageResult = mockResult(PageResult.class);
 
-    	result.of(RandomController.class);
+		result.of(RandomController.class);
 
-    	verify(pageResult).of(RandomController.class);
-    }
-    @Test
-    public void shouldDelegateToLogicResultOnForwardToLogic() throws Exception {
+		verify(pageResult).of(RandomController.class);
+	}
+	@Test
+	public void shouldDelegateToLogicResultOnForwardToLogic() throws Exception {
 
-    	LogicResult logicResult = mockResult(LogicResult.class);
+		LogicResult logicResult = mockResult(LogicResult.class);
 
-    	result.forwardTo(RandomController.class);
+		result.forwardTo(RandomController.class);
 
-    	verify(logicResult).forwardTo(RandomController.class);
+		verify(logicResult).forwardTo(RandomController.class);
 
-    }
-    @Test
-    public void shouldDelegateToLogicResultOnRedirectToLogic() throws Exception {
+	}
+	@Test
+	public void shouldDelegateToLogicResultOnRedirectToLogic() throws Exception {
 
-    	LogicResult logicResult = mockResult(LogicResult.class);
+		LogicResult logicResult = mockResult(LogicResult.class);
 
-    	result.redirectTo(RandomController.class);
+		result.redirectTo(RandomController.class);
 
-    	verify(logicResult).redirectTo(RandomController.class);
+		verify(logicResult).redirectTo(RandomController.class);
 
-    }
-    @Test
-    public void shouldDelegateToLogicResultOnRedirectToLogicWithInstance() throws Exception {
+	}
+	@Test
+	public void shouldDelegateToLogicResultOnRedirectToLogicWithInstance() throws Exception {
 
-    	LogicResult logicResult = mockResult(LogicResult.class);
+		LogicResult logicResult = mockResult(LogicResult.class);
 
-    	result.redirectTo(new RandomController());
+		result.redirectTo(new RandomController());
 
-    	verify(logicResult).redirectTo(RandomController.class);
+		verify(logicResult).redirectTo(RandomController.class);
 
-    }
+	}
 
-    @Test
-    public void shouldDelegateToLogicResultOnForwardToLogicWithInstance() throws Exception {
+	@Test
+	public void shouldDelegateToLogicResultOnForwardToLogicWithInstance() throws Exception {
 
-    	LogicResult logicResult = mockResult(LogicResult.class);
+		LogicResult logicResult = mockResult(LogicResult.class);
 
-    	result.forwardTo(new RandomController());
+		result.forwardTo(new RandomController());
 
-    	verify(logicResult).forwardTo(RandomController.class);
+		verify(logicResult).forwardTo(RandomController.class);
 
-    }
-    @Test
-    public void shouldDelegateToPageResultOnPageOfWithInstance() throws Exception {
+	}
+	@Test
+	public void shouldDelegateToPageResultOnPageOfWithInstance() throws Exception {
 
-    	PageResult pageResult = mockResult(PageResult.class);
+		PageResult pageResult = mockResult(PageResult.class);
 
-    	result.of(new RandomController());
+		result.of(new RandomController());
 
-    	verify(pageResult).of(RandomController.class);
+		verify(pageResult).of(RandomController.class);
 
-    }
+	}
 
-    @Test
-    public void shouldDelegateToStatusOnNotFound() throws Exception {
+	@Test
+	public void shouldDelegateToStatusOnNotFound() throws Exception {
 
-    	Status status = mockResult(Status.class);
+		Status status = mockResult(Status.class);
 
-    	result.notFound();
+		result.notFound();
 
-    	verify(status).notFound();
+		verify(status).notFound();
 
-    }
+	}
 
-    @Test
-    public void shouldDelegateToStatusOnPermanentlyRedirectToUri() throws Exception {
+	@Test
+	public void shouldDelegateToStatusOnPermanentlyRedirectToUri() throws Exception {
 
-    	Status status = mockResult(Status.class);
+		Status status = mockResult(Status.class);
 
-    	result.permanentlyRedirectTo("url");
+		result.permanentlyRedirectTo("url");
 
-    	verify(status).movedPermanentlyTo("url");
+		verify(status).movedPermanentlyTo("url");
 
-    }
+	}
 
-    @Test
-    public void shouldDelegateToStatusOnPermanentlyRedirectToControllerClass() throws Exception {
+	@Test
+	public void shouldDelegateToStatusOnPermanentlyRedirectToControllerClass() throws Exception {
 
-    	Status status = mockResult(Status.class);
+		Status status = mockResult(Status.class);
 
-    	result.permanentlyRedirectTo(RandomController.class);
+		result.permanentlyRedirectTo(RandomController.class);
 
-    	verify(status).movedPermanentlyTo(RandomController.class);
+		verify(status).movedPermanentlyTo(RandomController.class);
 
-    }
+	}
 
-    @Test
-    public void shouldDelegateToStatusOnPermanentlyRedirectToControllerInstance() throws Exception {
+	@Test
+	public void shouldDelegateToStatusOnPermanentlyRedirectToControllerInstance() throws Exception {
 
-    	Status status = mockResult(Status.class);
+		Status status = mockResult(Status.class);
 
-    	result.permanentlyRedirectTo(new RandomController());
+		result.permanentlyRedirectTo(new RandomController());
 
-    	verify(status).movedPermanentlyTo(RandomController.class);
+		verify(status).movedPermanentlyTo(RandomController.class);
 
-    }
+	}
 
 
-    class Account {
-    	
-    }
+	class Account {
+		
+	}
 
-    @Test
-    public void shouldIncludeExtractedNameWhenSimplyIncluding() throws Exception {
+	@Test
+	public void shouldIncludeExtractedNameWhenSimplyIncluding() throws Exception {
 
-    	Account account = new Account();
-    	when(extractor.nameFor(Account.class)).thenReturn("account");
-    	
-    	result.include(account);
+		Account account = new Account();
+		when(extractor.nameFor(Account.class)).thenReturn("account");
+		
+		result.include(account);
 
-    	verify(request).setAttribute("account", account);
+		verify(request).setAttribute("account", account);
 
-    }
-    
-    @Test
-    public void shouldNotIncludeTheAttributeWhenTheValueIsNull() throws Exception {
-    	result.include(null);
-    	verify(request, never()).setAttribute(anyString(), anyObject());
-    }
+	}
+	
+	@Test
+	public void shouldNotIncludeTheAttributeWhenTheValueIsNull() throws Exception {
+		result.include(null);
+		verify(request, never()).setAttribute(anyString(), anyObject());
+	}
 }

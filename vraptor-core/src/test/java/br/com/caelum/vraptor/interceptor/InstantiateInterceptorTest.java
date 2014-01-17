@@ -35,39 +35,39 @@ import br.com.caelum.vraptor.view.DogController;
 
 public class InstantiateInterceptorTest {
 
-    private @Mock InterceptorStack stack;
-    private @Mock ResourceMethod method;
-    
-    @Before
-    public void setup() {
-        MockitoAnnotations.initMocks(this);
-    }
+	private @Mock InterceptorStack stack;
+	private @Mock ResourceMethod method;
+	
+	@Before
+	public void setup() {
+	MockitoAnnotations.initMocks(this);
+	}
 
-    @Test
-    public void shouldAcceptAlways() {
-    	assertTrue(new InstantiateInterceptor(null).accepts(null));
-    }
-    
-    @Test
-    public void shouldUseContainerForNewComponent() throws InterceptionException, IOException {
-        final DogController myDog = new DogController();
-        InstanceContainer container = new InstanceContainer(myDog);
-        InstantiateInterceptor interceptor = new InstantiateInterceptor(container);
-        
-        when(method.getResource()).thenReturn(new DefaultResourceClass(DogController.class));
-        
-        interceptor.intercept(stack, method, null);
-        assertTrue(container.isEmpty());
-        
-        verify(stack).next(method, myDog);
-    }
+	@Test
+	public void shouldAcceptAlways() {
+		assertTrue(new InstantiateInterceptor(null).accepts(null));
+	}
+	
+	@Test
+	public void shouldUseContainerForNewComponent() throws InterceptionException, IOException {
+	final DogController myDog = new DogController();
+	InstanceContainer container = new InstanceContainer(myDog);
+	InstantiateInterceptor interceptor = new InstantiateInterceptor(container);
+	
+	when(method.getResource()).thenReturn(new DefaultResourceClass(DogController.class));
+	
+	interceptor.intercept(stack, method, null);
+	assertTrue(container.isEmpty());
+	
+	verify(stack).next(method, myDog);
+	}
 
-    @Test
-    public void shouldNotInstantiateIfThereIsAlreadyAResource() throws InterceptionException, IOException {
-        final DogController myDog = new DogController();
-        InstantiateInterceptor interceptor = new InstantiateInterceptor(null);
-        
-        interceptor.intercept(stack, method, myDog);
-        verify(stack).next(method, myDog);
-    }
+	@Test
+	public void shouldNotInstantiateIfThereIsAlreadyAResource() throws InterceptionException, IOException {
+	final DogController myDog = new DogController();
+	InstantiateInterceptor interceptor = new InstantiateInterceptor(null);
+	
+	interceptor.intercept(stack, method, myDog);
+	verify(stack).next(method, myDog);
+	}
 }

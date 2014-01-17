@@ -34,34 +34,34 @@ import br.com.caelum.vraptor.ioc.ComponentFactory;
 @SuppressWarnings({"serial"})
 public class PicoComponentAdapter extends AbstractAdapter {
 
-    private static final Logger logger = LoggerFactory.getLogger(PicoComponentAdapter.class);
+	private static final Logger logger = LoggerFactory.getLogger(PicoComponentAdapter.class);
 
-    private final Class<?> targetType;
-    private final Class<? extends ComponentFactory> componentFactoryClass;
+	private final Class<?> targetType;
+	private final Class<? extends ComponentFactory> componentFactoryClass;
 
-    public PicoComponentAdapter(Class<?> targetType, Class<? extends ComponentFactory> componentFactoryClass) {
-        super(targetType, targetType);
+	public PicoComponentAdapter(Class<?> targetType, Class<? extends ComponentFactory> componentFactoryClass) {
+	super(targetType, targetType);
 
-        logger.debug("New adapter for {}", componentFactoryClass.getName());
+	logger.debug("New adapter for {}", componentFactoryClass.getName());
 
-        this.targetType = targetType;
-        this.componentFactoryClass = componentFactoryClass;
-    }
+	this.targetType = targetType;
+	this.componentFactoryClass = componentFactoryClass;
+	}
 
-    public Object getComponentInstance(PicoContainer pico, Type type)
-            throws PicoCompositionException {
+	public Object getComponentInstance(PicoContainer pico, Type type)
+		throws PicoCompositionException {
 
 		logger.debug("Providing {} instance via {}", targetType.getName(), componentFactoryClass.getName());
 
-        ComponentFactory<?> componentFactory = pico.getComponent(componentFactoryClass);
-        return componentFactory.getInstance();
-    }
+	ComponentFactory<?> componentFactory = pico.getComponent(componentFactoryClass);
+	return componentFactory.getInstance();
+	}
 
-    public String getDescriptor() {
-        return "Adapter for " + targetType.getName();
-    }
+	public String getDescriptor() {
+	return "Adapter for " + targetType.getName();
+	}
 
-    public void verify(PicoContainer pico) throws PicoCompositionException {
-    }
+	public void verify(PicoContainer pico) throws PicoCompositionException {
+	}
 
 }

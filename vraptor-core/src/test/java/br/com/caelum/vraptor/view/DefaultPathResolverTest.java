@@ -32,48 +32,48 @@ import br.com.caelum.vraptor.resource.ResourceMethod;
 
 public class DefaultPathResolverTest {
 
-    private @Mock ResourceMethod method;
-    private @Mock ResourceClass resource;
+	private @Mock ResourceMethod method;
+	private @Mock ResourceClass resource;
 	private @Mock FormatResolver formatResolver;
 
 	private DefaultPathResolver resolver;
 
 
-    @SuppressWarnings({ "rawtypes", "unchecked" })
+	@SuppressWarnings({ "rawtypes", "unchecked" })
 	@Before
-    public void config() throws Exception {
-    	MockitoAnnotations.initMocks(this);
+	public void config() throws Exception {
+		MockitoAnnotations.initMocks(this);
 
-    	resolver = new DefaultPathResolver(formatResolver);
-    	when(method.getResource()).thenReturn(resource);
-    	when(method.getMethod()  ).thenReturn(DogController.class.getDeclaredMethod("bark"));
-    	when(resource.getType()  ).thenReturn((Class) DogController.class);
-    }
+		resolver = new DefaultPathResolver(formatResolver);
+		when(method.getResource()).thenReturn(resource);
+		when(method.getMethod()  ).thenReturn(DogController.class.getDeclaredMethod("bark"));
+		when(resource.getType()  ).thenReturn((Class) DogController.class);
+	}
 
-    @Test
-    public void shouldUseResourceTypeAndMethodNameToResolveJsp(){
-        when(formatResolver.getAcceptFormat()).thenReturn(null);
+	@Test
+	public void shouldUseResourceTypeAndMethodNameToResolveJsp(){
+	when(formatResolver.getAcceptFormat()).thenReturn(null);
 
-        String result = resolver.pathFor(method);
-        assertThat(result, is("/WEB-INF/jsp/dog/bark.jsp"));
-    }
+	String result = resolver.pathFor(method);
+	assertThat(result, is("/WEB-INF/jsp/dog/bark.jsp"));
+	}
 
-    @Test
-    public void shouldUseTheFormatIfSupplied() throws NoSuchMethodException {
-    	when(formatResolver.getAcceptFormat()).thenReturn("json");
+	@Test
+	public void shouldUseTheFormatIfSupplied() throws NoSuchMethodException {
+		when(formatResolver.getAcceptFormat()).thenReturn("json");
 
-    	String result = resolver.pathFor(method);
+		String result = resolver.pathFor(method);
 
-        assertThat(result, is("/WEB-INF/jsp/dog/bark.json.jsp"));
-    }
+	assertThat(result, is("/WEB-INF/jsp/dog/bark.json.jsp"));
+	}
 
-    @Test
-    public void shouldIgnoreHtmlFormat() throws NoSuchMethodException {
-    	when(formatResolver.getAcceptFormat()).thenReturn("html");
+	@Test
+	public void shouldIgnoreHtmlFormat() throws NoSuchMethodException {
+		when(formatResolver.getAcceptFormat()).thenReturn("html");
 
-    	String result = resolver.pathFor(method);
+		String result = resolver.pathFor(method);
 
-        assertThat(result, is("/WEB-INF/jsp/dog/bark.jsp"));
-    }
+	assertThat(result, is("/WEB-INF/jsp/dog/bark.jsp"));
+	}
 
 }

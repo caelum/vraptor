@@ -42,7 +42,7 @@ public class LocalDateTimeConverterTest {
 		FilterChain chain = mock(FilterChain.class);
 
 		final RequestInfo webRequest = new RequestInfo(context, chain, request, null);
-        jstlLocalization = new JstlLocalization(webRequest);
+	jstlLocalization = new JstlLocalization(webRequest);
 
 		converter = new LocalDateTimeConverter(jstlLocalization);
 	}
@@ -69,8 +69,8 @@ public class LocalDateTimeConverterTest {
 	@Test
 	public void shouldThrowExceptionWhenUnableToParse() {
 		when(request.getAttribute("javax.servlet.jsp.jstl.fmt.locale.request"))
-    		.thenReturn("pt_br");
-    		
+			.thenReturn("pt_br");
+			
 		try {
 			converter.convert("a,10/06/2008/a/b/c", LocalDateTime.class, bundle);
 		} catch (ConversionError e) {

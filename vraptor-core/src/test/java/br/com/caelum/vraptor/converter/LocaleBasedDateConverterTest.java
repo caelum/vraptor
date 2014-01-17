@@ -53,7 +53,7 @@ public class LocaleBasedDateConverterTest {
 	private @Mock HttpSession session;
 	private @Mock ServletContext context;
 	private @Mock ResourceBundle bundle;
-    private @Mock JstlLocalization jstlLocalization;
+	private @Mock JstlLocalization jstlLocalization;
 
 	@Before
 	public void setup() {
@@ -64,7 +64,7 @@ public class LocaleBasedDateConverterTest {
 		jstlLocalization = new JstlLocalization(webRequest);
 		converter = new LocaleBasedDateConverter(jstlLocalization);
 		bundle = ResourceBundle.getBundle("messages");
-        Locale.setDefault(Locale.ENGLISH);
+	Locale.setDefault(Locale.ENGLISH);
 	}
 
 	@Test

@@ -33,15 +33,15 @@ import br.com.caelum.vraptor.ioc.ApplicationScoped;
 @ApplicationScoped
 class HttpSessionProvider implements FactoryBean<HttpSession> {
 
-    public HttpSession getObject() throws Exception {
-        return VRaptorRequestHolder.currentRequest().getRequest().getSession();
-    }
+	public HttpSession getObject() throws Exception {
+	return VRaptorRequestHolder.currentRequest().getRequest().getSession();
+	}
 
-    public Class<? extends HttpSession> getObjectType() {
-        return HttpSession.class;
-    }
+	public Class<? extends HttpSession> getObjectType() {
+	return HttpSession.class;
+	}
 
-    public boolean isSingleton() {
-        return false;
-    }
+	public boolean isSingleton() {
+	return false;
+	}
 }

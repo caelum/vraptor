@@ -42,22 +42,22 @@ import br.com.caelum.vraptor.ioc.ComponentFactory;
 @Alternative
 public class ValidatorCreator implements ComponentFactory<Validator> {
 
-    private static final Logger logger = LoggerFactory.getLogger(ValidatorCreator.class);
+	private static final Logger logger = LoggerFactory.getLogger(ValidatorCreator.class);
 
 	private final ValidatorFactory factory;
 
 	private Validator validator;
 
 	@Inject
-    public ValidatorCreator(ValidatorFactory factory) {
-        this.factory = factory;
-    }
+	public ValidatorCreator(ValidatorFactory factory) {
+	this.factory = factory;
+	}
 	
-    @PostConstruct
-    public void createValidator() {
-    	validator = factory.getValidator();
-    	logger.debug("Initializing Bean Validator");
-    }
+	@PostConstruct
+	public void createValidator() {
+		validator = factory.getValidator();
+		logger.debug("Initializing Bean Validator");
+	}
 
 	public Validator getInstance() {
 		return validator;

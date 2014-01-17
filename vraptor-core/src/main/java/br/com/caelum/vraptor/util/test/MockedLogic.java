@@ -29,7 +29,7 @@ public class MockedLogic implements LogicResult {
 	private final Proxifier proxifier;
 
 	public MockedLogic() {
-	    proxifier = new JavassistProxifier(new ObjenesisInstanceCreator());
+		proxifier = new JavassistProxifier(new ObjenesisInstanceCreator());
 	}
 
 	public <T> T forwardTo(Class<T> type) {

@@ -44,8 +44,8 @@ import br.com.caelum.vraptor.resource.ResourceMethod;
  */
 public interface Interceptor {
 
-    void intercept(InterceptorStack stack, ResourceMethod method, Object resourceInstance) throws InterceptionException;
+	void intercept(InterceptorStack stack, ResourceMethod method, Object resourceInstance) throws InterceptionException;
 
-    boolean accepts(ResourceMethod method);
+	boolean accepts(ResourceMethod method);
 
 }

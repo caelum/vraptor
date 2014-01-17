@@ -75,7 +75,7 @@ public class OgnlFacade {
 		context.put("removal", removal);
 		context.put("nullHandler", nullHandler());
 		context.put(ResourceBundle.class, bundle);
-        context.put("proxifier", proxifier);
+	context.put("proxifier", proxifier);
 
 		Ognl.setTypeConverter(context, createAdapter(bundle));
 

@@ -31,95 +31,95 @@ import br.com.caelum.vraptor.validator.Validations;
  */
 public interface Validator {
 
-    void checking(Validations rules);
+	void checking(Validations rules);
 
-    /**
-     * Validate an object using some Bean Validation engine. If the object is null,
-     * the validation will be skipped.
-     *
-     * @param object The object to be validated.
-     * @param groups The groups to be validated.
-     * @since vraptor3.1.2
-     */
-    void validate(Object object, Class<?>... groups);
+	/**
+	 * Validate an object using some Bean Validation engine. If the object is null,
+	 * the validation will be skipped.
+	 *
+	 * @param object The object to be validated.
+	 * @param groups The groups to be validated.
+	 * @since vraptor3.1.2
+	 */
+	void validate(Object object, Class<?>... groups);
 
-    /**
-     * Validate the specifics propeties of an object using some Bean Validation engine. If the object is null,
-     * the validation will be skipped.
-     * 
-     * @param object The object to be validated.
-     * @param properties The names of properties to be validated.
-     */
-    void validateProperties(Object object, String... properties);
-    
-    /**
-     * Validate the specific property of an object using some Bean Validation engine. If the object is null,
-     * the validation will be skipped.
-     * 
-     * @param object The object to be validated.
-     * @param property The name of property to be validated.
-     * @param groups The groups to be validated.
-     */
-    void validateProperty(Object object, String property, Class<?>... groups);
+	/**
+	 * Validate the specifics propeties of an object using some Bean Validation engine. If the object is null,
+	 * the validation will be skipped.
+	 * 
+	 * @param object The object to be validated.
+	 * @param properties The names of properties to be validated.
+	 */
+	void validateProperties(Object object, String... properties);
+	
+	/**
+	 * Validate the specific property of an object using some Bean Validation engine. If the object is null,
+	 * the validation will be skipped.
+	 * 
+	 * @param object The object to be validated.
+	 * @param property The name of property to be validated.
+	 * @param groups The groups to be validated.
+	 */
+	void validateProperty(Object object, String property, Class<?>... groups);
 
-    <T extends View> T onErrorUse(Class<T> view);
+	<T extends View> T onErrorUse(Class<T> view);
 
-    void addAll(Collection<? extends Message> message);
+	void addAll(Collection<? extends Message> message);
 
-    void add(Message message);
+	void add(Message message);
 
-    List<Message> getErrors();
-    
-    boolean hasErrors();
+	List<Message> getErrors();
+	
+	boolean hasErrors();
 
-    /**
-     * Shortcut for <br>
-     * <pre>onErrorUse(logic()).forwardTo(controller);</pre>
-     */
-    <T> T onErrorForwardTo(Class<T> controller);
-    /**
-     * Shortcut for <br>
-     * <pre>onErrorUse(logic()).forwardTo(controller.getClass());</pre>
-     *
-     * For usage in the same controller:<br>
-     * <pre>validator.onErrorForwardTo(this).someLogic();</pre>
-     */
-    <T> T onErrorForwardTo(T controller);
+	/**
+	 * Shortcut for <br>
+	 * <pre>onErrorUse(logic()).forwardTo(controller);</pre>
+	 */
+	<T> T onErrorForwardTo(Class<T> controller);
+	/**
+	 * Shortcut for <br>
+	 * <pre>onErrorUse(logic()).forwardTo(controller.getClass());</pre>
+	 *
+	 * For usage in the same controller:<br>
+	 * <pre>validator.onErrorForwardTo(this).someLogic();</pre>
+	 */
+	<T> T onErrorForwardTo(T controller);
 
-    /**
-     * Shortcut for <br>
-     * <pre>onErrorUse(logic()).redirectTo(controller);</pre>
-     */
-    <T> T onErrorRedirectTo(Class<T> controller);
-    /**
-     * Shortcut for <br>
-     * <pre>onErrorUse(logic()).redirectTo(controller.getClass());</pre>
-     *
-     * For usage in the same controller:<br>
-     * <pre>validator.onErrorRedirectTo(this).someLogic();</pre>
-     */
-    <T> T onErrorRedirectTo(T controller);
+	/**
+	 * Shortcut for <br>
+	 * <pre>onErrorUse(logic()).redirectTo(controller);</pre>
+	 */
+	<T> T onErrorRedirectTo(Class<T> controller);
+	/**
+	 * Shortcut for <br>
+	 * <pre>onErrorUse(logic()).redirectTo(controller.getClass());</pre>
+	 *
+	 * For usage in the same controller:<br>
+	 * <pre>validator.onErrorRedirectTo(this).someLogic();</pre>
+	 */
+	<T> T onErrorRedirectTo(T controller);
 
-    /**
-     * Shortcut for <br>
-     * <pre>onErrorUse(page()).of(controller);</pre>
-     */
-    <T> T onErrorUsePageOf(Class<T> controller);
-    /**
-     * Shortcut for <br>
-     * <pre>onErrorUse(page()).of(controller.getClass());</pre>
-     *
-     * For usage in the same controller:<br>
-     * <pre>validator.onErrorUsePageOf(this).someLogic();</pre>
-     */
-    <T> T onErrorUsePageOf(T controller);
+	/**
+	 * Shortcut for <br>
+	 * <pre>onErrorUse(page()).of(controller);</pre>
+	 */
+	<T> T onErrorUsePageOf(Class<T> controller);
+	/**
+	 * Shortcut for <br>
+	 * <pre>onErrorUse(page()).of(controller.getClass());</pre>
+	 *
+	 * For usage in the same controller:<br>
+	 * <pre>validator.onErrorUsePageOf(this).someLogic();</pre>
+	 */
+	<T> T onErrorUsePageOf(T controller);
 
-    /**
-     * Shortcut for <br>
-     * <pre>onErrorUse(status()).badRequest(errors);</pre>
-     *
-     * the actual validation errors list will be used.
-     */
-    void onErrorSendBadRequest();
+	/**
+	 * Shortcut for <br>
+	 * <pre>onErrorUse(status()).badRequest(errors);</pre>
+	 *
+	 * the actual validation errors list will be used.
+	 */
+	void onErrorSendBadRequest();
 
 }

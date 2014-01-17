@@ -36,64 +36,64 @@ import org.junit.Test;
 @SuppressWarnings("unchecked")
 public class ReflectionInstanceCreatorTest {
 
-    private Proxifier proxifier;
+	private Proxifier proxifier;
 
-    @Before
-    public void setUp() throws Exception {
-        proxifier = new JavassistProxifier(new ReflectionInstanceCreator());
-    }
-    
-    @Test
-    public void shouldProxifyInterfaces() {
-        TheInterface proxy = (TheInterface) proxifier.proxify(TheInterface.class, new MethodInvocation() {
-            public Object intercept(Object proxy, Method method, Object[] args, SuperMethod superMethod) {
-                return true;
-            }
-        });
-        assertTrue(proxy.wasCalled());
-    }
+	@Before
+	public void setUp() throws Exception {
+	proxifier = new JavassistProxifier(new ReflectionInstanceCreator());
+	}
+	
+	@Test
+	public void shouldProxifyInterfaces() {
+	TheInterface proxy = (TheInterface) proxifier.proxify(TheInterface.class, new MethodInvocation() {
+		public Object intercept(Object proxy, Method method, Object[] args, SuperMethod superMethod) {
+		return true;
+		}
+	});
+	assertTrue(proxy.wasCalled());
+	}
 
-    @Test
-    public void shouldProxifyConcreteClassesWithDefaultConstructors() {
-        TheClass proxy = (TheClass) proxifier.proxify(TheClass.class, new MethodInvocation() {
-            public Object intercept(Object proxy, Method method, Object[] args, SuperMethod superMethod) {
-                return true;
-            }
-        });
-        assertTrue(proxy.wasCalled());
-    }
+	@Test
+	public void shouldProxifyConcreteClassesWithDefaultConstructors() {
+	TheClass proxy = (TheClass) proxifier.proxify(TheClass.class, new MethodInvocation() {
+		public Object intercept(Object proxy, Method method, Object[] args, SuperMethod superMethod) {
+		return true;
+		}
+	});
+	assertTrue(proxy.wasCalled());
+	}
 
-    @Test
-    public void shouldProxifyConcreteClassesWithComplexConstructorsAndPassNullForAllParameters() {
-        TheClassWithComplexConstructor proxy = (TheClassWithComplexConstructor) proxifier.proxify(TheClassWithComplexConstructor.class, new MethodInvocation() {
-            public Object intercept(Object proxy, Method method, Object[] args, SuperMethod superMethod) {
-                return superMethod.invoke(proxy, args);
-            }
-        });
-        assertThat(proxy.getFirstDependency(), is(nullValue()));
-        assertThat(proxy.getSecondDependency(), is(nullValue()));
-    }
+	@Test
+	public void shouldProxifyConcreteClassesWithComplexConstructorsAndPassNullForAllParameters() {
+	TheClassWithComplexConstructor proxy = (TheClassWithComplexConstructor) proxifier.proxify(TheClassWithComplexConstructor.class, new MethodInvocation() {
+		public Object intercept(Object proxy, Method method, Object[] args, SuperMethod superMethod) {
+		return superMethod.invoke(proxy, args);
+		}
+	});
+	assertThat(proxy.getFirstDependency(), is(nullValue()));
+	assertThat(proxy.getSecondDependency(), is(nullValue()));
+	}
 
-    @Test
-    public void shouldTryAllConstructorsInDeclarationOrder() {
-        TheClassWithManyConstructors proxy = (TheClassWithManyConstructors) proxifier.proxify(TheClassWithManyConstructors.class, new MethodInvocation() {
-            public Object intercept(Object proxy, Method method, Object[] args, SuperMethod superMethod) {
-                return superMethod.invoke(proxy, args);
-            }
-        });
-        assertTrue(proxy.wasNumberConstructorCalled());
-        assertThat(proxy.getNumber(), is(nullValue()));
-    }
+	@Test
+	public void shouldTryAllConstructorsInDeclarationOrder() {
+	TheClassWithManyConstructors proxy = (TheClassWithManyConstructors) proxifier.proxify(TheClassWithManyConstructors.class, new MethodInvocation() {
+		public Object intercept(Object proxy, Method method, Object[] args, SuperMethod superMethod) {
+		return superMethod.invoke(proxy, args);
+		}
+	});
+	assertTrue(proxy.wasNumberConstructorCalled());
+	assertThat(proxy.getNumber(), is(nullValue()));
+	}
 
-    @Test
+	@Test
 	public void shouldNotProxifyJavaLangObjectMethods() throws Exception {
-    	Object proxy = proxifier.proxify(ReflectionInstanceCreatorTest.class, new MethodInvocation() {
+		Object proxy = proxifier.proxify(ReflectionInstanceCreatorTest.class, new MethodInvocation() {
 			public Object intercept(Object proxy, Method method, Object[] args, SuperMethod superMethod) {
 				Assert.fail("should not call this Method interceptor");
 				return null;
 			}
 		});
-    	new Mirror().on(proxy).invoke().method("finalize").withoutArgs();
+		new Mirror().on(proxy).invoke().method("finalize").withoutArgs();
 	}
 
 }

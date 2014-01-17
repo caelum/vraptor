@@ -41,14 +41,14 @@ import br.com.caelum.vraptor.ioc.RequestScoped;
  */
 @RequestScoped
 public class DefaultResult extends AbstractResult {
-    
-    private static final Logger logger = LoggerFactory.getLogger(DefaultResult.class);
+	
+	private static final Logger logger = LoggerFactory.getLogger(DefaultResult.class);
 
-    private final HttpServletRequest request;
-    private final Container container;
-    private final Map<String, Object> includedAttributes;
-    private boolean responseCommitted = false;
-    private final ExceptionMapper exceptions;
+	private final HttpServletRequest request;
+	private final Container container;
+	private final Map<String, Object> includedAttributes;
+	private boolean responseCommitted = false;
+	private final ExceptionMapper exceptions;
 	private final TypeNameExtractor extractor;
 
 	public DefaultResult() {
@@ -56,36 +56,36 @@ public class DefaultResult extends AbstractResult {
 	}
 	
 	@Inject
-    public DefaultResult(HttpServletRequest request, Container container, ExceptionMapper exceptions, TypeNameExtractor extractor) {
-        this.request = request;
-        this.container = container;
+	public DefaultResult(HttpServletRequest request, Container container, ExceptionMapper exceptions, TypeNameExtractor extractor) {
+	this.request = request;
+	this.container = container;
 		this.extractor = extractor;
-        this.includedAttributes = new HashMap<String, Object>();
-        this.exceptions = exceptions;
-    }
+	this.includedAttributes = new HashMap<String, Object>();
+	this.exceptions = exceptions;
+	}
 
-    public <T extends View> T use(Class<T> view) {
-        responseCommitted = true;
-        return container.instanceFor(view);
-    }
-    
-    public Result on(Class<? extends Exception> exception) {
-        return exceptions.record(exception);
-    }
+	public <T extends View> T use(Class<T> view) {
+	responseCommitted = true;
+	return container.instanceFor(view);
+	}
+	
+	public Result on(Class<? extends Exception> exception) {
+	return exceptions.record(exception);
+	}
 
-    public Result include(String key, Object value) {
-        if (logger.isDebugEnabled()) {
-            logger.debug("including attribute {}: {}", key, value);
-        }
-        
-    	includedAttributes.put(key, value);
-        request.setAttribute(key, value);
-        return this;
-    }
+	public Result include(String key, Object value) {
+	if (logger.isDebugEnabled()) {
+		logger.debug("including attribute {}: {}", key, value);
+	}
+	
+		includedAttributes.put(key, value);
+	request.setAttribute(key, value);
+	return this;
+	}
 
-    public boolean used() {
-        return responseCommitted;
-    }
+	public boolean used() {
+	return responseCommitted;
+	}
 
 	public Map<String, Object> included() {
 		return unmodifiableMap(includedAttributes);

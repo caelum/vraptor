@@ -28,15 +28,15 @@ import br.com.caelum.vraptor.ioc.ApplicationScoped;
 @ApplicationScoped
 class VRaptorRequestProvider implements FactoryBean<RequestInfo> {
 
-    public RequestInfo getObject() throws Exception {
-        return VRaptorRequestHolder.currentRequest();
-    }
+	public RequestInfo getObject() throws Exception {
+	return VRaptorRequestHolder.currentRequest();
+	}
 
-    public Class<? extends RequestInfo> getObjectType() {
-        return RequestInfo.class;
-    }
+	public Class<? extends RequestInfo> getObjectType() {
+	return RequestInfo.class;
+	}
 
-    public boolean isSingleton() {
-        return false;
-    }
+	public boolean isSingleton() {
+	return false;
+	}
 }

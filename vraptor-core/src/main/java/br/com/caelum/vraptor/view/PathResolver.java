@@ -26,6 +26,6 @@ import br.com.caelum.vraptor.resource.ResourceMethod;
  */
 public interface PathResolver {
 
-    String pathFor(ResourceMethod method);
+	String pathFor(ResourceMethod method);
 
 }

@@ -72,7 +72,7 @@ public interface Status extends View {
 	 *
 	 * Serializes the given List as "errors", with
 	 * <pre>
-	 *    result.use(representation()).from(errors, "errors").serialize();
+	 *	result.use(representation()).from(errors, "errors").serialize();
 	 * </pre>
 	 * @param message
 	 */
@@ -111,7 +111,7 @@ public interface Status extends View {
 	 * /<contextPath>/clients
 	 *
 	 * @param uri
-	 *            absolute uri to redirect
+	 *		absolute uri to redirect
 	 */
 	void movedPermanentlyTo(String url);
 

@@ -39,20 +39,20 @@ import br.com.caelum.vraptor.core.Localization;
 @Convert(DateMidnight.class)
 public class DateMidnightConverter implements Converter<DateMidnight> {
 
-    private final Localization localization;
-    
+	private final Localization localization;
+	
 	public DateMidnightConverter(Localization localization) {
-        this.localization = localization;
-    }
+	this.localization = localization;
+	}
 
-    public DateMidnight convert(String value, Class<? extends DateMidnight> type, ResourceBundle bundle) {
-        try {
-            DateTime out = new LocaleBasedJodaTimeConverter(localization).convert(value, shortDate());
-            if (out == null) {
-                return null;
-            }
-            
-            return out.toDateMidnight();
+	public DateMidnight convert(String value, Class<? extends DateMidnight> type, ResourceBundle bundle) {
+	try {
+		DateTime out = new LocaleBasedJodaTimeConverter(localization).convert(value, shortDate());
+		if (out == null) {
+		return null;
+		}
+		
+		return out.toDateMidnight();
 		} catch (Exception e) {
 			throw new ConversionError(MessageFormat.format(bundle.getString("is_not_a_valid_datetime"), value));
 		}

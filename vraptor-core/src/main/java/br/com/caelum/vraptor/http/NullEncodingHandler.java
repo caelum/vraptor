@@ -26,8 +26,8 @@ import javax.servlet.http.HttpServletResponse;
  * @author Lucas Cavalcanti
  */
 public class NullEncodingHandler implements EncodingHandler {
-    
+	
 	public void setEncoding(HttpServletRequest request, HttpServletResponse response) {
-	    
+		
 	}
 }

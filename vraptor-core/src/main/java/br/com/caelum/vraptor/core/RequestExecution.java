@@ -26,10 +26,10 @@ import br.com.caelum.vraptor.VRaptorException;
  */
 public interface RequestExecution {
 
-    /**
-     * Executes this method.
-     * @throws VRaptorException 
-     */
-    void execute() throws VRaptorException;
-    
+	/**
+	 * Executes this method.
+	 * @throws VRaptorException 
+	 */
+	void execute() throws VRaptorException;
+	
 }

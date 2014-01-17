@@ -42,26 +42,26 @@ import br.com.caelum.vraptor.ioc.RequestScoped;
 @Convert(Float.class)
 @RequestScoped
 public class LocaleBasedFloatConverter
-    implements Converter<Float> {
+	implements Converter<Float> {
 
-    private final Localization localization;
+	private final Localization localization;
 
-    public LocaleBasedFloatConverter(Localization localization) {
-        this.localization = localization;
-    }
+	public LocaleBasedFloatConverter(Localization localization) {
+	this.localization = localization;
+	}
 
-    public Float convert(String value, Class<? extends Float> type, ResourceBundle bundle) {
-        if (isNullOrEmpty(value)) {
-            return null;
-        }
+	public Float convert(String value, Class<? extends Float> type, ResourceBundle bundle) {
+	if (isNullOrEmpty(value)) {
+		return null;
+	}
 
-        try {
-            final Locale locale = localization.getLocale();
-            DecimalFormat fmt = ((DecimalFormat) DecimalFormat.getInstance(locale));
+	try {
+		final Locale locale = localization.getLocale();
+		DecimalFormat fmt = ((DecimalFormat) DecimalFormat.getInstance(locale));
 
-            return fmt.parse(value).floatValue();
-        } catch (ParseException e) {
-            throw new ConversionError(MessageFormat.format(bundle.getString("is_not_a_valid_number"), value));
-        }
-    }
+		return fmt.parse(value).floatValue();
+	} catch (ParseException e) {
+		throw new ConversionError(MessageFormat.format(bundle.getString("is_not_a_valid_number"), value));
+	}
+	}
 }

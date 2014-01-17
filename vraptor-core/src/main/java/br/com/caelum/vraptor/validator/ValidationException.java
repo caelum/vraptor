@@ -31,29 +31,29 @@ import javax.ejb.ApplicationException;
 @ApplicationException
 public class ValidationException extends RuntimeException {
 
-    /**
-     * Serialized id.
-     */
-    private static final long serialVersionUID = -1069844446293479183L;
+	/**
+	 * Serialized id.
+	 */
+	private static final long serialVersionUID = -1069844446293479183L;
 
-    private final List<Message> errors;
+	private final List<Message> errors;
 
-    public ValidationException(List<Message> errors) {
-        this.errors = errors;
-    }
+	public ValidationException(List<Message> errors) {
+	this.errors = errors;
+	}
 
-    public List<Message> getErrors() {
-        return errors;
-    }
+	public List<Message> getErrors() {
+	return errors;
+	}
 
-    /**
-     * We don't need stack traces for this exception. It is used only to control flow.
-     * The default implementation for this method is extremely expensive.
-     *
-     * @return reference for this, without filling the stack trace
-     */
-    @Override
-    public final Throwable fillInStackTrace() {
-        return this;
-    }
+	/**
+	 * We don't need stack traces for this exception. It is used only to control flow.
+	 * The default implementation for this method is extremely expensive.
+	 *
+	 * @return reference for this, without filling the stack trace
+	 */
+	@Override
+	public final Throwable fillInStackTrace() {
+	return this;
+	}
 }

@@ -47,163 +47,163 @@ import br.com.caelum.vraptor.util.test.MockValidator;
  */
 public class MethodValidatorTest {
 
-    @Mock private Localization l10n;
-    @Mock private InterceptorStack stack;
-    @Mock private Container container;
-    
-    private MethodValidatorInterceptor interceptor;
-    private ParameterNameProvider provider;
-    private Validator validator;
-    private ValidatorFactory factory;
-    private MessageInterpolator interpolator;
-    
+	@Mock private Localization l10n;
+	@Mock private InterceptorStack stack;
+	@Mock private Container container;
+
+	private MethodValidatorInterceptor interceptor;
+	private ParameterNameProvider provider;
+	private Validator validator;
+	private ValidatorFactory factory;
+	private MessageInterpolator interpolator;
+	
 	private ResourceMethod withConstraint;
 	private ResourceMethod withTwoConstraints;
 	private ResourceMethod withoutConstraint;
 	private ResourceMethod cascadeConstraint;
 
-    @Before
-    public void setup() throws Exception {
-        MockitoAnnotations.initMocks(this);
+	@Before
+	public void setup() throws Exception {
+	MockitoAnnotations.initMocks(this);
 
-        Locale.setDefault(Locale.ENGLISH);
+	Locale.setDefault(Locale.ENGLISH);
 
-        provider = new ParanamerNameProvider();
-        doReturn(false).when(container).canProvide(any(Class.class));
-        doReturn(new ObjenesisInstanceCreator()).when(container).instanceFor(InstanceCreator.class);
-        
-        DIConstraintValidatorFactory constraintValidatorFactory = new DIConstraintValidatorFactory(container);
-        MethodValidatorFactoryCreator methodValidatorCreator = new MethodValidatorFactoryCreator(provider, constraintValidatorFactory);
-        methodValidatorCreator.buildFactory();
-        factory = methodValidatorCreator.getInstance();
+	provider = new ParanamerNameProvider();
+	doReturn(false).when(container).canProvide(any(Class.class));
+	doReturn(new ObjenesisInstanceCreator()).when(container).instanceFor(InstanceCreator.class);
+	
+	DIConstraintValidatorFactory constraintValidatorFactory = new DIConstraintValidatorFactory(container);
+	MethodValidatorFactoryCreator methodValidatorCreator = new MethodValidatorFactoryCreator(provider, constraintValidatorFactory);
+	methodValidatorCreator.buildFactory();
+	factory = methodValidatorCreator.getInstance();
 
-        MessageInterpolatorFactory interpolatorFactory = new MessageInterpolatorFactory();
-        interpolatorFactory.createInterpolator();
-        interpolator = interpolatorFactory.getInstance();
+	MessageInterpolatorFactory interpolatorFactory = new MessageInterpolatorFactory();
+	interpolatorFactory.createInterpolator();
+	interpolator = interpolatorFactory.getInstance();
 
-        ValidatorFactoryCreator creator = new ValidatorFactoryCreator(interpolator);
-        creator.buildFactory();
+	ValidatorFactoryCreator creator = new ValidatorFactoryCreator(interpolator);
+	creator.buildFactory();
 
-        validator = new MockValidator();
-        
-        withConstraint = DefaultResourceMethod.instanceFor(MyController.class, MyController.class.getMethod("withConstraint", String.class));
-        withTwoConstraints = DefaultResourceMethod.instanceFor(MyController.class, MyController.class.getMethod("withTwoConstraints", String.class, Customer.class));
-        withoutConstraint = DefaultResourceMethod.instanceFor(MyController.class, MyController.class.getMethod("withoutConstraint", String.class));
-        cascadeConstraint = DefaultResourceMethod.instanceFor(MyController.class, MyController.class.getMethod("cascadeConstraint", Customer.class));
-    }
-    
-    @Test
-    public void shouldAcceptIfMethodHasConstraint() {
-        interceptor = new MethodValidatorInterceptor(null, null, null, null, factory.getValidator(), null);
-    	assertThat(interceptor.accepts(withConstraint), is(true));
-    	
-        interceptor = new MethodValidatorInterceptor(null, null, null, null, factory.getValidator(), null);
-    	assertThat(interceptor.accepts(withTwoConstraints), is(true));
-    	
-        interceptor = new MethodValidatorInterceptor(null, null, null, null, factory.getValidator(), null);
-    	assertThat(interceptor.accepts(cascadeConstraint), is(true));
-    }
+	validator = new MockValidator();
+	
+	withConstraint = DefaultResourceMethod.instanceFor(MyController.class, MyController.class.getMethod("withConstraint", String.class));
+	withTwoConstraints = DefaultResourceMethod.instanceFor(MyController.class, MyController.class.getMethod("withTwoConstraints", String.class, Customer.class));
+	withoutConstraint = DefaultResourceMethod.instanceFor(MyController.class, MyController.class.getMethod("withoutConstraint", String.class));
+	cascadeConstraint = DefaultResourceMethod.instanceFor(MyController.class, MyController.class.getMethod("cascadeConstraint", Customer.class));
+	}
+	
+	@Test
+	public void shouldAcceptIfMethodHasConstraint() {
+	interceptor = new MethodValidatorInterceptor(null, null, null, null, factory.getValidator(), null);
+		assertThat(interceptor.accepts(withConstraint), is(true));
+		
+	interceptor = new MethodValidatorInterceptor(null, null, null, null, factory.getValidator(), null);
+		assertThat(interceptor.accepts(withTwoConstraints), is(true));
+		
+	interceptor = new MethodValidatorInterceptor(null, null, null, null, factory.getValidator(), null);
+		assertThat(interceptor.accepts(cascadeConstraint), is(true));
+	}
 
-    @Test
-    public void shouldNotAcceptIfMethodHasConstraint() {
-        interceptor = new MethodValidatorInterceptor(null, null, null, null, factory.getValidator(), null);
-    	assertThat(interceptor.accepts(withoutConstraint), is(false));
-    }
+	@Test
+	public void shouldNotAcceptIfMethodHasConstraint() {
+	interceptor = new MethodValidatorInterceptor(null, null, null, null, factory.getValidator(), null);
+		assertThat(interceptor.accepts(withoutConstraint), is(false));
+	}
 
-    @Test
-    public void shouldValidateMethodWithConstraint()
-        throws Exception {
-        MethodInfo info = new DefaultMethodInfo();
-        info.setParameters(new Object[] { null });
-        info.setResourceMethod(withConstraint);
+	@Test
+	public void shouldValidateMethodWithConstraint()
+	throws Exception {
+	MethodInfo info = new DefaultMethodInfo();
+	info.setParameters(new Object[] { null });
+	info.setResourceMethod(withConstraint);
 
-        interceptor = new MethodValidatorInterceptor(l10n, interpolator, validator, info, factory.getValidator(), provider);
-        when(l10n.getLocale()).thenReturn(new Locale("pt", "br"));
+	interceptor = new MethodValidatorInterceptor(l10n, interpolator, validator, info, factory.getValidator(), provider);
+	when(l10n.getLocale()).thenReturn(new Locale("pt", "br"));
 
-        MyController controller = new MyController();
-        interceptor.intercept(stack, info.getResourceMethod(), controller);
-        
-        assertThat(validator.getErrors(), hasSize(1));
-        assertThat(validator.getErrors().get(0).getCategory(), is("withConstraint.email"));
-    }
+	MyController controller = new MyController();
+	interceptor.intercept(stack, info.getResourceMethod(), controller);
+	
+	assertThat(validator.getErrors(), hasSize(1));
+	assertThat(validator.getErrors().get(0).getCategory(), is("withConstraint.email"));
+	}
 
-    @Test
-    public void shouldUseDefaultLocale()
-        throws Exception {
-        MethodInfo info = new DefaultMethodInfo();
-        info.setParameters(new Object[] { null });
-        info.setResourceMethod(withConstraint);
+	@Test
+	public void shouldUseDefaultLocale()
+	throws Exception {
+	MethodInfo info = new DefaultMethodInfo();
+	info.setParameters(new Object[] { null });
+	info.setResourceMethod(withConstraint);
 
-        interceptor = new MethodValidatorInterceptor(l10n, interpolator, validator, info, factory.getValidator(), provider);
+	interceptor = new MethodValidatorInterceptor(l10n, interpolator, validator, info, factory.getValidator(), provider);
 
-        MyController controller = new MyController();
-        interceptor.intercept(stack, info.getResourceMethod(), controller);
+	MyController controller = new MyController();
+	interceptor.intercept(stack, info.getResourceMethod(), controller);
 
-        assertThat(validator.getErrors(), hasSize(1));
-        assertThat(validator.getErrors().get(0).getCategory(), is("withConstraint.email"));
-        assertThat(validator.getErrors().get(0).getMessage(), is("may not be null"));
-    }
+	assertThat(validator.getErrors(), hasSize(1));
+	assertThat(validator.getErrors().get(0).getCategory(), is("withConstraint.email"));
+	assertThat(validator.getErrors().get(0).getMessage(), is("may not be null"));
+	}
 
-    @Test
-    public void shouldValidateMethodWithTwoConstraints()
-        throws Exception {
-        MethodInfo info = new DefaultMethodInfo();
-        info.setParameters(new Object[] { null, new Customer(null, null) });
-        info.setResourceMethod(withTwoConstraints);
+	@Test
+	public void shouldValidateMethodWithTwoConstraints()
+	throws Exception {
+	MethodInfo info = new DefaultMethodInfo();
+	info.setParameters(new Object[] { null, new Customer(null, null) });
+	info.setResourceMethod(withTwoConstraints);
 
-        interceptor = new MethodValidatorInterceptor(l10n, interpolator, validator, info, factory.getValidator(), provider);
-        when(l10n.getLocale()).thenReturn(new Locale("pt", "br"));
+	interceptor = new MethodValidatorInterceptor(l10n, interpolator, validator, info, factory.getValidator(), provider);
+	when(l10n.getLocale()).thenReturn(new Locale("pt", "br"));
 
-        MyController controller = new MyController();
-        interceptor.intercept(stack, info.getResourceMethod(), controller);
-        String messages = validator.getErrors().toString();
+	MyController controller = new MyController();
+	interceptor.intercept(stack, info.getResourceMethod(), controller);
+	String messages = validator.getErrors().toString();
 
-        assertThat(validator.getErrors(), hasSize(3));
-        
-        assertThat(messages, containsString("não pode ser nulo"));
-        assertThat(messages, containsString("withTwoConstraints.name"));
-        assertThat(messages, containsString("withTwoConstraints.customer.name"));
-        assertThat(messages, containsString("withTwoConstraints.customer.id"));
-    }
-    
-    /**
-     * Customer for using in bean validator tests.
-     */
-    public class Customer {
+	assertThat(validator.getErrors(), hasSize(3));
+	
+	assertThat(messages, containsString("não pode ser nulo"));
+	assertThat(messages, containsString("withTwoConstraints.name"));
+	assertThat(messages, containsString("withTwoConstraints.customer.name"));
+	assertThat(messages, containsString("withTwoConstraints.customer.id"));
+	}
+	
+	/**
+	 * Customer for using in bean validator tests.
+	 */
+	public class Customer {
 
-        @NotNull public Integer id;
+	@NotNull public Integer id;
 
-        @NotNull public String name;
+	@NotNull public String name;
 
-        public Customer(Integer id, String name) {
-            this.id = id;
-            this.name = name;
-        }
-    }
+	public Customer(Integer id, String name) {
+		this.id = id;
+		this.name = name;
+	}
+	}
 
-    public class MyController {
+	public class MyController {
 
-        public void withConstraint(@NotNull String email) {
+	public void withConstraint(@NotNull String email) {
 
-        }
+	}
 
-        public void withTwoConstraints(@NotNull String name, @Valid Customer customer) {
+	public void withTwoConstraints(@NotNull String name, @Valid Customer customer) {
 
-        }
-        
-        public void withoutConstraint(@Foo String foo) {
-        	
-        }
-        
-        public void cascadeConstraint(@Valid Customer customer) {
+	}
+	
+	public void withoutConstraint(@Foo String foo) {
+		
+	}
+	
+	public void cascadeConstraint(@Valid Customer customer) {
 
-        }
-    }
-    
+	}
+	}
+	
 	@Target(value = { PARAMETER })
 	@Retention(value = RUNTIME)
 	@Documented
-    public @interface Foo {
-    	
-    }
+	public @interface Foo {
+		
+	}
 }

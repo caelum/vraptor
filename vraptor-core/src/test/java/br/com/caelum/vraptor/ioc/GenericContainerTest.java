@@ -275,10 +275,10 @@ public abstract class GenericContainerTest {
 				new URLClassLoader(new URL[] {ScannotationComponentScannerTest.class.getResource("/test-fixture.jar")},
 						currentThread().getContextClassLoader()));
 
-        //allowing(context).getInitParameter(ENCODING);
-        //allowing(context).setAttribute(with(any(String.class)), with(any(Object.class)));
+	//allowing(context).getInitParameter(ENCODING);
+	//allowing(context).setAttribute(with(any(String.class)), with(any(Object.class)));
 
-        when(context.getInitParameter(SCANNING_PARAM)).thenReturn("enabled");
+	when(context.getInitParameter(SCANNING_PARAM)).thenReturn("enabled");
 
 		configureExpectations();
 		provider = getProvider();

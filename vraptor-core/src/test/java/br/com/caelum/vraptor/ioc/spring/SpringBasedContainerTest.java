@@ -94,14 +94,14 @@ public class SpringBasedContainerTest {
 			.thenReturn(SpringBasedContainer.class.getResource(".").getFile());
 
 		when(servletContext.getInitParameter(BasicConfiguration.SCANNING_PARAM))
-        	.thenReturn("enabled");
+		.thenReturn("enabled");
 
-        when(servletContext.getClassLoader())
-        	.thenReturn(Thread.currentThread().getContextClassLoader());
+	when(servletContext.getClassLoader())
+		.thenReturn(Thread.currentThread().getContextClassLoader());
 
-    	Enumeration<String> emptyEnumeration = enumeration(Collections.<String>emptyList());
-    	when(servletContext.getInitParameterNames()).thenReturn(emptyEnumeration);
-    	when(servletContext.getAttributeNames()).thenReturn(emptyEnumeration);
+		Enumeration<String> emptyEnumeration = enumeration(Collections.<String>emptyList());
+		when(servletContext.getInitParameterNames()).thenReturn(emptyEnumeration);
+		when(servletContext.getAttributeNames()).thenReturn(emptyEnumeration);
 	
 		session = new HttpSessionMock(servletContext, "session");
 		request = new HttpServletRequestMock(session, mock(MutableRequest.class));

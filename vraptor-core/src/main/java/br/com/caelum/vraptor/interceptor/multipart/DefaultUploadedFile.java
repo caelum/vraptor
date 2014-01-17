@@ -23,50 +23,50 @@ import java.util.regex.Pattern;
  * Default implementation for {@link UploadedFile}.
  */
 public class DefaultUploadedFile implements UploadedFile {
-    
-    static final Pattern REGEX_REMOVE_SLASHES = Pattern.compile(".*(?:\\\\|\\/)(.+)$");
+	
+	static final Pattern REGEX_REMOVE_SLASHES = Pattern.compile(".*(?:\\\\|\\/)(.+)$");
 
-    private final String contentType;
+	private final String contentType;
 
-    private final String fileName;
+	private final String fileName;
 
-    private final String completeFileName;
+	private final String completeFileName;
 
 	private final InputStream content;
 
 	private final long size;
 	
-    public DefaultUploadedFile(InputStream content, String completeFileName,
-            String contentType, long size) {
-        this.content = content;
+	public DefaultUploadedFile(InputStream content, String completeFileName,
+		String contentType, long size) {
+	this.content = content;
 		this.fileName = REGEX_REMOVE_SLASHES.matcher(completeFileName).replaceAll("$1");
-        this.completeFileName = completeFileName;
-        this.contentType = contentType;
-        this.size = size;
-    }
+	this.completeFileName = completeFileName;
+	this.contentType = contentType;
+	this.size = size;
+	}
 
-    @Override
+	@Override
 	public String toString() {
-        return "[uploadedFile uploadedCompleteName="
-                + this.completeFileName + " uploadedName=" + this.fileName
-                + " contentType=" + this.contentType + "]";
-    }
+	return "[uploadedFile uploadedCompleteName="
+		+ this.completeFileName + " uploadedName=" + this.fileName
+		+ " contentType=" + this.contentType + "]";
+	}
 
-    public String getContentType() {
-        return this.contentType;
-    }
+	public String getContentType() {
+	return this.contentType;
+	}
 
-    public InputStream getFile() {
-    	return content;
-    }
+	public InputStream getFile() {
+		return content;
+	}
 
-    public String getFileName() {
-        return this.fileName;
-    }
+	public String getFileName() {
+	return this.fileName;
+	}
 
-    public String getCompleteFileName() {
-        return this.completeFileName;
-    }
+	public String getCompleteFileName() {
+	return this.completeFileName;
+	}
 
 	public long getSize() {
 		return size;

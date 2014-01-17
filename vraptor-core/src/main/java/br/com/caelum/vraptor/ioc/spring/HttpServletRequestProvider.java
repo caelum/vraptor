@@ -34,15 +34,15 @@ import br.com.caelum.vraptor.ioc.ApplicationScoped;
 @ApplicationScoped
 class HttpServletRequestProvider implements FactoryBean<HttpServletRequest> {
 
-    public HttpServletRequest getObject() throws Exception {
-        return VRaptorRequestHolder.currentRequest().getRequest();
-    }
+	public HttpServletRequest getObject() throws Exception {
+	return VRaptorRequestHolder.currentRequest().getRequest();
+	}
 
-    public Class<? extends HttpServletRequest> getObjectType() {
-        return MutableRequest.class;
-    }
+	public Class<? extends HttpServletRequest> getObjectType() {
+	return MutableRequest.class;
+	}
 
-    public boolean isSingleton() {
-        return false;
-    }
+	public boolean isSingleton() {
+	return false;
+	}
 }

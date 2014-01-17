@@ -103,28 +103,28 @@ public class GuiceComponentRegistry implements ComponentRegistry {
 	}
 
 	private void deepRegister(Class required, Class component) {
-	    if (required == null || required.equals(Object.class)) {
+		if (required == null || required.equals(Object.class)) {
 			return;
 		}
-	    
-        // try register named component
-        if (component.isAnnotationPresent(Named.class)) {
-            Named named = ((Class<?>) component).getAnnotation(Named.class);
-            logger.debug("Binding {} to {} with @Named({})", new Object[] { required, component, named.value() });
-            binder.bind(required).annotatedWith(named).to(component);
-        } else if (!boundClasses.contains(required)) {
-            logger.debug("Binding {} to {}", required, component);
-            binder.bind(required).to(component);
-            boundClasses.add(required);
-        } else {
-            logger.debug("Ignoring binding of {} to {}", required, component);
-        }
-	    
-	    for (Class<?> c : required.getInterfaces()) {
-	        deepRegister(c, component);
-	    }
+		
+	// try register named component
+	if (component.isAnnotationPresent(Named.class)) {
+		Named named = ((Class<?>) component).getAnnotation(Named.class);
+		logger.debug("Binding {} to {} with @Named({})", new Object[] { required, component, named.value() });
+		binder.bind(required).annotatedWith(named).to(component);
+	} else if (!boundClasses.contains(required)) {
+		logger.debug("Binding {} to {}", required, component);
+		binder.bind(required).to(component);
+		boundClasses.add(required);
+	} else {
+		logger.debug("Ignoring binding of {} to {}", required, component);
+	}
+		
+		for (Class<?> c : required.getInterfaces()) {
+		deepRegister(c, component);
+		}
 
-	    deepRegister(required.getSuperclass(), component);
+		deepRegister(required.getSuperclass(), component);
 	}
 
 	public void registerInScope(Map<Class, Class> classes, Scope scope) {

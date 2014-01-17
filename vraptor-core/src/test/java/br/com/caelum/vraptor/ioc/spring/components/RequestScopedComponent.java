@@ -23,7 +23,7 @@ import br.com.caelum.vraptor.ioc.RequestScoped;
  */
 @RequestScoped
 public class RequestScopedComponent implements RequestScopedContract {
-    public void operation() {
-        System.out.println("operation done");
-    }
+	public void operation() {
+	System.out.println("operation done");
+	}
 }

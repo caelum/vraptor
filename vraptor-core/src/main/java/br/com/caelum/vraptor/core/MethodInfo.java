@@ -26,11 +26,11 @@ import br.com.caelum.vraptor.resource.ResourceMethod;
  * @author Fabio Kung
  */
 public interface MethodInfo {
-    ResourceMethod getResourceMethod();
-    void setResourceMethod(ResourceMethod resourceMethod);
-    void setParameters(Object[] parameters);
-    Object[] getParameters();
-    Object getResult();
-    void setResult(Object result);
+	ResourceMethod getResourceMethod();
+	void setResourceMethod(ResourceMethod resourceMethod);
+	void setParameters(Object[] parameters);
+	Object[] getParameters();
+	Object getResult();
+	void setResult(Object result);
 	public abstract boolean parametersWereSet();
 }

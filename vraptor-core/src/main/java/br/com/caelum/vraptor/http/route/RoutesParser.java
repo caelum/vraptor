@@ -28,6 +28,6 @@ import br.com.caelum.vraptor.resource.ResourceClass;
  */
 public interface RoutesParser {
 
-    List<Route> rulesFor(ResourceClass resource);
+	List<Route> rulesFor(ResourceClass resource);
 
 }

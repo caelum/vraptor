@@ -76,7 +76,7 @@ public class LinkConverterJSON implements Converter {
 				context.convertAnother(link);
 				writer.endNode();
 			}
-	        writer.endNode();
+		writer.endNode();
 		}
 	}
 

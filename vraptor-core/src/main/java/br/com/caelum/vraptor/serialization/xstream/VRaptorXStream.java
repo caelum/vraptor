@@ -26,10 +26,10 @@ public final class VRaptorXStream extends XStream {
 	@Override
 	protected MapperWrapper wrapMapper(MapperWrapper next) {
 		
-	    vraptorMapper = new VRaptorClassMapper(next,
-	    /* this method is called in the super constructor, so we cannot use instance variables, so we're
-	     * using this 'lazy' get */
-	    new Supplier<TypeNameExtractor>() {
+		vraptorMapper = new VRaptorClassMapper(next,
+		/* this method is called in the super constructor, so we cannot use instance variables, so we're
+		 * using this 'lazy' get */
+		new Supplier<TypeNameExtractor>() {
 			public TypeNameExtractor get() {
 				return extractor;
 			}

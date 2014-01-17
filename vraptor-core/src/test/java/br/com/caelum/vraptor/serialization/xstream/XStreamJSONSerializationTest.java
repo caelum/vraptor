@@ -43,18 +43,18 @@ public class XStreamJSONSerializationTest {
 	private HttpServletResponse response;
 	private DefaultTypeNameExtractor extractor;
 	private HibernateProxyInitializer initializer;
-    private XStreamBuilder builder = XStreamBuilderImpl.cleanInstance();
+	private XStreamBuilder builder = XStreamBuilderImpl.cleanInstance();
 
-    @Before
-    public void setup() throws Exception {
-        this.stream = new ByteArrayOutputStream();
+	@Before
+	public void setup() throws Exception {
+	this.stream = new ByteArrayOutputStream();
 
-        response = mock(HttpServletResponse.class);
-        when(response.getWriter()).thenReturn(new PrintWriter(stream));
-        extractor = new DefaultTypeNameExtractor();
+	response = mock(HttpServletResponse.class);
+	when(response.getWriter()).thenReturn(new PrintWriter(stream));
+	extractor = new DefaultTypeNameExtractor();
 		initializer = new HibernateProxyInitializer();
 		this.serialization = new XStreamJSONSerialization(response, extractor, initializer, builder);
-    }
+	}
 
 	public static class Address {
 		String street;
@@ -123,7 +123,7 @@ public class XStreamJSONSerializationTest {
 	}
 
 	@Test
-    public void shouldSerializeGenericClass() {
+	public void shouldSerializeGenericClass() {
 		String expectedResult = "{\"genericWrapper\": {\"entityList\": [{\"name\": \"washington botelho\"},{\"name\": \"washington botelho\"}],\"total\": 2}}";
 
 		Collection<Client> entityList = new ArrayList<Client>();
@@ -132,26 +132,26 @@ public class XStreamJSONSerializationTest {
 
 		GenericWrapper<Client> wrapper = new GenericWrapper<Client>(entityList, entityList.size());
 
-        serialization.from(wrapper).include("entityList").serialize();
+	serialization.from(wrapper).include("entityList").serialize();
 
-        assertThat(result(), is(equalTo(expectedResult)));
-    }
+	assertThat(result(), is(equalTo(expectedResult)));
+	}
 
-    @Test
-    public void shouldSerializeAllBasicFields() {
-        String expectedResult = "{\"order\": {\"price\": 15.0,\"comments\": \"pack it nicely, please\"}}";
-        Order order = new Order(new Client("guilherme silveira"), 15.0, "pack it nicely, please");
-        serialization.from(order).serialize();
-        assertThat(result(), is(equalTo(expectedResult)));
-    }
+	@Test
+	public void shouldSerializeAllBasicFields() {
+	String expectedResult = "{\"order\": {\"price\": 15.0,\"comments\": \"pack it nicely, please\"}}";
+	Order order = new Order(new Client("guilherme silveira"), 15.0, "pack it nicely, please");
+	serialization.from(order).serialize();
+	assertThat(result(), is(equalTo(expectedResult)));
+	}
 
-    @Test
-    public void shouldSerializeAllBasicFieldsIdented() {
-        String expectedResult = "{\"order\": {\n  \"price\": 15.0,\n  \"comments\": \"pack it nicely, please\"\n}}";
-        Order order = new Order(new Client("guilherme silveira"), 15.0, "pack it nicely, please");
-        serialization.indented().from(order).serialize();
-        assertThat(result(), is(equalTo(expectedResult)));
-    }
+	@Test
+	public void shouldSerializeAllBasicFieldsIdented() {
+	String expectedResult = "{\"order\": {\n  \"price\": 15.0,\n  \"comments\": \"pack it nicely, please\"\n}}";
+	Order order = new Order(new Client("guilherme silveira"), 15.0, "pack it nicely, please");
+	serialization.indented().from(order).serialize();
+	assertThat(result(), is(equalTo(expectedResult)));
+	}
 
 	@Test
 	public void shouldUseAlias() {
@@ -354,14 +354,14 @@ public class XStreamJSONSerializationTest {
 		assertThat(result(), not(containsString("\"order\":")));
 	}
 
-    @Test
-    public void shouldOptionallyRemoveRootIdented() {
-        String expected = "{\n  \"price\": 15.0,\n  \"comments\": \"pack it nicely, please\",\n  \"items\": [\n    {\n      \"name\": \"any item\"\n    }\n  ]\n}";
-        Order order = new Order(new Client("guilherme silveira"), 15.0, "pack it nicely, please",
-                new Item("any item", 12.99));
-        serialization.indented().withoutRoot().from(order).include("items").exclude("items.price").serialize();
-        assertThat(result(), equalTo(expected));
-    }
+	@Test
+	public void shouldOptionallyRemoveRootIdented() {
+	String expected = "{\n  \"price\": 15.0,\n  \"comments\": \"pack it nicely, please\",\n  \"items\": [\n    {\n      \"name\": \"any item\"\n    }\n  ]\n}";
+	Order order = new Order(new Client("guilherme silveira"), 15.0, "pack it nicely, please",
+		new Item("any item", 12.99));
+	serialization.indented().withoutRoot().from(order).include("items").exclude("items.price").serialize();
+	assertThat(result(), equalTo(expected));
+	}
 
 	private String result() {
 		return new String(stream.toByteArray());

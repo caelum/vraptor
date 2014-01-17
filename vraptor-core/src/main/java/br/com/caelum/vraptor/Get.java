@@ -33,9 +33,9 @@ import java.lang.annotation.Target;
 @Retention(RetentionPolicy.RUNTIME)
 public @interface Get {
 
-    /**
-     * All paths that will be mapped to an annotated Resource method. 
-     * @return
-     */
-    String[] value() default {};
+	/**
+	 * All paths that will be mapped to an annotated Resource method. 
+	 * @return
+	 */
+	String[] value() default {};
 }

@@ -57,11 +57,11 @@ import com.google.common.base.Predicate;
  *   //delegate constructor
  *
  *   protected String extractControllerNameFrom(Class&lt;?&gt; type) {
- *     return //your convention here
+ *	 return //your convention here
  *   }
  *
  *   protected String defaultUriFor(String controllerName, String methodName) {
- *     return //your convention here
+ *	 return //your convention here
  *   }
  * }
  *

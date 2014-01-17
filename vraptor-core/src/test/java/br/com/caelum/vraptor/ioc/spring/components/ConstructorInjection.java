@@ -23,13 +23,13 @@ import br.com.caelum.vraptor.ioc.Component;
  */
 @Component
 public class ConstructorInjection {
-    private final DummyComponent dependecy;
+	private final DummyComponent dependecy;
 
-    public ConstructorInjection(DummyComponent dependecy) {
-        this.dependecy = dependecy;
-    }
+	public ConstructorInjection(DummyComponent dependecy) {
+	this.dependecy = dependecy;
+	}
 
-    public DummyComponent getDependecy() {
-        return dependecy;
-    }
+	public DummyComponent getDependecy() {
+	return dependecy;
+	}
 }

@@ -23,21 +23,21 @@ package br.com.caelum.vraptor.proxy;
  */
 public interface Proxifier {
 
-    /**
-     * Creates a proxy for class defined in type parameter.
-     * 
-     * @param type The proxy type.
-     * @param handler Callback for method invocation.
-     * @return The proxy.
-     */
-    <T> T proxify(Class<T> type, MethodInvocation<? super T> handler);
+	/**
+	 * Creates a proxy for class defined in type parameter.
+	 * 
+	 * @param type The proxy type.
+	 * @param handler Callback for method invocation.
+	 * @return The proxy.
+	 */
+	<T> T proxify(Class<T> type, MethodInvocation<? super T> handler);
 
-    /**
-     * Return <code>true</code> if the object is a proxy, false otherwise. <code>null</code> objects always return
-     * <code>false</code>.
-     * 
-     * @param o The object to test
-     * @return <code>true</code> if the object is a proxy, false otherwise.
-     */
-    boolean isProxy(Object o);
+	/**
+	 * Return <code>true</code> if the object is a proxy, false otherwise. <code>null</code> objects always return
+	 * <code>false</code>.
+	 * 
+	 * @param o The object to test
+	 * @return <code>true</code> if the object is a proxy, false otherwise.
+	 */
+	boolean isProxy(Object o);
 }

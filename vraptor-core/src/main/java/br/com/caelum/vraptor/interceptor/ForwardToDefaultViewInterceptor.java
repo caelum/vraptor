@@ -35,29 +35,29 @@ import br.com.caelum.vraptor.view.Results;
  */
 @Intercepts(after=ExecuteMethodInterceptor.class, before={})
 public class ForwardToDefaultViewInterceptor implements Interceptor {
-    private final Result result;
+	private final Result result;
 
-    private static final Logger logger = LoggerFactory.getLogger(ForwardToDefaultViewInterceptor.class);
+	private static final Logger logger = LoggerFactory.getLogger(ForwardToDefaultViewInterceptor.class);
 
-    public ForwardToDefaultViewInterceptor(Result result) {
-        this.result = result;
-    }
+	public ForwardToDefaultViewInterceptor(Result result) {
+	this.result = result;
+	}
 
-    public boolean accepts(ResourceMethod method) {
-        return true;
-    }
+	public boolean accepts(ResourceMethod method) {
+	return true;
+	}
 
-    public void intercept(InterceptorStack stack, ResourceMethod method, Object resourceInstance)
-            throws InterceptionException {
-        if (result.used()) {
-        	logger.debug("Request already dispatched and commited somewhere else, not forwarding.");
-            return;
-        }
+	public void intercept(InterceptorStack stack, ResourceMethod method, Object resourceInstance)
+		throws InterceptionException {
+	if (result.used()) {
+		logger.debug("Request already dispatched and commited somewhere else, not forwarding.");
+		return;
+	}
 
-        // TODO: maybe the response.isCommited is true, we should warn before
-        // trying to forward
-        logger.debug("forwarding to the dafault page for this logic");
-        result.use(Results.page()).defaultView();
-    }
+	// TODO: maybe the response.isCommited is true, we should warn before
+	// trying to forward
+	logger.debug("forwarding to the dafault page for this logic");
+	result.use(Results.page()).defaultView();
+	}
 
 }

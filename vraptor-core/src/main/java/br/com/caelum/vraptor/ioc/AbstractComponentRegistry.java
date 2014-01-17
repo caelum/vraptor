@@ -33,20 +33,20 @@ public abstract class AbstractComponentRegistry implements ComponentRegistry {
 	}
 
 	private void deepRegister(Class<?> required, Class<?> component, Set<Class<?>> registeredKeys) {
-        if (required == null || required.equals(Object.class)) {
+	if (required == null || required.equals(Object.class)) {
 			return;
 		}
 
-        if (!registeredKeys.contains(required)) {
-            registeredKeys.add(required);
-            register(required, component);
-        }
+	if (!registeredKeys.contains(required)) {
+		registeredKeys.add(required);
+		register(required, component);
+	}
 
-        for (Class<?> c : required.getInterfaces()) {
-            deepRegister(c, component, registeredKeys);
-        }
+	for (Class<?> c : required.getInterfaces()) {
+		deepRegister(c, component, registeredKeys);
+	}
 
-        deepRegister(required.getSuperclass(), component, registeredKeys);
-    }
+	deepRegister(required.getSuperclass(), component, registeredKeys);
+	}
 
 }

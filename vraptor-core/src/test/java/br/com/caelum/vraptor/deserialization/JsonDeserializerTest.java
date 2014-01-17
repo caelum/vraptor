@@ -41,8 +41,8 @@ public class JsonDeserializerTest {
 
 		extractor = new DefaultTypeNameExtractor();
 		
-        deserializer = new JsonDeserializer(provider, extractor, XStreamBuilderImpl.cleanInstance());
-        
+	deserializer = new JsonDeserializer(provider, extractor, XStreamBuilderImpl.cleanInstance());
+	
 		ResourceClass resourceClass = new DefaultResourceClass(CatController.class);
 
 		meow = new DefaultResourceMethod(resourceClass, CatController.class.getDeclaredMethod("meow"));

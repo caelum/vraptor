@@ -75,138 +75,138 @@ import com.google.common.io.Closeables;
 @Intercepts(before = ParametersInstantiatorInterceptor.class)
 @RequestScoped
 public class Servlet3MultipartInterceptor
-    implements MultipartInterceptor {
+	implements MultipartInterceptor {
 
-    private static final Logger logger = LoggerFactory.getLogger(Servlet3MultipartInterceptor.class);
+	private static final Logger logger = LoggerFactory.getLogger(Servlet3MultipartInterceptor.class);
 
-    private static final Pattern EXTRACT_FILENAME = Pattern.compile("(.*)name=\"(.*)\"");
+	private static final Pattern EXTRACT_FILENAME = Pattern.compile("(.*)name=\"(.*)\"");
 
-    public static final String ACCEPT_MULTIPART = "multipart/form-data";
-    public static final String CONTENT_DISPOSITION_KEY = "content-disposition";
+	public static final String ACCEPT_MULTIPART = "multipart/form-data";
+	public static final String CONTENT_DISPOSITION_KEY = "content-disposition";
 
-    private final HttpServletRequest request;
-    private final MutableRequest parameters;
-    private final Validator validator;
+	private final HttpServletRequest request;
+	private final MutableRequest parameters;
+	private final Validator validator;
 
-    private Multiset<String> indexes;
+	private Multiset<String> indexes;
 
-    public Servlet3MultipartInterceptor(HttpServletRequest request, MutableRequest parameters, Validator validator) {
-        this.request = request;
-        this.parameters = parameters;
-        this.validator = validator;
-    }
+	public Servlet3MultipartInterceptor(HttpServletRequest request, MutableRequest parameters, Validator validator) {
+	this.request = request;
+	this.parameters = parameters;
+	this.validator = validator;
+	}
 
-    /**
-     * Only accept requests that contains multipart headers.
-     */
-    public boolean accepts(ResourceMethod method) {
-        if (!request.getMethod().toUpperCase().equals("POST")) {
-            return false;
-        }
+	/**
+	 * Only accept requests that contains multipart headers.
+	 */
+	public boolean accepts(ResourceMethod method) {
+	if (!request.getMethod().toUpperCase().equals("POST")) {
+		return false;
+	}
 
-        String contentType = request.getContentType();
-        return contentType != null && contentType.startsWith(ACCEPT_MULTIPART);
-    }
+	String contentType = request.getContentType();
+	return contentType != null && contentType.startsWith(ACCEPT_MULTIPART);
+	}
 
-    public void intercept(InterceptorStack stack, ResourceMethod method, Object resourceInstance)
-        throws InterceptionException {
-        logger.info("Request contains multipart data. Try to parse with Servlet3 Part");
+	public void intercept(InterceptorStack stack, ResourceMethod method, Object resourceInstance)
+	throws InterceptionException {
+	logger.info("Request contains multipart data. Try to parse with Servlet3 Part");
 
-        final Multimap<String, String> params = LinkedListMultimap.create();
-        indexes = HashMultiset.create();
+	final Multimap<String, String> params = LinkedListMultimap.create();
+	indexes = HashMultiset.create();
 
-        try {
-            for (Part part : request.getParts()) {
-                String name = part.getName();
-                name = fixIndexedParameters(name);
+	try {
+		for (Part part : request.getParts()) {
+		String name = part.getName();
+		name = fixIndexedParameters(name);
 
-                if (isField(part)) {
-                    logger.debug("{} is a field", name);
-                    params.put(name, getStringValue(part));
+		if (isField(part)) {
+			logger.debug("{} is a field", name);
+			params.put(name, getStringValue(part));
 
-                } else {
-                    logger.debug("{} is a file", name);
+		} else {
+			logger.debug("{} is a file", name);
 
-                    String fileName = getFileName(part);
-                    UploadedFile upload = new DefaultUploadedFile(part.getInputStream(), fileName, part.getContentType(), part.getSize());
+			String fileName = getFileName(part);
+			UploadedFile upload = new DefaultUploadedFile(part.getInputStream(), fileName, part.getContentType(), part.getSize());
 
-                    parameters.setParameter(name, name);
-                    request.setAttribute(name, upload);
-                }
-            }
-        } catch (IllegalStateException e) {
-            reportSizeLimitExceeded(e);
+			parameters.setParameter(name, name);
+			request.setAttribute(name, upload);
+		}
+		}
+	} catch (IllegalStateException e) {
+		reportSizeLimitExceeded(e);
 
-        } catch (IOException e) {
-            throw new InterceptionException(e);
+	} catch (IOException e) {
+		throw new InterceptionException(e);
 
-        } catch (ServletException e) {
-            throw new InterceptionException(e);
-        }
+	} catch (ServletException e) {
+		throw new InterceptionException(e);
+	}
 
-        for (String paramName : params.keySet()) {
-            Collection<String> paramValues = params.get(paramName);
-            parameters.setParameter(paramName, paramValues.toArray(new String[paramValues.size()]));
-        }
+	for (String paramName : params.keySet()) {
+		Collection<String> paramValues = params.get(paramName);
+		parameters.setParameter(paramName, paramValues.toArray(new String[paramValues.size()]));
+	}
 
-        stack.next(method, resourceInstance);
-    }
+	stack.next(method, resourceInstance);
+	}
 
-    /**
-     * This method is called when the max upload size is reached. There are no way to get the maxFileSize() and
-     * maxRequestSize() attributes in a Filter.
-     * 
-     * @param e
-     */
-    protected void reportSizeLimitExceeded(final IllegalStateException e) {
-        validator.add(new I18nMessage("upload", "servlet3.upload.filesize.exceeded"));
-        logger.warn("The file size limit was exceeded.", e);
-    }
+	/**
+	 * This method is called when the max upload size is reached. There are no way to get the maxFileSize() and
+	 * maxRequestSize() attributes in a Filter.
+	 * 
+	 * @param e
+	 */
+	protected void reportSizeLimitExceeded(final IllegalStateException e) {
+	validator.add(new I18nMessage("upload", "servlet3.upload.filesize.exceeded"));
+	logger.warn("The file size limit was exceeded.", e);
+	}
 
-    /**
-     * Returns true if the part is a field, false otherwise.
-     */
-    protected boolean isField(Part part) {
-        return Strings.isNullOrEmpty(part.getContentType());
-    }
+	/**
+	 * Returns true if the part is a field, false otherwise.
+	 */
+	protected boolean isField(Part part) {
+	return Strings.isNullOrEmpty(part.getContentType());
+	}
 
-    /**
-     * Get the filename of the part. The filename is extracted by header.
-     */
-    protected String getFileName(Part part) {
-        String name = part.getHeader(CONTENT_DISPOSITION_KEY);
-        return EXTRACT_FILENAME.matcher(name).replaceAll("$2");
-    }
+	/**
+	 * Get the filename of the part. The filename is extracted by header.
+	 */
+	protected String getFileName(Part part) {
+	String name = part.getHeader(CONTENT_DISPOSITION_KEY);
+	return EXTRACT_FILENAME.matcher(name).replaceAll("$2");
+	}
 
-    /**
-     * Get the content of a part as String.
-     */
-    protected String getStringValue(Part part)
-        throws IOException {
-        String encoding = request.getCharacterEncoding();
+	/**
+	 * Get the content of a part as String.
+	 */
+	protected String getStringValue(Part part)
+	throws IOException {
+	String encoding = request.getCharacterEncoding();
 
-        InputStream in = part.getInputStream();
-        byte[] out = ByteStreams.toByteArray(in);
-        Closeables.closeQuietly(in);
+	InputStream in = part.getInputStream();
+	byte[] out = ByteStreams.toByteArray(in);
+	Closeables.closeQuietly(in);
 
-        if (!Strings.isNullOrEmpty(encoding)) {
-            try {
-                return new String(out, encoding);
-            } catch (UnsupportedEncodingException e) {
-                logger.warn("Request have an invalid encoding. Ignoring it");
-            }
-        }
+	if (!Strings.isNullOrEmpty(encoding)) {
+		try {
+		return new String(out, encoding);
+		} catch (UnsupportedEncodingException e) {
+		logger.warn("Request have an invalid encoding. Ignoring it");
+		}
+	}
 
-        return new String(out);
-    }
+	return new String(out);
+	}
 
-    protected String fixIndexedParameters(String name) {
-        if (name.contains("[]")) {
-            String newName = name.replace("[]", "[" + (indexes.count(name)) + "]");
-            indexes.add(name);
-            logger.debug("{} was renamed to {}", name, newName);
-            name = newName;
-        }
-        return name;
-    }
+	protected String fixIndexedParameters(String name) {
+	if (name.contains("[]")) {
+		String newName = name.replace("[]", "[" + (indexes.count(name)) + "]");
+		indexes.add(name);
+		logger.debug("{} was renamed to {}", name, newName);
+		name = newName;
+	}
+	return name;
+	}
 }

@@ -42,27 +42,27 @@ import br.com.caelum.vraptor.ioc.RequestScoped;
 @Convert(Double.class)
 @RequestScoped
 public class LocaleBasedDoubleConverter
-    implements Converter<Double> {
+	implements Converter<Double> {
 
-    private final Localization localization;
-    
-    public LocaleBasedDoubleConverter(Localization localization) {
-        this.localization = localization;
-    }
+	private final Localization localization;
+	
+	public LocaleBasedDoubleConverter(Localization localization) {
+	this.localization = localization;
+	}
 
-    public Double convert(String value, Class<? extends Double> type, ResourceBundle bundle) {
-        if (isNullOrEmpty(value)) {
-            return null;
-        }
+	public Double convert(String value, Class<? extends Double> type, ResourceBundle bundle) {
+	if (isNullOrEmpty(value)) {
+		return null;
+	}
 
-        try {
-            final Locale locale = localization.getLocale();
-            DecimalFormat fmt = ((DecimalFormat) DecimalFormat.getInstance(locale));
+	try {
+		final Locale locale = localization.getLocale();
+		DecimalFormat fmt = ((DecimalFormat) DecimalFormat.getInstance(locale));
 
-            return fmt.parse(value).doubleValue();
-        } catch (ParseException e) {
-            throw new ConversionError(MessageFormat.format(bundle.getString("is_not_a_valid_number"), value));
-        }
-    }
+		return fmt.parse(value).doubleValue();
+	} catch (ParseException e) {
+		throw new ConversionError(MessageFormat.format(bundle.getString("is_not_a_valid_number"), value));
+	}
+	}
 
 }

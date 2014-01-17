@@ -52,11 +52,11 @@ public class FlashInterceptorTest {
 		interceptor = new FlashInterceptor(session, result, response);
 	}
 
-    @Test
-    public void shouldAcceptAlways() {
-    	assertTrue(interceptor.accepts(null));
-    }
-    
+	@Test
+	public void shouldAcceptAlways() {
+		assertTrue(interceptor.accepts(null));
+	}
+	
 	@Test
 	public void shouldDoNothingWhenThereIsNoFlashParameters() throws Exception {
 		when(session.getAttribute(FLASH_INCLUDED_PARAMETERS)).thenReturn(null);

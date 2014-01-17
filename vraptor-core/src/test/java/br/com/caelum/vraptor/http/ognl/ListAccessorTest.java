@@ -41,41 +41,41 @@ import com.google.inject.util.Types;
 
 public class ListAccessorTest {
 
-    private ListAccessor accessor;
-    private @Mock OgnlContext context;
-    private @Mock List<String> instance;
+	private ListAccessor accessor;
+	private @Mock OgnlContext context;
+	private @Mock List<String> instance;
 	private @Mock Converters converters;
 
-    @Before
-    public void setup() {
-    	MockitoAnnotations.initMocks(this);
-        this.instance = new ArrayList<String>();
-        when(context.getRoot()).thenReturn(instance);
+	@Before
+	public void setup() {
+		MockitoAnnotations.initMocks(this);
+	this.instance = new ArrayList<String>();
+	when(context.getRoot()).thenReturn(instance);
 
-        when(context.get("rootType")).thenReturn(Types.listOf(String.class));
-        when(converters.to(String.class)).thenReturn((Converter) new StringConverter());
-        this.accessor = new ListAccessor(converters);
-    }
+	when(context.get("rootType")).thenReturn(Types.listOf(String.class));
+	when(converters.to(String.class)).thenReturn((Converter) new StringConverter());
+	this.accessor = new ListAccessor(converters);
+	}
 
-    @Test
-    public void gettingShouldReturnNullIfIndexNotFound() throws Exception {
-        Object value = accessor.getProperty(null, instance, 1);
-        assertThat(value, is(nullValue()));
-    }
+	@Test
+	public void gettingShouldReturnNullIfIndexNotFound() throws Exception {
+	Object value = accessor.getProperty(null, instance, 1);
+	assertThat(value, is(nullValue()));
+	}
 
-    @Test
-    public void gettingShouldReturnValueIfIndexFound() throws Exception {
-        instance.add("nothing");
-        instance.add("guilherme");
-        Object value = accessor.getProperty(null, instance, 1);
-        assertThat(value, is(Matchers.equalTo((Object) "guilherme")));
-    }
+	@Test
+	public void gettingShouldReturnValueIfIndexFound() throws Exception {
+	instance.add("nothing");
+	instance.add("guilherme");
+	Object value = accessor.getProperty(null, instance, 1);
+	assertThat(value, is(Matchers.equalTo((Object) "guilherme")));
+	}
 
-    @Test
-    public void settingShouldNullifyUpToIndex() throws Exception {
-        accessor.setProperty(context, instance, 1, "hello");
-        assertThat(instance.get(0), is(Matchers.nullValue()));
-        assertThat(instance.get(1), is(Matchers.equalTo("hello")));
-    }
+	@Test
+	public void settingShouldNullifyUpToIndex() throws Exception {
+	accessor.setProperty(context, instance, 1, "hello");
+	assertThat(instance.get(0), is(Matchers.nullValue()));
+	assertThat(instance.get(1), is(Matchers.equalTo("hello")));
+	}
 
 }

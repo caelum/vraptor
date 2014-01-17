@@ -44,10 +44,10 @@ public class BooleanConverter implements Converter<Boolean> {
 	private static final Set<String> IS_FALSE = new HashSet<String>(Arrays.asList("FALSE", "0", "NO", "N", "OFF"));
 
 	public Boolean convert(String value, Class<? extends Boolean> type, ResourceBundle bundle) {
-	    if (isNullOrEmpty(value)) {
+		if (isNullOrEmpty(value)) {
 			return null;
 		}
-	    
+		
 		value = value.toUpperCase();
 		
 		if (matches(IS_TRUE, value)) {

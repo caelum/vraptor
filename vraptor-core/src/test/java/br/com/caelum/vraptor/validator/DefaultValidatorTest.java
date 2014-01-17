@@ -124,9 +124,9 @@ public class DefaultValidatorTest {
 	@Test
 	public void shouldNotRedirectIfHasNotErrors() {
 		try {
-    		validator.onErrorRedirectTo(MyComponent.class).logic();
-    		assertThat(validator.getErrors(), hasSize(0));
-    		verify(outjector, never()).outjectRequestMap();
+			validator.onErrorRedirectTo(MyComponent.class).logic();
+			assertThat(validator.getErrors(), hasSize(0));
+			verify(outjector, never()).outjectRequestMap();
 		} catch (ValidationException e) {
 			fail("no error occurs");
 		}

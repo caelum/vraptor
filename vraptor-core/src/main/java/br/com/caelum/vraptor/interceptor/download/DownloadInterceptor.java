@@ -49,7 +49,7 @@ import br.com.caelum.vraptor.resource.ResourceMethod;
 @Lazy
 public class DownloadInterceptor implements Interceptor {
 
-    private static final Logger logger = LoggerFactory.getLogger(DownloadInterceptor.class);
+	private static final Logger logger = LoggerFactory.getLogger(DownloadInterceptor.class);
 
 	private final HttpServletResponse response;
 	private final MethodInfo info;
@@ -68,7 +68,7 @@ public class DownloadInterceptor implements Interceptor {
 	}
 
 	public void intercept(InterceptorStack stack, ResourceMethod method, Object instance) throws InterceptionException {
-    	logger.debug("Sending a file to the client");
+		logger.debug("Sending a file to the client");
 
 		Object result = info.getResult();
 

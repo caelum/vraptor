@@ -29,23 +29,23 @@ import java.util.List;
  * @author Guilherme Silveira
  */
 public abstract class Rules {
-    private final Router router;
+	private final Router router;
 	private final List<RouteBuilder> routesToBuild = new ArrayList<RouteBuilder>();
 
-    public Rules(Router router) {
-        this.router = router;
-        routes();
-        for(RouteBuilder builder : routesToBuild) {
-            router.add(builder.build());
-        }
-    }
+	public Rules(Router router) {
+	this.router = router;
+	routes();
+	for(RouteBuilder builder : routesToBuild) {
+		router.add(builder.build());
+	}
+	}
 
-    public abstract void routes();
+	public abstract void routes();
 
-    protected final RouteBuilder routeFor(String uri) {
-        RouteBuilder rule = router.builderFor(uri);
-        rule.withPriority(Integer.MIN_VALUE);
-        this.routesToBuild.add(rule);
-        return rule;
-    }
+	protected final RouteBuilder routeFor(String uri) {
+	RouteBuilder rule = router.builderFor(uri);
+	rule.withPriority(Integer.MIN_VALUE);
+	this.routesToBuild.add(rule);
+	return rule;
+	}
 }

@@ -26,14 +26,14 @@ public class XStreamJSONPSerializationTest {
 	private ByteArrayOutputStream stream;
 	
 	@Before
-    public void setup() throws Exception {
-        this.stream = new ByteArrayOutputStream();
+	public void setup() throws Exception {
+	this.stream = new ByteArrayOutputStream();
 
-        HttpServletResponse response = mock(HttpServletResponse.class);
-        when(response.getWriter()).thenReturn(new PrintWriter(stream));
-        
-        this.serialization = new XStreamJSONPSerialization(response, new DefaultTypeNameExtractor(), new HibernateProxyInitializer(), XStreamBuilderImpl.cleanInstance());
-    }
+	HttpServletResponse response = mock(HttpServletResponse.class);
+	when(response.getWriter()).thenReturn(new PrintWriter(stream));
+	
+	this.serialization = new XStreamJSONPSerialization(response, new DefaultTypeNameExtractor(), new HibernateProxyInitializer(), XStreamBuilderImpl.cleanInstance());
+	}
 
 	public static class Address {
 		String street;
@@ -81,7 +81,7 @@ public class XStreamJSONPSerializationTest {
 	}
 
 	@Test
-    public void shouldSerializeGenericClass() {
+	public void shouldSerializeGenericClass() {
 		String expectedResult = "myCallback({\"genericWrapper\": {\"entityList\": [{\"street\": \"vergueiro street\"},{\"street\": \"vergueiro street\"}],\"total\": 2}})";
 
 		Collection<Address> entityList = new ArrayList<Address>();
@@ -90,9 +90,9 @@ public class XStreamJSONPSerializationTest {
 
 		GenericWrapper<Address> wrapper = new GenericWrapper<Address>(entityList, entityList.size());
 
-        serialization.withCallback("myCallback").from(wrapper).include("entityList").serialize();
+	serialization.withCallback("myCallback").from(wrapper).include("entityList").serialize();
 
-        assertThat(result(), is(equalTo(expectedResult)));
-    }
+	assertThat(result(), is(equalTo(expectedResult)));
+	}
 
 }

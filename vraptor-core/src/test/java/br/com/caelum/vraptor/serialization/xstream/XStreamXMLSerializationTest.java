@@ -36,14 +36,14 @@ public class XStreamXMLSerializationTest {
 	protected ByteArrayOutputStream stream;
 
 	@Before
-    public void setup() throws Exception {
-        this.stream = new ByteArrayOutputStream();
+	public void setup() throws Exception {
+	this.stream = new ByteArrayOutputStream();
 
-        HttpServletResponse response = mock(HttpServletResponse.class);
-        when(response.getWriter()).thenReturn(new PrintWriter(stream));
-        
+	HttpServletResponse response = mock(HttpServletResponse.class);
+	when(response.getWriter()).thenReturn(new PrintWriter(stream));
+	
 		this.serialization = new XStreamXMLSerialization(response, new DefaultTypeNameExtractor(), new NullProxyInitializer(), XStreamBuilderImpl.cleanInstance());
-    }
+	}
 
 	public static class Address {
 		String street;
@@ -119,7 +119,7 @@ public class XStreamXMLSerializationTest {
 	}
 
 	@Test
-    public void shouldSerializeGenericClass() {
+	public void shouldSerializeGenericClass() {
 		String expectedResult = "<genericWrapper>\n  <entityList class=\"list\">\n    <client>\n      <name>washington botelho</name>\n    </client>\n    <client>\n      <name>washington botelho</name>\n    </client>\n  </entityList>\n  <total>2</total>\n</genericWrapper>";
 
 		Collection<Client> entityList = new ArrayList<Client>();
@@ -128,10 +128,10 @@ public class XStreamXMLSerializationTest {
 
 		GenericWrapper<Client> wrapper = new GenericWrapper<Client>(entityList, entityList.size());
 
-        serialization.from(wrapper).include("entityList").serialize();
+	serialization.from(wrapper).include("entityList").serialize();
 
-        assertThat(result(), is(equalTo(expectedResult)));
-    }
+	assertThat(result(), is(equalTo(expectedResult)));
+	}
 
 	@Test
 	public void shouldSerializeMaps() {

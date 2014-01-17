@@ -22,5 +22,5 @@ import br.com.caelum.vraptor.ioc.Container;
  * @author Fabio Kung
  */
 public interface Execution<T> {
-    T insideRequest(Container container);
+	T insideRequest(Container container);
 }

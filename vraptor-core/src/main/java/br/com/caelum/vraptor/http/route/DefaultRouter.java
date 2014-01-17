@@ -60,15 +60,15 @@ public class DefaultRouter implements Router {
 	private final TypeFinder finder;
 	private final Converters converters;
 	private final ParameterNameProvider nameProvider;
-    private final Evaluator evaluator;
+	private final Evaluator evaluator;
 
-    public DefaultRouter(RoutesConfiguration config,
+	public DefaultRouter(RoutesConfiguration config,
 			Proxifier proxifier, TypeFinder finder, Converters converters, ParameterNameProvider nameProvider, Evaluator evaluator) {
 		this.proxifier = proxifier;
 		this.finder = finder;
 		this.converters = converters;
 		this.nameProvider = nameProvider;
-        this.evaluator = evaluator;
+	this.evaluator = evaluator;
 		config.config(this);
 	}
 
@@ -153,35 +153,35 @@ public class DefaultRouter implements Router {
 
 
 
-    private Predicate<Route> canHandle(final Class<?> type, final Method method) {
-        return new Predicate<Route>() {
-            public boolean apply(Route route) {
-                return route.canHandle(type, method);
-            }
-        };
-    }
+	private Predicate<Route> canHandle(final Class<?> type, final Method method) {
+	return new Predicate<Route>() {
+		public boolean apply(Route route) {
+		return route.canHandle(type, method);
+		}
+	};
+	}
 
-    private Predicate<Route> canHandle(final String uri) {
-        return new Predicate<Route>() {
-            public boolean apply(Route route) {
-                return route.canHandle(uri);
-            }
-        };
-    }
-    
-    private Predicate<Route> allow(final HttpMethod method) {
-        return new Predicate<Route>() {
-            public boolean apply(Route route) {
-                return route.allowedMethods().contains(method);
-            }
-        };
-    }
-    
-    private Predicate<Annotation[]> hasAnnotation(final Class<?> annotation) {
-        return new Predicate<Annotation[]>() {
-            public boolean apply(Annotation[] param) {
-                return any(asList(param), instanceOf(annotation));
-            }
-        };
-    }
+	private Predicate<Route> canHandle(final String uri) {
+	return new Predicate<Route>() {
+		public boolean apply(Route route) {
+		return route.canHandle(uri);
+		}
+	};
+	}
+	
+	private Predicate<Route> allow(final HttpMethod method) {
+	return new Predicate<Route>() {
+		public boolean apply(Route route) {
+		return route.allowedMethods().contains(method);
+		}
+	};
+	}
+	
+	private Predicate<Annotation[]> hasAnnotation(final Class<?> annotation) {
+	return new Predicate<Annotation[]>() {
+		public boolean apply(Annotation[] param) {
+		return any(asList(param), instanceOf(annotation));
+		}
+	};
+	}
 }

@@ -64,25 +64,25 @@ public class SpringBasedContainer extends AbstractComponentRegistry implements C
 
 	private static final Logger logger = LoggerFactory.getLogger(SpringBasedContainer.class);
 
-    final Set<Class<?>> toRegister = Sets.newHashSet();
+	final Set<Class<?>> toRegister = Sets.newHashSet();
 
 	private final ConfigurableWebApplicationContext parentContext;
 
-    public SpringBasedContainer(ConfigurableWebApplicationContext parentContext) {
-        this.parentContext = parentContext;
-    }
+	public SpringBasedContainer(ConfigurableWebApplicationContext parentContext) {
+	this.parentContext = parentContext;
+	}
 
-    public void register(Class<?> requiredType, Class<?> componentType) {
-    	if (parentContext.isActive() && "VRaptor".equals(parentContext.getId())) {
-    		logger.info("registering class {} to {} after container initialization. Please avoid this", requiredType, componentType);
-    		new SpringRegistry(parentContext.getBeanFactory(), this).register(componentType);
+	public void register(Class<?> requiredType, Class<?> componentType) {
+		if (parentContext.isActive() && "VRaptor".equals(parentContext.getId())) {
+			logger.info("registering class {} to {} after container initialization. Please avoid this", requiredType, componentType);
+			new SpringRegistry(parentContext.getBeanFactory(), this).register(componentType);
 		} else {
 			toRegister.add(componentType);
 		}
-    }
+	}
 
-    public <T> T instanceFor(Class<T> type) {
-    	try {
+	public <T> T instanceFor(Class<T> type) {
+		try {
 			return parentContext.getBean(type);
 		} catch (NoSuchBeanDefinitionException e) {
 			Map<String, T> beans = parentContext.getBeansOfType(type);
@@ -94,32 +94,32 @@ public class SpringBasedContainer extends AbstractComponentRegistry implements C
 			}
 			throw e;
 		}
-    }
+	}
 
-    public <T> boolean canProvide(Class<T> type) {
-    	return BeanFactoryUtils.beanNamesForTypeIncludingAncestors(parentContext, type).length > 0;
-    }
+	public <T> boolean canProvide(Class<T> type) {
+		return BeanFactoryUtils.beanNamesForTypeIncludingAncestors(parentContext, type).length > 0;
+	}
 
-    public void start(ServletContext context) {
-        parentContext.setServletContext(context);
-        parentContext.addBeanFactoryPostProcessor(new BeanRegistrationProcessor(this));
-        parentContext.refresh();
+	public void start(ServletContext context) {
+	parentContext.setServletContext(context);
+	parentContext.addBeanFactoryPostProcessor(new BeanRegistrationProcessor(this));
+	parentContext.refresh();
 
-        parentContext.start();
-    }
+	parentContext.start();
+	}
 
-    public void stop() {
-        parentContext.stop();
-        if (parentContext instanceof DisposableBean){
+	public void stop() {
+	parentContext.stop();
+	if (parentContext instanceof DisposableBean){
 			try {
 				((DisposableBean)parentContext).destroy();
 			} catch (Exception e) {
 				logger.error("Error when destroying application context", e);
 			}
 		}
-    }
+	}
 
-    private boolean isPrimary(BeanDefinition definition) {
+	private boolean isPrimary(BeanDefinition definition) {
 		return definition instanceof AbstractBeanDefinition && ((AbstractBeanDefinition) definition).isPrimary();
 	}
 

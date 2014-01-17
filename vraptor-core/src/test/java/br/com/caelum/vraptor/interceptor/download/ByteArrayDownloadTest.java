@@ -49,7 +49,7 @@ public class ByteArrayDownloadTest {
 
 	@Test
 	public void shouldUseHeadersToHttpResponse() throws IOException {
-	    ByteArrayDownload fd = new ByteArrayDownload(bytes, "type", "x.txt");
+		ByteArrayDownload fd = new ByteArrayDownload(bytes, "type", "x.txt");
 		fd.write(response);
 
 		verify(response, times(1)).setHeader("Content-type", "type");

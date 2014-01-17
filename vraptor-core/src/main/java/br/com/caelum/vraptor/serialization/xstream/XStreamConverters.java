@@ -43,17 +43,17 @@ public class XStreamConverters {
 	
 	private static final Logger logger = LoggerFactory.getLogger(XStreamConverters.class);
 
-    /**
-     * for DI purposes
-     */
-    @Component @ApplicationScoped
+	/**
+	 * for DI purposes
+	 */
+	@Component @ApplicationScoped
 	public static class NullConverter implements SingleValueConverter {
-        public String toString(Object o) {return null;}
+	public String toString(Object o) {return null;}
 
-        public Object fromString(String s) {return null;}
+	public Object fromString(String s) {return null;}
 
-        public boolean canConvert(Class aClass) {return false;}
-    }
+	public boolean canConvert(Class aClass) {return false;}
+	}
 
 	public XStreamConverters(List<Converter> converters, List<SingleValueConverter> singleValueConverters)
 	{

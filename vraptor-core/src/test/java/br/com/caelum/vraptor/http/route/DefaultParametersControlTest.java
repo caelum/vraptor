@@ -44,9 +44,9 @@ public class DefaultParametersControlTest {
 	private @Mock MutableRequest request;
 	private @Mock Converters converters;
 	private @Mock TwoWayConverter converter;
-    private Evaluator evaluator = new JavaEvaluator();
+	private Evaluator evaluator = new JavaEvaluator();
 
-    @Before
+	@Before
 	public void setup() {
 		MockitoAnnotations.initMocks(this);
 	}
@@ -120,24 +120,24 @@ public class DefaultParametersControlTest {
 		assertThat(uri, is(equalTo("/clients/")));
 	}
 
-    @Test
-    public void shouldTranslatePatternArgs() {
-        String uri = new DefaultParametersControl("/clients/{client.id}", converters, evaluator).fillUri(new String[] {"client"}, client(3L));
-        assertThat(uri, is(equalTo("/clients/3")));
-    }
+	@Test
+	public void shouldTranslatePatternArgs() {
+	String uri = new DefaultParametersControl("/clients/{client.id}", converters, evaluator).fillUri(new String[] {"client"}, client(3L));
+	assertThat(uri, is(equalTo("/clients/3")));
+	}
 
-    @Test
-    public void shouldTranslatePatternArgsWithRegex() {
-        String uri = new DefaultParametersControl("/clients/{id:[0-9]{1,}}", converters, evaluator).fillUri(new String[] {"id"}, 30L);
-        assertThat(uri, is(equalTo("/clients/30")));
-    }
+	@Test
+	public void shouldTranslatePatternArgsWithRegex() {
+	String uri = new DefaultParametersControl("/clients/{id:[0-9]{1,}}", converters, evaluator).fillUri(new String[] {"id"}, 30L);
+	assertThat(uri, is(equalTo("/clients/30")));
+	}
 
-    @Test
-    public void shouldTranslatePatternArgsWithMultipleRegexes() {
-        String uri = new DefaultParametersControl("/test/{hash1:[a-z0-9]{16}}{id}{hash2:[a-z0-9]{16}}/", converters, evaluator).fillUri(new String[] {"hash1", "id", "hash2"}, "0123456789abcdef", "1234", "fedcba9876543210");
-        assertThat(uri, is(equalTo("/test/0123456789abcdef1234fedcba9876543210/")));
-    }
-    
+	@Test
+	public void shouldTranslatePatternArgsWithMultipleRegexes() {
+	String uri = new DefaultParametersControl("/test/{hash1:[a-z0-9]{16}}{id}{hash2:[a-z0-9]{16}}/", converters, evaluator).fillUri(new String[] {"hash1", "id", "hash2"}, "0123456789abcdef", "1234", "fedcba9876543210");
+	assertThat(uri, is(equalTo("/test/0123456789abcdef1234fedcba9876543210/")));
+	}
+	
 	@Test
 	public void shouldTranslatePatternArgNullAsEmpty() {
 		String uri = new DefaultParametersControl("/clients/{client.id}", converters, evaluator).fillUri(new String[] {"client"}, client(null));

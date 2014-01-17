@@ -35,16 +35,16 @@ import br.com.caelum.vraptor.ioc.ApplicationScoped;
 @ApplicationScoped
 public class ShortConverter implements Converter<Short> {
 
-    public Short convert(String value, Class<? extends Short> type, ResourceBundle bundle) {
-        if (isNullOrEmpty(value)) {
-            return null;
-        }
-        
-        try {
-            return Short.valueOf(value);
-        } catch (NumberFormatException e) {
-        	throw new ConversionError(MessageFormat.format(bundle.getString("is_not_a_valid_integer"), value));
-        }
-    }
+	public Short convert(String value, Class<? extends Short> type, ResourceBundle bundle) {
+	if (isNullOrEmpty(value)) {
+		return null;
+	}
+	
+	try {
+		return Short.valueOf(value);
+	} catch (NumberFormatException e) {
+		throw new ConversionError(MessageFormat.format(bundle.getString("is_not_a_valid_integer"), value));
+	}
+	}
 
 }

@@ -27,26 +27,26 @@ import java.io.InputStream;
  */
 public interface UploadedFile {
 
-    /**
-     * @return Returns the contentType.
-     */
-    String getContentType();
+	/**
+	 * @return Returns the contentType.
+	 */
+	String getContentType();
 
-    /**
-     * @return Returns the contents of uploaded file.
-     */
-    InputStream getFile();
+	/**
+	 * @return Returns the contents of uploaded file.
+	 */
+	InputStream getFile();
 
-    /**
-     * @return Returns the fileName of the uploaded as it was uploaded from the
-     * client
-     */
-    String getFileName();
-    
-    /**
-     * 
-     * @return Returns the file of uploaded file.
-     */
-    long getSize();
+	/**
+	 * @return Returns the fileName of the uploaded as it was uploaded from the
+	 * client
+	 */
+	String getFileName();
+	
+	/**
+	 * 
+	 * @return Returns the file of uploaded file.
+	 */
+	long getSize();
 
 }

@@ -22,5 +22,5 @@ import br.com.caelum.vraptor.core.RequestInfo;
  * @author Fabio Kung
  */
 public interface WhatToDo<T> {
-    T execute(RequestInfo request, int counter);
+	T execute(RequestInfo request, int counter);
 }

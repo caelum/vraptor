@@ -37,15 +37,15 @@ import br.com.caelum.vraptor.ioc.ApplicationScoped;
 public class PrimitiveIntConverter implements Converter<Integer> {
 
 	public Integer convert(String value, Class<? extends Integer> type, ResourceBundle bundle) {
-	if (isNullOrEmpty(value)) {
-		return 0;
-	}
-	
-	try {
-		return Integer.parseInt(value);
-	} catch (NumberFormatException e) {
-		throw new ConversionError(MessageFormat.format(bundle.getString("is_not_a_valid_integer"), value));
-	}
+		if (isNullOrEmpty(value)) {
+			return 0;
+		}
+		
+		try {
+			return Integer.parseInt(value);
+		} catch (NumberFormatException e) {
+			throw new ConversionError(MessageFormat.format(bundle.getString("is_not_a_valid_integer"), value));
+		}
 	}
 
 }

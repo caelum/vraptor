@@ -36,15 +36,15 @@ import br.com.caelum.vraptor.ioc.ApplicationScoped;
 public class PrimitiveShortConverter implements Converter<Short> {
 
 	public Short convert(String value, Class<? extends Short> type, ResourceBundle bundle) {
-	if (isNullOrEmpty(value)) {
-		return (short) 0;
-	}
-	
-	try {
-		return Short.parseShort(value);
-	} catch (NumberFormatException e) {
-		throw new ConversionError(MessageFormat.format(bundle.getString("is_not_a_valid_integer"), value));
-	}
+		if (isNullOrEmpty(value)) {
+			return (short) 0;
+		}
+		
+		try {
+			return Short.parseShort(value);
+		} catch (NumberFormatException e) {
+			throw new ConversionError(MessageFormat.format(bundle.getString("is_not_a_valid_integer"), value));
+		}
 	}
 
 }

@@ -43,34 +43,34 @@ public class EnumConverter<T extends Enum<T>> implements Converter<T> {
 	@SuppressWarnings("unchecked")
 	public T convert(String value, Class<? extends T> type, ResourceBundle bundle) {
 		if (isNullOrEmpty(value)) {
-		return null;
-	}
-		
-	if (Character.isDigit(value.charAt(0))) {
-		return resolveByOrdinal(value, (Class<T>) type, bundle);
-	} else {
-		return resolveByName(value, (Class<T>) type, bundle);
-	}
+			return null;
+		}
+			
+		if (Character.isDigit(value.charAt(0))) {
+			return resolveByOrdinal(value, (Class<T>) type, bundle);
+		} else {
+			return resolveByName(value, (Class<T>) type, bundle);
+		}
 	}
 
 	private T resolveByName(String value, Class<T> enumType, ResourceBundle bundle) {
-	try {
-		return Enum.valueOf(enumType, value);
-	} catch (IllegalArgumentException e) {
-			throw new ConversionError(MessageFormat.format(bundle.getString("is_not_a_valid_enum_value"), value));
-	}
+		try {
+			return Enum.valueOf(enumType, value);
+		} catch (IllegalArgumentException e) {
+				throw new ConversionError(MessageFormat.format(bundle.getString("is_not_a_valid_enum_value"), value));
+		}
 	}
 
 	private T resolveByOrdinal(String value, Class<T> enumType, ResourceBundle bundle) {
-	try {
-		int ordinal = Integer.parseInt(value);
-		if (ordinal >= enumType.getEnumConstants().length) {
+		try {
+			int ordinal = Integer.parseInt(value);
+			if (ordinal >= enumType.getEnumConstants().length) {
+					throw new ConversionError(MessageFormat.format(bundle.getString("is_not_a_valid_enum_value"), value));
+			}
+			return enumType.getEnumConstants()[ordinal];
+		} catch (NumberFormatException e) {
 				throw new ConversionError(MessageFormat.format(bundle.getString("is_not_a_valid_enum_value"), value));
 		}
-		return enumType.getEnumConstants()[ordinal];
-	} catch (NumberFormatException e) {
-			throw new ConversionError(MessageFormat.format(bundle.getString("is_not_a_valid_enum_value"), value));
-	}
 	}
 
 }

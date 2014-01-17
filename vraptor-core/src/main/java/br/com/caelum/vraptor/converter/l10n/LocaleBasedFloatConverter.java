@@ -47,21 +47,21 @@ public class LocaleBasedFloatConverter
 	private final Localization localization;
 
 	public LocaleBasedFloatConverter(Localization localization) {
-	this.localization = localization;
+		this.localization = localization;
 	}
 
 	public Float convert(String value, Class<? extends Float> type, ResourceBundle bundle) {
-	if (isNullOrEmpty(value)) {
-		return null;
-	}
-
-	try {
-		final Locale locale = localization.getLocale();
-		DecimalFormat fmt = ((DecimalFormat) DecimalFormat.getInstance(locale));
-
-		return fmt.parse(value).floatValue();
-	} catch (ParseException e) {
-		throw new ConversionError(MessageFormat.format(bundle.getString("is_not_a_valid_number"), value));
-	}
+		if (isNullOrEmpty(value)) {
+			return null;
+		}
+	
+		try {
+			final Locale locale = localization.getLocale();
+			DecimalFormat fmt = ((DecimalFormat) DecimalFormat.getInstance(locale));
+	
+			return fmt.parse(value).floatValue();
+		} catch (ParseException e) {
+			throw new ConversionError(MessageFormat.format(bundle.getString("is_not_a_valid_number"), value));
+		}
 	}
 }

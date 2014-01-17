@@ -32,12 +32,12 @@ public class DefaultParameterNameProvider implements ParameterNameProvider{
 	}
 
 	public String[] parameterNamesFor(AccessibleObject method) {
-	Type[] parameterTypes = parameterTypes(method);
-	String[] names = new String[parameterTypes.length];
-	for (int i = 0; i < names.length; i++) {
-		names[i] = extractor.nameFor(parameterTypes[i]);
-	}
-	return names;
+		Type[] parameterTypes = parameterTypes(method);
+		String[] names = new String[parameterTypes.length];
+		for (int i = 0; i < names.length; i++) {
+			names[i] = extractor.nameFor(parameterTypes[i]);
+		}
+		return names;
 	}
 
 	@SuppressWarnings({ "rawtypes" })

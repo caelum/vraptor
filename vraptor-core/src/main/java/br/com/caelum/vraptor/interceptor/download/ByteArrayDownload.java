@@ -37,12 +37,12 @@ public class ByteArrayDownload implements Download {
 	private final InputStreamDownload download;
 
 	public ByteArrayDownload(byte[] buff, String contentType, String fileName) {
-	this(buff, contentType, fileName, false);
+		this(buff, contentType, fileName, false);
 	}
 
 	public ByteArrayDownload(byte[] buff, String contentType, String fileName, boolean doDownload) {
-	ByteArrayInputStream stream = new ByteArrayInputStream(buff);
-	download = new InputStreamDownload(stream, contentType, fileName, doDownload, buff.length);
+		ByteArrayInputStream stream = new ByteArrayInputStream(buff);
+		download = new InputStreamDownload(stream, contentType, fileName, doDownload, buff.length);
 	}
 	
 	public void write(HttpServletResponse response) throws IOException {

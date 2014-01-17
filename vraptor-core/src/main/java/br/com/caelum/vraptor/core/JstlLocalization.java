@@ -51,15 +51,15 @@ public class JstlLocalization
 	private ResourceBundle bundle;
 
 	public JstlLocalization(RequestInfo request) {
-	this.request = request;
+		this.request = request;
 	}
 
 	public ResourceBundle getBundle() {
-	if (bundle == null) {
-		initializeBundle();
-	}
-
-	return bundle;
+		if (bundle == null) {
+			initializeBundle();
+		}
+	
+		return bundle;
 	}
 
 	/**
@@ -67,49 +67,49 @@ public class JstlLocalization
 	 * {@link MissingResourceException}.
 	 */
 	private void initializeBundle() {
-	Object bundle = findByKey(Config.FMT_LOCALIZATION_CONTEXT);
-	ResourceBundle unsafe = extractUnsafeBundle(bundle);
-
-	this.bundle = new SafeResourceBundle(unsafe);
+		Object bundle = findByKey(Config.FMT_LOCALIZATION_CONTEXT);
+		ResourceBundle unsafe = extractUnsafeBundle(bundle);
+	
+		this.bundle = new SafeResourceBundle(unsafe);
 	}
 
 	private ResourceBundle extractUnsafeBundle(Object bundle) {
-	if (bundle instanceof String || bundle == null) {
-		String baseName = (bundle == null) ? DEFAULT_BUNDLE_NAME : bundle.toString();
-
-		try {
-		return ResourceBundle.getBundle(baseName, getLocale());
-		} catch (MissingResourceException e) {
-		logger.debug("couldn't find message bundle, creating an empty one");
-		return new EmptyBundle();
+		if (bundle instanceof String || bundle == null) {
+			String baseName = (bundle == null) ? DEFAULT_BUNDLE_NAME : bundle.toString();
+	
+			try {
+			return ResourceBundle.getBundle(baseName, getLocale());
+			} catch (MissingResourceException e) {
+			logger.debug("couldn't find message bundle, creating an empty one");
+			return new EmptyBundle();
+			}
+	
 		}
-
-	}
-	if (bundle instanceof LocalizationContext) {
-		return ((LocalizationContext) bundle).getResourceBundle();
-	}
-	logger.warn("Can't handle bundle {}. Please report this bug. Using an empty bundle", bundle);
-	return new EmptyBundle();
+		if (bundle instanceof LocalizationContext) {
+			return ((LocalizationContext) bundle).getResourceBundle();
+		}
+		logger.warn("Can't handle bundle {}. Please report this bug. Using an empty bundle", bundle);
+		return new EmptyBundle();
 	}
 
 	public Locale getLocale() {
-	return localeFor(Config.FMT_LOCALE);
+		return localeFor(Config.FMT_LOCALE);
 	}
 
 	public Locale getFallbackLocale() {
-	return localeFor(Config.FMT_FALLBACK_LOCALE);
+		return localeFor(Config.FMT_FALLBACK_LOCALE);
 	}
 
 	private Locale localeFor(String key) {
-	Object localeValue = findByKey(key);
-
-	if (localeValue instanceof String) {
-		return findLocalefromString((String) localeValue);
-	} else if (localeValue instanceof Locale) {
-		return (Locale) localeValue;
-	}
-
-	return request.getRequest().getLocale();
+		Object localeValue = findByKey(key);
+	
+		if (localeValue instanceof String) {
+			return findLocalefromString((String) localeValue);
+		} else if (localeValue instanceof Locale) {
+			return (Locale) localeValue;
+		}
+	
+		return request.getRequest().getLocale();
 	}
 
 	/**
@@ -120,31 +120,31 @@ public class JstlLocalization
 	 * @return
 	 */
 	private Object findByKey(String key) {
-	Object value = Config.get(request.getRequest(), key);
-	if (value != null) {
-		return value;
-	}
-
-	value = Config.get(request.getRequest().getSession(), key);
-	if (value != null) {
-		return value;
-	}
-
-	value = Config.get(request.getServletContext(), key);
-	if (value != null) {
-		return value;
-	}
-
-	return request.getServletContext().getInitParameter(key);
+		Object value = Config.get(request.getRequest(), key);
+		if (value != null) {
+			return value;
+		}
+	
+		value = Config.get(request.getRequest().getSession(), key);
+		if (value != null) {
+			return value;
+		}
+	
+		value = Config.get(request.getServletContext(), key);
+		if (value != null) {
+			return value;
+		}
+	
+		return request.getServletContext().getInitParameter(key);
 	}
 
 	public String getMessage(String key, Object... parameters) {
-	try {
-		String content = getBundle().getString(key);
-		return MessageFormat.format(content, parameters);
-	} catch (MissingResourceException e) {
-		return "???" + key + "???";
-	}
+		try {
+			String content = getBundle().getString(key);
+			return MessageFormat.format(content, parameters);
+		} catch (MissingResourceException e) {
+			return "???" + key + "???";
+		}
 	}
 
 	/**
@@ -154,18 +154,18 @@ public class JstlLocalization
 	 * @return
 	 */
 	private Locale findLocalefromString(String str) {
-	if (!Strings.isNullOrEmpty(str)) {
-		String[] arr = str.split("_");
-		if (arr.length == 1) {
-		return new Locale(arr[0]);
-		} else if (arr.length == 2) {
-		return new Locale(arr[0], arr[1]);
-
-		} else {
-		return new Locale(arr[0], arr[1], arr[2]);
+		if (!Strings.isNullOrEmpty(str)) {
+			String[] arr = str.split("_");
+			if (arr.length == 1) {
+			return new Locale(arr[0]);
+			} else if (arr.length == 2) {
+			return new Locale(arr[0], arr[1]);
+	
+			} else {
+			return new Locale(arr[0], arr[1], arr[2]);
+			}
 		}
-	}
-
-	return null;
+	
+		return null;
 	}
 }

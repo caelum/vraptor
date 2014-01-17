@@ -45,13 +45,13 @@ public class DateTimeConverter implements Converter<DateTime> {
 	}
 
 	public DateTime convert(String value, Class<? extends DateTime> type, ResourceBundle bundle) {
-	try {
-		DateTime out = new LocaleBasedJodaTimeConverter(localization).convert(value, shortDateTime());
-		if (out == null) {
-		return null;
-		}
-		
-		return out.toDateTime();
+		try {
+			DateTime out = new LocaleBasedJodaTimeConverter(localization).convert(value, shortDateTime());
+			if (out == null) {
+				return null;
+			}
+			
+			return out.toDateTime();
 		} catch (Exception e) {
 			throw new ConversionError(MessageFormat.format(bundle.getString("is_not_a_valid_datetime"), value));
 		}

@@ -154,34 +154,34 @@ public class DefaultRouter implements Router {
 
 
 	private Predicate<Route> canHandle(final Class<?> type, final Method method) {
-	return new Predicate<Route>() {
-		public boolean apply(Route route) {
-		return route.canHandle(type, method);
-		}
-	};
+		return new Predicate<Route>() {
+			public boolean apply(Route route) {
+			return route.canHandle(type, method);
+			}
+		};
 	}
 
 	private Predicate<Route> canHandle(final String uri) {
-	return new Predicate<Route>() {
-		public boolean apply(Route route) {
-		return route.canHandle(uri);
-		}
-	};
+		return new Predicate<Route>() {
+			public boolean apply(Route route) {
+			return route.canHandle(uri);
+			}
+		};
 	}
 	
 	private Predicate<Route> allow(final HttpMethod method) {
-	return new Predicate<Route>() {
-		public boolean apply(Route route) {
-		return route.allowedMethods().contains(method);
-		}
-	};
+		return new Predicate<Route>() {
+			public boolean apply(Route route) {
+			return route.allowedMethods().contains(method);
+			}
+		};
 	}
 	
 	private Predicate<Annotation[]> hasAnnotation(final Class<?> annotation) {
-	return new Predicate<Annotation[]>() {
-		public boolean apply(Annotation[] param) {
-		return any(asList(param), instanceOf(annotation));
-		}
-	};
+		return new Predicate<Annotation[]>() {
+			public boolean apply(Annotation[] param) {
+			return any(asList(param), instanceOf(annotation));
+			}
+		};
 	}
 }

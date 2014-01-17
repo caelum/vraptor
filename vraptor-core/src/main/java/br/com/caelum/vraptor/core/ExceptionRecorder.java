@@ -49,36 +49,36 @@ public class ExceptionRecorder<T>
 	private final List<ExceptionRecorderParameter> parameters;
 
 	public ExceptionRecorder(Proxifier proxifier) {
-	this.proxifier = proxifier;
-	parameters = newArrayList();
+		this.proxifier = proxifier;
+		parameters = newArrayList();
 	}
 
 	@SuppressWarnings({ "unchecked", "rawtypes" })
 	public Object intercept(T proxy, Method method, Object[] args, SuperMethod superMethod) {
-	parameters.add(new ExceptionRecorderParameter(args, method));
-
-	if (void.class.equals(method.getReturnType())) {
-		return null;
-	}
-
-	return proxifier.proxify(findReturnType(method, args), (MethodInvocation) this);
+		parameters.add(new ExceptionRecorderParameter(args, method));
+	
+		if (void.class.equals(method.getReturnType())) {
+			return null;
+		}
+	
+		return proxifier.proxify(findReturnType(method, args), (MethodInvocation) this);
 	}
 
 	private Class<?> findReturnType(Method method, Object[] args) {
-	if (method.getGenericReturnType() instanceof TypeVariable) {
-		if (args[0] instanceof Class) {
-		return (Class<?>) args[0];
+		if (method.getGenericReturnType() instanceof TypeVariable) {
+			if (args[0] instanceof Class) {
+			return (Class<?>) args[0];
+			}
+			return args[0].getClass();
 		}
-		return args[0].getClass();
-	}
-
-	return method.getReturnType();
+	
+		return method.getReturnType();
 	}
 
 	public void replay(Result result) {
-	Object current = result;
-	for (ExceptionRecorderParameter p : parameters) {
-		current = new Mirror().on(current).invoke().method(p.getMethod()).withArgs(p.getArgs());
-	}
+		Object current = result;
+		for (ExceptionRecorderParameter p : parameters) {
+			current = new Mirror().on(current).invoke().method(p.getMethod()).withArgs(p.getArgs());
+		}
 	}
 }

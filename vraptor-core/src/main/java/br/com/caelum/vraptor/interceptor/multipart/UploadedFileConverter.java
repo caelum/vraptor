@@ -37,11 +37,11 @@ public class UploadedFileConverter implements Converter<UploadedFile> {
 	private final HttpServletRequest request;
 
 	public UploadedFileConverter(HttpServletRequest request) {
-	this.request = request;
+		this.request = request;
 	}
 
 	public UploadedFile convert(String value, Class<? extends UploadedFile> type, ResourceBundle bundle) {
-	Object upload = request.getAttribute(value);
-	return upload == null ? null : type.cast(upload);
+		Object upload = request.getAttribute(value);
+		return upload == null ? null : type.cast(upload);
 	}
 }

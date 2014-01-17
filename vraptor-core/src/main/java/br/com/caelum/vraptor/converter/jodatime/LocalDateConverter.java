@@ -45,13 +45,13 @@ public class LocalDateConverter implements Converter<LocalDate> {
 	}
 
 	public LocalDate convert(String value, Class<? extends LocalDate> type, ResourceBundle bundle) {
-	try {
-		DateTime out = new LocaleBasedJodaTimeConverter(localization).convert(value, shortDate());
-		if (out == null) {
-		return null;
-		}
-		
-		return out.toLocalDate();
+		try {
+			DateTime out = new LocaleBasedJodaTimeConverter(localization).convert(value, shortDate());
+			if (out == null) {
+				return null;
+			}
+			
+			return out.toLocalDate();
 		} catch (Exception e) {
 			throw new ConversionError(MessageFormat.format(bundle.getString("is_not_a_valid_date"), value));
 		}

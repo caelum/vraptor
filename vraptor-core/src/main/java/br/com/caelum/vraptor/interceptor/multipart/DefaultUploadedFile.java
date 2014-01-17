@@ -38,22 +38,22 @@ public class DefaultUploadedFile implements UploadedFile {
 	
 	public DefaultUploadedFile(InputStream content, String completeFileName,
 		String contentType, long size) {
-	this.content = content;
+		this.content = content;
 		this.fileName = REGEX_REMOVE_SLASHES.matcher(completeFileName).replaceAll("$1");
-	this.completeFileName = completeFileName;
-	this.contentType = contentType;
-	this.size = size;
+		this.completeFileName = completeFileName;
+		this.contentType = contentType;
+		this.size = size;
 	}
 
 	@Override
 	public String toString() {
-	return "[uploadedFile uploadedCompleteName="
-		+ this.completeFileName + " uploadedName=" + this.fileName
-		+ " contentType=" + this.contentType + "]";
+		return "[uploadedFile uploadedCompleteName="
+			+ this.completeFileName + " uploadedName=" + this.fileName
+			+ " contentType=" + this.contentType + "]";
 	}
 
 	public String getContentType() {
-	return this.contentType;
+		return this.contentType;
 	}
 
 	public InputStream getFile() {
@@ -61,11 +61,11 @@ public class DefaultUploadedFile implements UploadedFile {
 	}
 
 	public String getFileName() {
-	return this.fileName;
+		return this.fileName;
 	}
 
 	public String getCompleteFileName() {
-	return this.completeFileName;
+		return this.completeFileName;
 	}
 
 	public long getSize() {

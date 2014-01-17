@@ -35,11 +35,11 @@ public class NullMultipartInterceptor implements MultipartInterceptor {
 	 * Never accepts.
 	 */
 	public boolean accepts(ResourceMethod method) {
-	return false;
+		return false;
 	}
 
 	public void intercept(InterceptorStack stack, ResourceMethod method, Object resourceInstance)
-	throws InterceptionException {
-	throw new UnsupportedOperationException();
+			throws InterceptionException {
+		throw new UnsupportedOperationException();
 	}
 }

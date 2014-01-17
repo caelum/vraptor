@@ -39,20 +39,20 @@ public class DefaultMultipartConfig implements MultipartConfig {
 	private final Logger logger = LoggerFactory.getLogger(DefaultMultipartConfig.class);
 
 	public long getSizeLimit() {
-	return 2 * 1024 * 1024;
+		return 2 * 1024 * 1024;
 	}
 
 	public File getDirectory() {
-	try {
-		File tempFile = createTempFile();
-		tempFile.delete();
-		return tempFile.getParentFile();
-	} catch (IOException e) {
-		logger.warn("Unable to find temp directory, creating a dir inside the application", e);
-		File tmp = createDirInsideApplication();
-		tmp.mkdirs();
-		return tmp;
-	}
+		try {
+			File tempFile = createTempFile();
+			tempFile.delete();
+			return tempFile.getParentFile();
+		} catch (IOException e) {
+			logger.warn("Unable to find temp directory, creating a dir inside the application", e);
+			File tmp = createDirInsideApplication();
+			tmp.mkdirs();
+			return tmp;
+		}
 	}
 
 	protected File createDirInsideApplication() {

@@ -64,13 +64,13 @@ public class RequestInfo {
 	}
 
 	public String getRequestedUri() {
-	if (request.getAttribute(INCLUDE_REQUEST_URI) != null) {
-		return (String) request.getAttribute(INCLUDE_REQUEST_URI);
-	}
-	String uri = request.getRequestURI().replaceFirst("(?i);jsessionid=.*$", "");
-	String contextName = request.getContextPath();
-	uri = uri.replaceFirst(contextName, "");
-	return uri;
+		if (request.getAttribute(INCLUDE_REQUEST_URI) != null) {
+			return (String) request.getAttribute(INCLUDE_REQUEST_URI);
+		}
+		String uri = request.getRequestURI().replaceFirst("(?i);jsessionid=.*$", "");
+		String contextName = request.getContextPath();
+		uri = uri.replaceFirst(contextName, "");
+		return uri;
 	}
 
 }

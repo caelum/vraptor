@@ -92,7 +92,7 @@ public class CommonsUploadMultipartInterceptor
 
 	public void intercept(InterceptorStack stack, ResourceMethod method, Object instance) throws InterceptionException {
 		logger.info("Request contains multipart data. Try to parse with commons-upload.");
-	
+
 		FileItemFactory factory = createFactoryForDiskBasedFileItems(config.getDirectory());
 		indexes = HashMultiset.create();
 
@@ -102,26 +102,26 @@ public class CommonsUploadMultipartInterceptor
 		try {
 			final List<FileItem> items = uploader.parseRequest(request);
 			logger.debug("Found {} attributes in the multipart form submission. Parsing them.", items.size());
-	
+
 			final Multimap<String, String> params = LinkedListMultimap.create();
-	
+
 			for (FileItem item : items) {
-			String name = item.getFieldName();
-			name = fixIndexedParameters(name);
-			
-			if (item.isFormField()) {
-				logger.debug("{} is a field", name);
-				params.put(name, getValue(item));
-	
-			} else if (isNotEmpty(item)) {
-				logger.debug("{} is a file", name);
-				processFile(item, name);
-	
-			} else {
-				logger.debug("A file field was empty: {}", item.getFieldName());
+				String name = item.getFieldName();
+				name = fixIndexedParameters(name);
+
+				if (item.isFormField()) {
+					logger.debug("{} is a field", name);
+					params.put(name, getValue(item));
+
+				} else if (isNotEmpty(item)) {
+					logger.debug("{} is a file", name);
+					processFile(item, name);
+
+				} else {
+					logger.debug("A file field was empty: {}", item.getFieldName());
+				}
 			}
-			}
-	
+
 			for (String paramName : params.keySet()) {
 				Collection<String> paramValues = params.get(paramName);
 				parameters.setParameter(paramName, paramValues.toArray(new String[paramValues.size()]));
@@ -129,7 +129,7 @@ public class CommonsUploadMultipartInterceptor
 
 		} catch (final SizeLimitExceededException e) {
 			reportSizeLimitExceeded(e);
-	
+
 		} catch (FileUploadException e) {
 			reportFileUploadException(e);
 		}
@@ -181,9 +181,9 @@ public class CommonsUploadMultipartInterceptor
 		String encoding = request.getCharacterEncoding();
 		if (!Strings.isNullOrEmpty(encoding)) {
 			try {
-			return item.getString(encoding);
+				return item.getString(encoding);
 			} catch (UnsupportedEncodingException e) {
-			logger.warn("Request have an invalid encoding. Ignoring it");
+				logger.warn("Request have an invalid encoding. Ignoring it");
 			}
 		}
 		return item.getString();

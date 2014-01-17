@@ -62,17 +62,17 @@ public class ParametersInstantiatorInterceptor implements Interceptor {
 
 	public ParametersInstantiatorInterceptor(ParametersProvider provider, ParameterNameProvider parameterNameProvider, MethodInfo parameters,
 		Validator validator, Localization localization, MutableRequest request, FlashScope flash) {
-	this.provider = provider;
-	this.parameterNameProvider = parameterNameProvider;
-	this.parameters = parameters;
-	this.validator = validator;
-	this.localization = localization;
+		this.provider = provider;
+		this.parameterNameProvider = parameterNameProvider;
+		this.parameters = parameters;
+		this.validator = validator;
+		this.localization = localization;
 		this.request = request;
 		this.flash = flash;
 	}
 
 	public boolean accepts(ResourceMethod method) {
-	return method.getMethod().getParameterTypes().length > 0;
+		return method.getMethod().getParameterTypes().length > 0;
 	}
 
 	public void intercept(InterceptorStack stack, ResourceMethod method, Object resourceInstance) throws InterceptionException {
@@ -83,35 +83,35 @@ public class ParametersInstantiatorInterceptor implements Interceptor {
 		
 		addHeaderParametersToAttribute(method);
 		
-	Object[] values = getParametersFor(method);
+		Object[] values = getParametersFor(method);
 
-	validator.addAll(errors);
+		validator.addAll(errors);
 
 		if (!errors.isEmpty()) {
 			logger.debug("There are conversion errors: {}", errors);
 		}
-	logger.debug("Parameter values for {} are {}", method, values);
+		logger.debug("Parameter values for {} are {}", method, values);
 
-	parameters.setParameters(values);
-	stack.next(method, resourceInstance);
+		parameters.setParameters(values);
+		stack.next(method, resourceInstance);
 	}
  
 	private void addHeaderParametersToAttribute(ResourceMethod method) {
-		Method trueMethod = method.getMethod();  
-		  
-	String[] parameters = parameterNameProvider.parameterNamesFor(trueMethod);  
+		Method trueMethod = method.getMethod();
 
-	Annotation[][] annotations = trueMethod.getParameterAnnotations();  
-	for (int i = 0; i < annotations.length; i++) {  
-		for (Annotation annotation : annotations[i]) {  
-		if (annotation instanceof HeaderParam) {  
-			HeaderParam headerParam = (HeaderParam) annotation;  
-			String value = request.getHeader(headerParam.value());  
-			request.setAttribute(parameters[i], value);  
-		}  
-		}  
-	}  
-		
+		String[] parameters = parameterNameProvider.parameterNamesFor(trueMethod);
+
+		Annotation[][] annotations = trueMethod.getParameterAnnotations();
+		for (int i = 0; i < annotations.length; i++) {
+			for (Annotation annotation : annotations[i]) {
+				if (annotation instanceof HeaderParam) {
+					HeaderParam headerParam = (HeaderParam) annotation;
+					String value = request.getHeader(headerParam.value());
+					request.setAttribute(parameters[i], value);
+				}
+			}
+		}
+
 	}
 
 	private void fixParameter(String name) {

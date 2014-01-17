@@ -37,11 +37,11 @@ public class DefaultInterceptorRegistry implements InterceptorRegistry {
 	private final List<Class<? extends Interceptor>> interceptors = new ArrayList<Class<? extends Interceptor>>();
 
 	public void register(Class<? extends Interceptor>... interceptors) {
-	this.interceptors.addAll(Arrays.asList(interceptors));
+		this.interceptors.addAll(Arrays.asList(interceptors));
 	}
 
 	public List<Class<? extends Interceptor>> all() {
-	return interceptors;
+		return interceptors;
 	}
 
 }

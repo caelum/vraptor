@@ -51,18 +51,18 @@ public class LocaleBasedBigDecimalConverter
 	}
 
 	public BigDecimal convert(String value, Class<? extends BigDecimal> type, ResourceBundle bundle) {
-	if (isNullOrEmpty(value)) {
-		return null;
-	}
-	
-	try {
-		final Locale locale = localization.getLocale();
-		DecimalFormat fmt = ((DecimalFormat) DecimalFormat.getInstance(locale));
-		fmt.setParseBigDecimal(true);
+		if (isNullOrEmpty(value)) {
+			return null;
+		}
 		
-		return (BigDecimal) fmt.parse(value);
-	} catch (ParseException e) {
-		throw new ConversionError(MessageFormat.format(bundle.getString("is_not_a_valid_number"), value));
-	}
+		try {
+			final Locale locale = localization.getLocale();
+			DecimalFormat fmt = ((DecimalFormat) DecimalFormat.getInstance(locale));
+			fmt.setParseBigDecimal(true);
+			
+			return (BigDecimal) fmt.parse(value);
+		} catch (ParseException e) {
+			throw new ConversionError(MessageFormat.format(bundle.getString("is_not_a_valid_number"), value));
+		}
 	}
 }

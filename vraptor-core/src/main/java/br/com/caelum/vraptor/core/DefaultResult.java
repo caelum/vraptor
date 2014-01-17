@@ -57,34 +57,34 @@ public class DefaultResult extends AbstractResult {
 	
 	@Inject
 	public DefaultResult(HttpServletRequest request, Container container, ExceptionMapper exceptions, TypeNameExtractor extractor) {
-	this.request = request;
-	this.container = container;
+		this.request = request;
+		this.container = container;
 		this.extractor = extractor;
-	this.includedAttributes = new HashMap<String, Object>();
-	this.exceptions = exceptions;
+		this.includedAttributes = new HashMap<String, Object>();
+		this.exceptions = exceptions;
 	}
 
 	public <T extends View> T use(Class<T> view) {
-	responseCommitted = true;
-	return container.instanceFor(view);
+		responseCommitted = true;
+		return container.instanceFor(view);
 	}
 	
 	public Result on(Class<? extends Exception> exception) {
-	return exceptions.record(exception);
+		return exceptions.record(exception);
 	}
 
 	public Result include(String key, Object value) {
-	if (logger.isDebugEnabled()) {
-		logger.debug("including attribute {}: {}", key, value);
-	}
+		if (logger.isDebugEnabled()) {
+			logger.debug("including attribute {}: {}", key, value);
+		}
 	
 		includedAttributes.put(key, value);
-	request.setAttribute(key, value);
-	return this;
+		request.setAttribute(key, value);
+		return this;
 	}
 
 	public boolean used() {
-	return responseCommitted;
+		return responseCommitted;
 	}
 
 	public Map<String, Object> included() {

@@ -42,20 +42,20 @@ public class DefaultInterceptorStack implements InterceptorStack {
 	private final InterceptorHandlerFactory handlerFactory;
 
 	public DefaultInterceptorStack(InterceptorHandlerFactory handlerFactory) {
-	this.handlerFactory = handlerFactory;
+		this.handlerFactory = handlerFactory;
 	}
 
 	public void next(ResourceMethod method, Object resourceInstance) throws InterceptionException {
-	if (interceptors.isEmpty()) {
-		logger.debug("All registered interceptors have been called. End of VRaptor Request Execution.");
-		return;
-	}
-	InterceptorHandler handler = interceptors.poll();
-	handler.execute(this, method, resourceInstance);
+		if (interceptors.isEmpty()) {
+			logger.debug("All registered interceptors have been called. End of VRaptor Request Execution.");
+			return;
+		}
+		InterceptorHandler handler = interceptors.poll();
+		handler.execute(this, method, resourceInstance);
 	}
 
 	public void add(Class<? extends Interceptor> type) {
-	this.interceptors.addLast(handlerFactory.handlerFor(type));
+		this.interceptors.addLast(handlerFactory.handlerFor(type));
 	}
 
 	//XXX this method will be removed soon

@@ -36,15 +36,15 @@ import br.com.caelum.vraptor.ioc.ApplicationScoped;
 public class FloatConverter implements Converter<Float> {
 
 	public Float convert(String value, Class<? extends Float> type, ResourceBundle bundle) {
-	if (isNullOrEmpty(value)) {
-		return null;
-	}
-	
-	try {
-		return Float.valueOf(value);
-	} catch (NumberFormatException e) {
-			throw new ConversionError(MessageFormat.format(bundle.getString("is_not_a_valid_number"), value));
-	}
+		if (isNullOrEmpty(value)) {
+			return null;
+		}
+		
+		try {
+			return Float.valueOf(value);
+		} catch (NumberFormatException e) {
+				throw new ConversionError(MessageFormat.format(bundle.getString("is_not_a_valid_number"), value));
+		}
 	}
 
 }

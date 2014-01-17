@@ -46,13 +46,13 @@ public class DateMidnightConverter implements Converter<DateMidnight> {
 	}
 
 	public DateMidnight convert(String value, Class<? extends DateMidnight> type, ResourceBundle bundle) {
-	try {
-		DateTime out = new LocaleBasedJodaTimeConverter(localization).convert(value, shortDate());
-		if (out == null) {
-		return null;
-		}
-		
-		return out.toDateMidnight();
+		try {
+			DateTime out = new LocaleBasedJodaTimeConverter(localization).convert(value, shortDate());
+			if (out == null) {
+				return null;
+			}
+			
+			return out.toDateMidnight();
 		} catch (Exception e) {
 			throw new ConversionError(MessageFormat.format(bundle.getString("is_not_a_valid_datetime"), value));
 		}

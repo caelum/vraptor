@@ -36,15 +36,15 @@ import br.com.caelum.vraptor.ioc.ApplicationScoped;
 public class PrimitiveDoubleConverter implements Converter<Double> {
 
 	public Double convert(String value, Class<? extends Double> type, ResourceBundle bundle) {
-	if (isNullOrEmpty(value)) {
-		return 0d;
-	}
-	
-	try {
-		return Double.parseDouble(value);
-	} catch (NumberFormatException e) {
-		throw new ConversionError(MessageFormat.format(bundle.getString("is_not_a_valid_number"), value));
-	}
+		if (isNullOrEmpty(value)) {
+			return 0d;
+		}
+		
+		try {
+			return Double.parseDouble(value);
+		} catch (NumberFormatException e) {
+			throw new ConversionError(MessageFormat.format(bundle.getString("is_not_a_valid_number"), value));
+		}
 	}
 
 }

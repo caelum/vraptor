@@ -37,11 +37,11 @@ public class PrimitiveBooleanConverter implements Converter<Boolean> {
 	private final BooleanConverter booleanConverter = new BooleanConverter();
 
 	public Boolean convert(String value, Class<? extends Boolean> type, ResourceBundle bundle) {
-	if (isNullOrEmpty(value)) {
-		return false;
-	}
-	
-	return booleanConverter.convert(value, type, bundle);
+		if (isNullOrEmpty(value)) {
+			return false;
+		}
+		
+		return booleanConverter.convert(value, type, bundle);
 	}
 
 }

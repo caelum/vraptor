@@ -37,15 +37,15 @@ import br.com.caelum.vraptor.ioc.ApplicationScoped;
 public class PrimitiveByteConverter implements Converter<Byte> {
 
 	public Byte convert(String value, Class<? extends Byte> type, ResourceBundle bundle) {
-	if (isNullOrEmpty(value)) {
-		return (byte) 0;
-	}
-	
-	try {
-		return Byte.parseByte(value);
-	} catch (NumberFormatException e) {
-		throw new ConversionError(MessageFormat.format(bundle.getString("is_not_a_valid_integer"), value));
-	}
+		if (isNullOrEmpty(value)) {
+			return (byte) 0;
+		}
+		
+		try {
+			return Byte.parseByte(value);
+		} catch (NumberFormatException e) {
+			throw new ConversionError(MessageFormat.format(bundle.getString("is_not_a_valid_integer"), value));
+		}
 	}
 
 }

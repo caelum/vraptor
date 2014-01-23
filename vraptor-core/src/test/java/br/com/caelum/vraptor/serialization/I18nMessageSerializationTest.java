@@ -46,8 +46,7 @@ public class I18nMessageSerializationTest {
 		when(container.instanceFor(JSONSerialization.class)).thenReturn(jsonSerialization);
 		when(container.instanceFor(XMLSerialization.class)).thenReturn(xmlSerialization);
 		
-		MockLocalization mockLocalization = mock(MockLocalization.class);
-		when(mockLocalization.getBundle()).thenReturn(new SingletonResourceBundle("message.cat", "Just another {0} in {1}"));
+		MockLocalization mockLocalization = new MockLocalization(new SingletonResourceBundle("message.cat", "Just another {0} in {1}"));
 
 		serialization = new I18nMessageSerialization(container , mockLocalization);
 	

@@ -31,8 +31,18 @@ import br.com.caelum.vraptor.util.EmptyBundle;
  */
 public class MockLocalization implements Localization {
 
+	private final ResourceBundle bundle;
+
+	public MockLocalization() {
+		this.bundle = new SafeResourceBundle(new EmptyBundle());
+	}
+	
+	public MockLocalization(ResourceBundle bundle) {
+		this.bundle = bundle;
+	}
+	
 	public ResourceBundle getBundle() {
-		return new SafeResourceBundle(new EmptyBundle());
+		return bundle;
 	}
 
 	public Locale getFallbackLocale() {

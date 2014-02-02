@@ -36,8 +36,6 @@ import java.util.Calendar;
 import java.util.GregorianCalendar;
 import java.util.Locale;
 
-import ognl.OgnlException;
-
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
@@ -125,7 +123,7 @@ public class MiscIogiSupportTest {
 	}
 
 	@Test
-	public void isCapableOfDealingWithEmptyParameterForInternalValueWhichNeedsAConverter() throws OgnlException {
+	public void isCapableOfDealingWithEmptyParameterForInternalValueWhichNeedsAConverter() {
 		final Target<House> target = Target.create(House.class, "house");
 		final Parameter parameter = new Parameter("house.cat.firstLeg.birthDay", "10/5/2010");
 		when(mockLocaleProvider.getLocale()).thenReturn(new Locale("pt", "BR"));

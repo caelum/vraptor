@@ -34,7 +34,7 @@ public class DIConstraintValidatorFactory
 		}
 
 		// GH583 - we need to use reflection to instantiate constraints
-		return container.instanceFor(ReflectionInstanceCreator.class).instanceFor(key);
+		return new ReflectionInstanceCreator().instanceFor(key);
 	}
 
 	public void releaseInstance(ConstraintValidator<?, ?> key) {

@@ -8,7 +8,7 @@ import org.slf4j.LoggerFactory;
 
 import br.com.caelum.vraptor.ioc.ApplicationScoped;
 import br.com.caelum.vraptor.ioc.Container;
-import br.com.caelum.vraptor.proxy.InstanceCreator;
+import br.com.caelum.vraptor.proxy.ReflectionInstanceCreator;
 
 /**
  * Create a custom {@link ConstraintValidatorFactory} to allow users to use constraints that uses components.
@@ -24,19 +24,20 @@ public class DIConstraintValidatorFactory
 	private final Container container;
 
 	public DIConstraintValidatorFactory(Container container) {
-	this.container = container;
+		this.container = container;
 	}
 
 	public <T extends ConstraintValidator<?, ?>> T getInstance(Class<T> key) {
-	if (container.canProvide(key)) {
-		logger.debug("we can provide instance for ConstraintValidator {}", key);
-		return container.instanceFor(key);
-	}
+		if (container.canProvide(key)) {
+			logger.debug("we can provide instance for ConstraintValidator {}", key);
+			return container.instanceFor(key);
+		}
 
-	return container.instanceFor(InstanceCreator.class).instanceFor(key);
+		// GH583 - we need to use reflection to instantiate constraints
+		return container.instanceFor(ReflectionInstanceCreator.class).instanceFor(key);
 	}
 
 	public void releaseInstance(ConstraintValidator<?, ?> key) {
-	// we don't need this
+		// we don't need this
 	}
 }

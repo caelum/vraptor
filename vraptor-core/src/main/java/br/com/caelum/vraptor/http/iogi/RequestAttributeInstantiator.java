@@ -34,7 +34,7 @@ final class RequestAttributeInstantiator implements Instantiator<Object> {
 	}
 
 	public boolean isAbleToInstantiate(Target<?> target) {
-		return request.getAttribute(target.getName()) != null;
+		Object value = request.getAttribute(target.getName());
+		return value != null && target.getClassType().isInstance(value);
 	}
-
 }

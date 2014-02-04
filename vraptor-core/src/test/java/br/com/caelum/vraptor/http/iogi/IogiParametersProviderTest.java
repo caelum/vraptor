@@ -27,10 +27,13 @@
  */
 package br.com.caelum.vraptor.http.iogi;
 
+import static java.util.Arrays.asList;
+import static java.util.Collections.enumeration;
 import static org.hamcrest.Matchers.allOf;
 import static org.hamcrest.Matchers.hasItem;
 import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.not;
 import static org.hamcrest.Matchers.notNullValue;
 import static org.hamcrest.Matchers.nullValue;
 import static org.hamcrest.Matchers.sameInstance;
@@ -43,7 +46,10 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import java.lang.reflect.Method;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
+import java.util.ResourceBundle;
 import java.util.Set;
 
 import org.junit.Test;
@@ -52,6 +58,7 @@ import org.mockito.Mock;
 import br.com.caelum.iogi.parameters.Parameter;
 import br.com.caelum.iogi.parameters.Parameters;
 import br.com.caelum.iogi.reflection.Target;
+import br.com.caelum.vraptor.Result;
 import br.com.caelum.vraptor.core.Localization;
 import br.com.caelum.vraptor.core.SafeResourceBundle;
 import br.com.caelum.vraptor.http.ParametersProvider;
@@ -59,6 +66,7 @@ import br.com.caelum.vraptor.http.ParametersProviderTest;
 import br.com.caelum.vraptor.resource.DefaultResourceMethod;
 import br.com.caelum.vraptor.resource.ResourceMethod;
 import br.com.caelum.vraptor.util.EmptyBundle;
+import br.com.caelum.vraptor.validator.Message;
 
 public class IogiParametersProviderTest extends ParametersProviderTest {
 	private @Mock Localization mockLocalization;
@@ -170,11 +178,32 @@ public class IogiParametersProviderTest extends ParametersProviderTest {
 		assertThat(abc, hasSize(1));
 		assertThat(abc.iterator().next().getX(), is(1l));
 	}
-	
+
+	@Test
+	public void shouldInjectOnlyAttributesWithSameType() throws Exception {
+		Object result = mock(Result.class);
+		ResourceBundle emptyBundle = mock(ResourceBundle.class);
+
+		ResourceMethod method = DefaultResourceMethod.instanceFor(OtherResource.class, 
+				OtherResource.class.getDeclaredMethod("logic", String.class));
+
+		when(request.getAttribute("result")).thenReturn(result);
+		when(request.getParameterValues("result")).thenReturn(new String[] { "buggy" });
+		when(request.getParameterNames()).thenReturn(enumeration(asList("result")));
+		when(nameProvider.parameterNamesFor(method.getMethod())).thenReturn(new String[] { "result" });
+
+		List<Message> errors = new ArrayList<Message>();
+		Object[] out = provider.getParametersFor(method, errors, emptyBundle);
+
+		assertThat(out[0], is(not(result)));
+	}
+
 	//----------
 
 	class OtherResource {
 		void logic(NeedsMyResource param) {
+		}
+		void logic(String result) {
 		}
 	}
 

@@ -103,7 +103,7 @@ public class DefaultValidator extends AbstractValidator {
 			logger.debug("there are errors on result: {}", errors);
 		}
 
-		result.include("errors", errors);
+		result.include("errors", getErrors());
 		outjector.outjectRequestMap();
 		return viewsFactory.instanceFor(view, errors);
 	}
@@ -126,7 +126,7 @@ public class DefaultValidator extends AbstractValidator {
 	}
 
 	public List<Message> getErrors() {
-		return unmodifiableList(errors);
+		return new ErrorList(errors);
 	}
 
 }

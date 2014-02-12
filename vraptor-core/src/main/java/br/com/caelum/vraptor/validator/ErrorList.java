@@ -16,17 +16,21 @@ import com.google.common.collect.Multimap;
 public class ErrorList extends ForwardingList<Message> {
 	
 	private final List<Message> delegate;
+	private Map<String, Collection<String>> byCategory;
 
 	public ErrorList(List<Message> delegate) {
 		this.delegate = delegate;
 	}
-	
+
 	public Map<String, Collection<String>> asMap() {
-		Multimap<String, String> out = ArrayListMultimap.create();
-		for(Message message: delegate) {
-			out.put(message.getCategory(), message.getMessage());
+		if (byCategory == null) {
+			Multimap<String, String> out = ArrayListMultimap.create();
+			for (Message message : delegate) {
+				out.put(message.getCategory(), message.getMessage());
+			}
+			byCategory = out.asMap();
 		}
-		return out.asMap();
+		return byCategory;
 	}
 
 	@Override

@@ -89,9 +89,6 @@ import br.com.caelum.vraptor.http.iogi.IogiParametersProvider;
 import br.com.caelum.vraptor.http.iogi.VRaptorDependencyProvider;
 import br.com.caelum.vraptor.http.iogi.VRaptorInstantiator;
 import br.com.caelum.vraptor.http.iogi.VRaptorParameterNamesProvider;
-import br.com.caelum.vraptor.http.ognl.EmptyElementsRemoval;
-import br.com.caelum.vraptor.http.ognl.OgnlFacade;
-import br.com.caelum.vraptor.http.ognl.OgnlParametersProvider;
 import br.com.caelum.vraptor.http.route.DefaultRouter;
 import br.com.caelum.vraptor.http.route.DefaultTypeFinder;
 import br.com.caelum.vraptor.http.route.Evaluator;
@@ -278,7 +275,11 @@ public class BaseComponents {
 		RestHeadersHandler.class,						DefaultRestHeadersHandler.class,
 		FlashScope.class,								SessionFlashScope.class,
 		XStreamConverters.class,						XStreamConverters.class,
-		MessageConverter.class,							MessageConverter.class
+		MessageConverter.class,							MessageConverter.class,
+		ParametersProvider.class, 						IogiParametersProvider.class,
+		ParameterNamesProvider.class, 					VRaptorParameterNamesProvider.class,
+		InstantiatorWithErrors.class, 					VRaptorInstantiator.class,
+		Instantiator.class, 							VRaptorInstantiator.class
 	);
 
 	@SuppressWarnings({"unchecked", "rawtypes"})
@@ -395,17 +396,6 @@ public class BaseComponents {
 					"If you are willing to upload a file, please add the commons-fileupload in " +
 					"your classpath or use a Servlet 3 Container");
 			REQUEST_COMPONENTS.put(MultipartInterceptor.class, NullMultipartInterceptor.class);
-		}
-	
-		if (isClassPresent("ognl.OgnlRuntime")) {
-			REQUEST_COMPONENTS.put(ParametersProvider.class, OgnlParametersProvider.class);
-			REQUEST_COMPONENTS.put(EmptyElementsRemoval.class, EmptyElementsRemoval.class);
-			REQUEST_COMPONENTS.put(OgnlFacade.class, OgnlFacade.class);
-		} else {
-			REQUEST_COMPONENTS.put(ParametersProvider.class, IogiParametersProvider.class);
-			REQUEST_COMPONENTS.put(ParameterNamesProvider.class, VRaptorParameterNamesProvider.class);
-			REQUEST_COMPONENTS.put(InstantiatorWithErrors.class, VRaptorInstantiator.class);
-			REQUEST_COMPONENTS.put(Instantiator.class, VRaptorInstantiator.class);
 		}
 	
 		return Collections.unmodifiableMap(REQUEST_COMPONENTS);

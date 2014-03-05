@@ -393,7 +393,7 @@ public class GsonJSONSerializationTest {
 	}
 
 	private String result() {
-		return new String(stream.toString());
+		return stream.toString();
 	}
 
 	public static class Bazinga {

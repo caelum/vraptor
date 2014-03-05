@@ -83,6 +83,7 @@ import br.com.caelum.vraptor.http.FormatResolver;
 import br.com.caelum.vraptor.http.ParameterNameProvider;
 import br.com.caelum.vraptor.http.ParametersProvider;
 import br.com.caelum.vraptor.http.ParanamerNameProvider;
+import br.com.caelum.vraptor.http.LateResponseCommitHandler;
 import br.com.caelum.vraptor.http.UrlToResourceTranslator;
 import br.com.caelum.vraptor.http.iogi.InstantiatorWithErrors;
 import br.com.caelum.vraptor.http.iogi.IogiParametersProvider;
@@ -278,7 +279,8 @@ public class BaseComponents {
 		RestHeadersHandler.class,						DefaultRestHeadersHandler.class,
 		FlashScope.class,								SessionFlashScope.class,
 		XStreamConverters.class,						XStreamConverters.class,
-		MessageConverter.class,							MessageConverter.class
+		MessageConverter.class,							MessageConverter.class,
+		LateResponseCommitHandler.class,					LateResponseCommitHandler.class
 	);
 
 	@SuppressWarnings({"unchecked", "rawtypes"})

@@ -8,8 +8,8 @@ import static org.junit.Assert.assertThat;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-import java.io.ByteArrayOutputStream;
 import java.io.PrintWriter;
+import java.io.StringWriter;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
@@ -46,7 +46,7 @@ public class GsonJSONSerializationTest {
 	
 	private GsonJSONSerialization serialization;
 
-	private ByteArrayOutputStream stream;
+	private StringWriter stream;
 
 	private HttpServletResponse response;
 
@@ -58,7 +58,7 @@ public class GsonJSONSerializationTest {
 	
 	@Before
 	public void setup() throws Exception {
-		this.stream = new ByteArrayOutputStream();
+		this.stream = new StringWriter();
 
 		response = mock(HttpServletResponse.class);
 		when(response.getWriter()).thenReturn(new PrintWriter(stream));
@@ -393,7 +393,7 @@ public class GsonJSONSerializationTest {
 	}
 
 	private String result() {
-		return new String(stream.toByteArray());
+		return stream.toString();
 	}
 
 	public static class Bazinga {

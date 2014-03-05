@@ -150,9 +150,6 @@ public class GsonSerializer implements SerializerBuilder {
 				tree.put(alias, root);
 				writer.write(gson.toJson(tree));
 			}
-
-			writer.flush();
-			writer.close();
 		} catch (IOException e) {
 			throw new RuntimeException("Não pode serializar", e);
 		}

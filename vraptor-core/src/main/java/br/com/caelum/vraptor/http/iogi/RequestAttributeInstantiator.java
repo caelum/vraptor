@@ -17,6 +17,8 @@
 
 package br.com.caelum.vraptor.http.iogi;
 
+import java.util.Enumeration;
+
 import javax.servlet.http.HttpServletRequest;
 
 import br.com.caelum.iogi.Instantiator;
@@ -35,6 +37,29 @@ final class RequestAttributeInstantiator implements Instantiator<Object> {
 
 	public boolean isAbleToInstantiate(Target<?> target) {
 		Object value = request.getAttribute(target.getName());
-		return value != null && target.getClassType().isInstance(value);
+		return (value != null && isSameType(target, value)) || (value == null && existsAttribute(target.getName()));
+	}
+	
+	private boolean isSameType(Target<?> target, Object value) {
+		return target.getClassType().isInstance(value);
+	}
+	
+	private boolean existsAttribute(String name) {
+		
+		Enumeration<String> attributes = request.getAttributeNames();
+		
+		boolean exists = false;
+		
+		while (attributes.hasMoreElements()) {
+			
+			String attributeName = attributes.nextElement();
+			
+			if (attributeName.equals(name)) {
+				exists = true;
+				break;
+			}
+		}
+		
+		return exists;
 	}
 }

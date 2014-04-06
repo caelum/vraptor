@@ -87,7 +87,8 @@ public abstract class ParametersProviderTest {
 	when(converters.to(String.class)).thenReturn(new StringConverter());
 
 	when(nameProvider.parameterNamesFor(any(AccessibleObject.class))).thenReturn(new String[0]);
-
+	when(request.getAttributeNames()).thenReturn(Collections.enumeration(Collections.<String> emptyList()));
+	
 	buyA 		= method("buyA", House.class);
 	kick 		= method("kick", AngryCat.class);
 	error 		= method("error", WrongCat.class);

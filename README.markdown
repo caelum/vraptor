@@ -3,7 +3,7 @@ VRaptor 3
 ![Build status](https://secure.travis-ci.org/caelum/vraptor.png)
 
 A web MVC framework for fast and maintainable development.
-Documentation can be found at http://vraptor.caelum.com.br
+Documentation can be found at http://vraptor3.vraptor.org
 
 Building in your machine
 ========================
@@ -20,4 +20,4 @@ Contribute to VRaptor
 =====================
 Want to contribute with code, documentation or bug report?
 
-You can find guidelines to contribute to VRaptor [here](http://vraptor.caelum.com.br/en/docs/how-to-contribute/ "Contribute").
+You can find guidelines to contribute to VRaptor [here](http://vraptor3.vraptor.org/en/docs/how-to-contribute/ "Contribute").

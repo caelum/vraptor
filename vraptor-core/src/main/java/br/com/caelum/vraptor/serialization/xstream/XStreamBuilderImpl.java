@@ -47,6 +47,7 @@ public class XStreamBuilderImpl implements XStreamBuilder {
 	
 	private boolean indented;
 	private boolean withoutRoot;
+	private boolean recursive;
 	
 	public XStreamBuilderImpl(XStreamConverters converters, TypeNameExtractor extractor) {
 		this.converters = converters;
@@ -60,7 +61,9 @@ public class XStreamBuilderImpl implements XStreamBuilder {
 	}
 
 	public XStream xmlInstance() {
-		return configure(new VRaptorXStream(extractor));
+		VRaptorXStream xstream = new VRaptorXStream(extractor);
+		xstream.getVRaptorMapper().getSerializee().setRecursive(recursive);
+		return configure(xstream);
 	}
 	
 	protected static final String DEFAULT_NEW_LINE = "";
@@ -105,6 +108,11 @@ public class XStreamBuilderImpl implements XStreamBuilder {
 	public XStreamBuilder withoutRoot() {
 		withoutRoot = true;
 	return this;
+	}
+
+	public XStreamBuilder recursive() {
+		recursive = true;
+		return this;
 	}
 	
 }

@@ -90,5 +90,8 @@ public class VRaptorClassMapper extends MapperWrapper {
 		this.serializee = serializee;
 	}
 
+	public Serializee getSerializee() {
+		return serializee;
+	}
 
 }

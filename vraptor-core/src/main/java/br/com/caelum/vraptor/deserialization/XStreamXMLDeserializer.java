@@ -93,7 +93,7 @@ public class XStreamXMLDeserializer implements XMLDeserializer {
 	 */
 	@Deprecated
 	protected XStream getXStream() {
-		return builder.xmlInstance();
+		return builder.recursive().xmlInstance();
 	}
 	
 }

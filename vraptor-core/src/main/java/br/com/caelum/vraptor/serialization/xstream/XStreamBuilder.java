@@ -34,5 +34,7 @@ public interface XStreamBuilder {
 	public XStreamBuilder indented();
 	
 	public XStreamBuilder withoutRoot();
+
+	public XStreamBuilder recursive();
 	
 }

@@ -13,7 +13,7 @@ For a quick start, you can use this snippet in your maven POM:
 <dependency>
     <groupId>br.com.caelum</groupId>
     <artifactId>vraptor</artifactId>
-    <version>3.4.1</version> <!--or the latest version-->
+    <version>3.5.4</version> <!--or the latest version-->
 </dependency>
 ```
 

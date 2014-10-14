@@ -71,7 +71,7 @@ public class DeserializingInterceptor implements Interceptor {
 		List<String> supported =  Arrays.asList(consumesAnnotation.value());
 
 		if(request.getContentType() == null) {
-			logger.info("Request does not have Content-Type and parameters will be not deserialized");
+			logger.warn("Request does not have Content-Type and parameters will be not deserialized");
 			stack.next(method, resourceInstance);
 			return;
 		}

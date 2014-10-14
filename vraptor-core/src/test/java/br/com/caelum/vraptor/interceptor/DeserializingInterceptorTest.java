@@ -137,6 +137,20 @@ public class DeserializingInterceptorTest {
 		assertEquals(methodInfo.getParameters()[1], "def");
 		verify(stack).next(consumesAnything, null);
 	}
+	
+	@Test
+	public void shouldNotDeserializeIfHasNoContentType() throws Exception {
+		when(request.getContentType()).thenReturn(null);
+		
+		methodInfo.setParameters(new Object[2]);
+		final DefaultResourceMethod consumesAnything = new DefaultResourceMethod(null, DummyResource.class.getDeclaredMethod("consumesAnything"));
+		
+		interceptor.intercept(stack, consumesAnything, null);
+
+		assertEquals(methodInfo.getParameters()[0], null);
+		assertEquals(methodInfo.getParameters()[1], null);
+		verify(stack).next(consumesAnything, null);
+	}
 
 	@Test
 	public void willSetOnlyNonNullParameters() throws Exception {

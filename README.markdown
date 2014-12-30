@@ -8,7 +8,9 @@ Documentation can be found at http://vraptor3.vraptor.org
 Latest version
 ==============
 The latest version is [VRaptor 4](https://github.com/caelum/vraptor4)
-and it's use should be preferable
+and it's use should be preferable.  
+It's documentation can be found at
+[http://vraptor.org]([http://vraptor.org)
 
 Downloading directly or using it through Maven
 ==============================================

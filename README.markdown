@@ -10,7 +10,7 @@ Latest version
 The latest version is available at https://github.com/caelum/vraptor4
 and it should be used for new projects.  
 It's documentation can be found at
-[http://vraptor.org]([http://vraptor.org)
+http://vraptor.org
 
 Downloading directly or using it through Maven
 ==============================================

@@ -5,6 +5,13 @@ VRaptor 3
 A web MVC framework for fast and maintainable development.
 Documentation can be found at http://vraptor3.vraptor.org
 
+Latest version
+==============
+The latest version is available at https://github.com/caelum/vraptor4
+and it should be used for new projects.  
+It's documentation can be found at
+http://vraptor.org
+
 Downloading directly or using it through Maven
 ==============================================
 For a quick start, you can use this snippet in your maven POM:

@@ -59,6 +59,10 @@ public class ReflectionBasedNullHandler extends ObjectNullHandler {
 		return list.instantiate(target, property, (Type) context.get("rootType"));
 	}
 
+	if(ctx.getCurrentEvaluation() == null){
+		return null;
+	}
+	
 	int indexInParent = ctx.getCurrentEvaluation().getNode().getIndexInParent();
 	int maxIndex = ctx.getRootEvaluation().getNode().jjtGetNumChildren() - 1;
 

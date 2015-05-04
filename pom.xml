@@ -3,7 +3,7 @@
 
 	<groupId>br.com.caelum</groupId>
 	<artifactId>vraptor-parent</artifactId>
-	<version>3.5.5-SNAPSHOT</version>
+	<version>3.5.5</version>
 	<name>VRaptor3</name>
 	<packaging>pom</packaging>
 
@@ -69,7 +69,7 @@
 		<url>http://github.com/caelum/vraptor</url>
 		<connection>scm:git:git://github.com/caelum/vraptor</connection>
 		<developerConnection>scm:git:git@github.com:caelum/vraptor.git</developerConnection>
-	  <tag>HEAD</tag>
+	  <tag>vraptor-parent-3.5.5</tag>
   </scm>
 
 	<modules>

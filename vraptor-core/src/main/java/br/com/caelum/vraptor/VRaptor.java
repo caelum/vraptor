@@ -52,7 +52,7 @@ import br.com.caelum.vraptor.ioc.ContainerProvider;
  * @author Fabio Kung
  */
 public class VRaptor implements Filter {
-	private static final String VERSION = "3.5.4-SNAPSHOT";
+	private static final String VERSION = "3.5.5";
 	
 	private ContainerProvider provider;
 	private ServletContext servletContext;

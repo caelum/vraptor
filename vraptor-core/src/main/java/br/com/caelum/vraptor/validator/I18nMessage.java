@@ -18,6 +18,8 @@ package br.com.caelum.vraptor.validator;
 import static com.google.common.base.Objects.toStringHelper;
 
 import java.text.MessageFormat;
+import java.util.Arrays;
+import java.util.Objects;
 import java.util.ResourceBundle;
 
 import com.google.common.base.Supplier;
@@ -101,4 +103,22 @@ public class I18nMessage implements Message {
 		return toStringHelper(this).add("category", category).add("message", message).add("parameters", parameters).toString();
 	}
 
+	@Override
+	public int hashCode() {
+		return Objects.hashCode(category) ^ Objects.hashCode(message) 
+			^ Objects.hash(parameters) ^ Objects.hashCode(severity);
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj) return true;
+		if (obj == null) return false;
+		if (getClass() != obj.getClass()) return false;
+		I18nMessage other = (I18nMessage) obj;
+		return Objects.equals(category, other.category) 
+			&& Objects.equals(message, other.message)
+			&& ((parameters == null &&  other.parameters == null) 
+				|| Arrays.equals(parameters, other.parameters))
+			&& Objects.equals(severity, other.severity);
+	}
 }

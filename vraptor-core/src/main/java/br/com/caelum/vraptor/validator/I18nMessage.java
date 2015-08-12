@@ -106,7 +106,7 @@ public class I18nMessage implements Message {
 	@Override
 	public int hashCode() {
 		return Objects.hashCode(category) ^ Objects.hashCode(message) 
-			^ Objects.hash(parameters) ^ Objects.hashCode(severity);
+			^ Objects.hash(parameters);
 	}
 
 	@Override
@@ -118,7 +118,6 @@ public class I18nMessage implements Message {
 		return Objects.equals(category, other.category) 
 			&& Objects.equals(message, other.message)
 			&& ((parameters == null &&  other.parameters == null) 
-				|| Arrays.equals(parameters, other.parameters))
-			&& Objects.equals(severity, other.severity);
+				|| Arrays.equals(parameters, other.parameters));
 	}
 }

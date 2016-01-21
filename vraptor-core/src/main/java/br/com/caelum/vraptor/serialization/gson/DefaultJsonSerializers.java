@@ -22,7 +22,7 @@ public class DefaultJsonSerializers implements JsonSerializers {
 			isHibernateProxyPresent = false;
 		}
 	}
-	private List<JsonSerializer> serializers;
+	private final List<JsonSerializer> serializers;
 
 	public DefaultJsonSerializers(List<JsonSerializer> serializers) {
 		this.serializers = Lists.newArrayList(serializers);

@@ -60,7 +60,7 @@ import br.com.caelum.vraptor.view.PageResult;
 public class DefaultValidatorTest {
 
 	private static final Message A_MESSAGE = new ValidationMessage("", "");
-	private @Mock Result result = new MockResult();
+	private final @Mock Result result = new MockResult();
 	private @Mock LogicResult logicResult;
 	private @Mock PageResult pageResult;
 	private @Mock Outjector outjector;

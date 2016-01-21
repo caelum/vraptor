@@ -45,7 +45,7 @@ public class DefaultComponentFactoryRegistry implements ComponentFactoryRegistry
 	private final Map<Class<?>, Class<? extends ComponentFactory>> requestScoped =
 		new HashMap<Class<?>, Class<? extends ComponentFactory>>();
 
-	private ComponentFactoryIntrospector componentFactoryIntrospector = new ComponentFactoryIntrospector();
+	private final ComponentFactoryIntrospector componentFactoryIntrospector = new ComponentFactoryIntrospector();
 
 	public void register(Class<? extends ComponentFactory> componentFactoryClass) {
 	Class<?> targetType = componentFactoryIntrospector.targetTypeForComponentFactory(componentFactoryClass);

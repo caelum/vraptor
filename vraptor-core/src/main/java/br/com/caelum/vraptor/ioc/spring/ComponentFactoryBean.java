@@ -28,10 +28,10 @@ import br.com.caelum.vraptor.ioc.Container;
 @SuppressWarnings({ "rawtypes" })
 public class ComponentFactoryBean<T extends ComponentFactory<Object>> implements FactoryBean {
 
-	private Container container;
+	private final Container container;
 
-	private Class<T> factoryType;
-	private Class<?> targetType;
+	private final Class<T> factoryType;
+	private final Class<?> targetType;
 
 	public ComponentFactoryBean(Container container, Class<T> factoryType) {
 	this.container = container;

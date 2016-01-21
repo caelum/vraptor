@@ -13,7 +13,7 @@ import com.google.gson.JsonDeserializer;
 @SuppressWarnings("rawtypes")
 public class DefaultJsonDeserializers implements JsonDeserializers {
 
-	private List<JsonDeserializer> deserializers;
+	private final List<JsonDeserializer> deserializers;
 	
 	public DefaultJsonDeserializers(List<JsonDeserializer> deserializers) {
 		this.deserializers = Lists.newArrayList(deserializers);

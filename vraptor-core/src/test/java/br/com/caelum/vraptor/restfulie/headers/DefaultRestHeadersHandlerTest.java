@@ -75,7 +75,7 @@ public class DefaultRestHeadersHandlerTest {
 
 	class CacheableOrderEntity implements RestfulEntity, HypermediaResource {
 
-		private Calendar date = Calendar.getInstance();
+		private final Calendar date = Calendar.getInstance();
 
 		public void configureRelations(RelationBuilder builder) {
 		}

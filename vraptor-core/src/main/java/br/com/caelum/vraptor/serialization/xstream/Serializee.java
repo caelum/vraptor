@@ -20,8 +20,8 @@ import com.google.common.collect.Sets;
 public class Serializee {
 	private Object root;
 	private Class<?> rootClass;
-	private Multimap<String, Class<?>> includes = LinkedListMultimap.create();
-	private Multimap<String, Class<?>> excludes = LinkedListMultimap.create();
+	private final Multimap<String, Class<?>> includes = LinkedListMultimap.create();
+	private final Multimap<String, Class<?>> excludes = LinkedListMultimap.create();
 	private Set<Class<?>> elementTypes;
 	private boolean recursive;
 

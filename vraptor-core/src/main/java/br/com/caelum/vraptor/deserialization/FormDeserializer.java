@@ -34,8 +34,8 @@ import br.com.caelum.vraptor.validator.Message;
 @Deserializes("application/x-www-form-urlencoded")
 public class FormDeserializer implements Deserializer {
 
-	private ParametersProvider provider;
-	private Localization localization;
+	private final ParametersProvider provider;
+	private final Localization localization;
 	
 	public FormDeserializer(ParametersProvider provider, Localization localization) {
 		this.provider = provider;

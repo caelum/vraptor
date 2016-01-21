@@ -18,7 +18,7 @@ import com.google.gson.FieldAttributes;
 
 public class Exclusions implements ExclusionStrategy {
 
-	private Serializee serializee;
+	private final Serializee serializee;
 
 	public Exclusions(Serializee serializee) {
 		this.serializee = serializee;

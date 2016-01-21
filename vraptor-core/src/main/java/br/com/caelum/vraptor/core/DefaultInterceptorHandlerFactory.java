@@ -34,9 +34,9 @@ import com.google.common.collect.MapMaker;
 @ApplicationScoped
 public class DefaultInterceptorHandlerFactory implements InterceptorHandlerFactory {
 
-	private Container container;
+	private final Container container;
 
-	private ConcurrentMap<Class<? extends Interceptor>, InterceptorHandler> cachedHandlers =
+	private final ConcurrentMap<Class<? extends Interceptor>, InterceptorHandler> cachedHandlers =
 		new MapMaker().makeMap();
 
 	public DefaultInterceptorHandlerFactory(Container container) {

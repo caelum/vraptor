@@ -21,8 +21,12 @@ import br.com.caelum.vraptor.core.RequestInfo;
 /**
  * @author Fabio Kung
  */
-public class VRaptorRequestHolder {
+public final class VRaptorRequestHolder {
 	private static final ThreadLocal<RequestInfo> vraptorRequests = new ThreadLocal<RequestInfo>();
+
+	private VRaptorRequestHolder() {
+		throw new InstantiationError( "Must not instantiate this class" );
+	}
 
 	public static RequestInfo currentRequest() {
 	return vraptorRequests.get();

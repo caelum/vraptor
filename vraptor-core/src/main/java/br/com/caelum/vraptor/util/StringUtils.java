@@ -25,7 +25,11 @@ import java.util.List;
 
  * @author Lucas Cavalcanti
  */
-public class StringUtils {
+public final class StringUtils {
+
+	private StringUtils() {
+		throw new InstantiationError( "Must not instantiate this class" );
+	}
 
 	public static String decapitalize(String name) {
 	if (name.length() == 1) {

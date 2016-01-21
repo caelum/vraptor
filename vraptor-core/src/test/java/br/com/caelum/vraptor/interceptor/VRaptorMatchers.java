@@ -33,7 +33,11 @@ import br.com.caelum.vraptor.validator.ValidationMessage;
  * 
  * @author Guilherme Silveira
  */
-public class VRaptorMatchers {
+public final class VRaptorMatchers {
+
+	private VRaptorMatchers () {
+		throw new InstantiationError( "Must not instantiate this class" );
+	}
 
 	public static TypeSafeMatcher<ResourceMethod> resourceMethod(final Method method) {
 	return new TypeSafeMatcher<ResourceMethod>() {

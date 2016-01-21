@@ -28,7 +28,11 @@ import br.com.caelum.vraptor.serialization.XMLSerialization;
  *
  * @author Guilherme Silveira
  */
-public class Results {
+public final class Results {
+
+	private Results() {
+		throw new InstantiationError( "Must not instantiate this class" );
+	}
 
 	/**
 	 * Offers server side forward and include for web pages.<br>

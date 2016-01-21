@@ -40,8 +40,8 @@ import com.thoughtworks.xstream.io.json.JsonWriter;
 @Component
 public class DefaultExtJson implements ExtJSJson {
 
-	private XStreamSerializer serializer;
-	private XStream xstream;
+	private final XStreamSerializer serializer;
+	private final XStream xstream;
 	private ExtJSWrapper wrapper;
 
 	public DefaultExtJson(HttpServletResponse response, TypeNameExtractor extractor, ProxyInitializer initializer)

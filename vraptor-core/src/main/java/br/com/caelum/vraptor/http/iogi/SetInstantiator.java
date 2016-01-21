@@ -35,7 +35,7 @@ import br.com.caelum.iogi.reflection.Target;
  */
 public class SetInstantiator implements Instantiator<Set<Object>> {
 
-	private ListInstantiator listInstantiator;
+	private final ListInstantiator listInstantiator;
 
 	public SetInstantiator(Instantiator<Object> listElementInstantiator) {
 		listInstantiator = new ListInstantiator(listElementInstantiator);

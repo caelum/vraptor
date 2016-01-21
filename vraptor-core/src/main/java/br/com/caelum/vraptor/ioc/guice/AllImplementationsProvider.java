@@ -11,7 +11,7 @@ import com.google.inject.Injector;
 import com.google.inject.Provider;
 
 final class AllImplementationsProvider<T> implements Provider<List<T>> {
-	private List<Class<? extends T>> types = new ArrayList<Class<? extends T>>();
+	private final List<Class<? extends T>> types = new ArrayList<Class<? extends T>>();
 	private Injector injector;
 	@Inject
 	public void setInjector(Injector injector) {

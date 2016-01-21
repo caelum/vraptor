@@ -44,7 +44,7 @@ public class DefaultParametersControlTest {
 	private @Mock MutableRequest request;
 	private @Mock Converters converters;
 	private @Mock TwoWayConverter converter;
-	private Evaluator evaluator = new JavaEvaluator();
+	private final Evaluator evaluator = new JavaEvaluator();
 
 	@Before
 	public void setup() {

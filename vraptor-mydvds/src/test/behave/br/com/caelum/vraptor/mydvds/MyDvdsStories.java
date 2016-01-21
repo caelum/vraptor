@@ -31,10 +31,10 @@ import br.com.caelum.vraptor.mydvds.pages.PageFactory;
 
 public class MyDvdsStories extends JUnitStories {
 
-	private WebDriverFactory driverFactory = new DefaultWebDriverFactory();
-	private PageFactory pageFactory = new PageFactory(driverFactory);
-	private SeleniumContext context = new SeleniumContext();
-	private ContextView contextView = new LocalFrameContextView().sized(500,
+	private final WebDriverFactory driverFactory = new DefaultWebDriverFactory();
+	private final PageFactory pageFactory = new PageFactory(driverFactory);
+	private final SeleniumContext context = new SeleniumContext();
+	private final ContextView contextView = new LocalFrameContextView().sized(500,
 			100);
 
 	@Override

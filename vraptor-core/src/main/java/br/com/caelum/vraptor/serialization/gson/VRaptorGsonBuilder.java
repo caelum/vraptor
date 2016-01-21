@@ -29,9 +29,9 @@ public class VRaptorGsonBuilder {
 
 	private String alias;
 
-	private Collection<JsonSerializer> serializers;
+	private final Collection<JsonSerializer> serializers;
 
-	private Collection<ExclusionStrategy> exclusions;
+	private final Collection<ExclusionStrategy> exclusions;
 
 	public VRaptorGsonBuilder(JsonSerializers serializers, Serializee serializee) {
 		this.serializers = serializers.getSerializers();

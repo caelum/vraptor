@@ -382,7 +382,7 @@ public abstract class GenericContainerTest {
 	@RequestScoped
 	static public class DisposableComponent {
 		private boolean destroyed;
-		private Object dependency = new Object();
+		private final Object dependency = new Object();
 		
 		public Object getDependency() {
 			return dependency;

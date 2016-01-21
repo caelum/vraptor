@@ -36,7 +36,7 @@ import br.com.caelum.vraptor.view.HttpResult;
  */
 @Component
 public class MockHttpResult extends MockResult{
-	private MockHttpServletResponse response = new MockHttpServletResponse();
+	private final MockHttpServletResponse response = new MockHttpServletResponse();
 
 	public MockHttpResult() {
 		super(new JavassistProxifier(new ObjenesisInstanceCreator()));

@@ -43,7 +43,7 @@ public class XStreamJSONSerializationTest {
 	private HttpServletResponse response;
 	private DefaultTypeNameExtractor extractor;
 	private HibernateProxyInitializer initializer;
-	private XStreamBuilder builder = XStreamBuilderImpl.cleanInstance();
+	private final XStreamBuilder builder = XStreamBuilderImpl.cleanInstance();
 
 	@Before
 	public void setup() throws Exception {
@@ -372,7 +372,7 @@ public class XStreamJSONSerializationTest {
 
 		private String aField;
 
-		private transient LazyInitializer initializer;
+		private final transient LazyInitializer initializer;
 
 		public SomeProxy(LazyInitializer initializer) {
 			super("name");

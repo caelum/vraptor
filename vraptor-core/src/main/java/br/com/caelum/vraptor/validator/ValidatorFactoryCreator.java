@@ -45,7 +45,7 @@ public class ValidatorFactoryCreator implements ComponentFactory<ValidatorFactor
 	private static final Logger logger = LoggerFactory.getLogger(ValidatorFactoryCreator.class);
 
 	private ValidatorFactory factory;
-	private MessageInterpolator interpolator;
+	private final MessageInterpolator interpolator;
 
 	public ValidatorFactoryCreator(MessageInterpolator interpolator) {
 		this.interpolator = interpolator;

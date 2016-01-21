@@ -43,7 +43,7 @@ public class MockHttpServletResponse implements HttpServletResponse {
 	
 	private PrintWriter writer;
 	private String contentType;
-	private ByteArrayOutputStream content =  new ByteArrayOutputStream();
+	private final ByteArrayOutputStream content =  new ByteArrayOutputStream();
 	
 	private int status;
 	

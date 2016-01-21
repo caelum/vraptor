@@ -37,7 +37,7 @@ import br.com.caelum.vraptor.restfulie.hypermedia.HypermediaResource;
 public class DefaultRepresentationResult implements RepresentationResult {
 
 	private final FormatResolver formatResolver;
-	private List<Serialization> serializations;
+	private final List<Serialization> serializations;
 	private final Result result;
 	private final RestHeadersHandler headersHandler;
 

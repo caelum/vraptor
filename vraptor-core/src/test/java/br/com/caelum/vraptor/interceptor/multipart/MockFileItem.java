@@ -16,10 +16,10 @@ public class MockFileItem
 
 	private static final long serialVersionUID = 5566658661323774136L;
 
-	private String fieldName;
+	private final String fieldName;
 	private String contentType;
 	private String name;
-	private byte[] content;
+	private final byte[] content;
 	private boolean formField;
 
 	public MockFileItem(String fieldName, String content) {

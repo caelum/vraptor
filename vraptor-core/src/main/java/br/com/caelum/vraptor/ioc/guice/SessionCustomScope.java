@@ -37,7 +37,7 @@ public class SessionCustomScope extends AbstractScope implements LifecycleScope 
 
 	private static final Logger logger = LoggerFactory.getLogger(SessionCustomScope.class);
 
-	private Multimap<String, LifecycleListener> listeners = LinkedListMultimap.create();
+	private final Multimap<String, LifecycleListener> listeners = LinkedListMultimap.create();
 
 	private Provider<HttpSession> provider;
 

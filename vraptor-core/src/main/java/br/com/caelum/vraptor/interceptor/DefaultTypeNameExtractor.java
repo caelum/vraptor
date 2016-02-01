@@ -45,7 +45,7 @@ public class DefaultTypeNameExtractor implements TypeNameExtractor {
 		}
 
 		if (generic instanceof TypeVariable<?>) {
-			return nameFor(((TypeVariable<?>) generic));
+			return nameFor((TypeVariable<?>) generic);
 		}
 
 		return nameFor((Class<?>) generic);
@@ -66,7 +66,7 @@ public class DefaultTypeNameExtractor implements TypeNameExtractor {
 	}
 
 	private String nameFor(WildcardType wild) {
-		if ((wild.getLowerBounds().length != 0)) {
+		if (wild.getLowerBounds().length != 0) {
 			return nameFor(wild.getLowerBounds()[0]);
 		} else {
 			return nameFor(wild.getUpperBounds()[0]);

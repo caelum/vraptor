@@ -140,7 +140,7 @@ public class GuiceComponentRegistry implements ComponentRegistry {
 		Constructor constructor = getConstructor(componentType);
 		for (Type type : constructor.getGenericParameterTypes()) {
 			if (type instanceof ParameterizedType) {
-				ParameterizedType ptype =((ParameterizedType) type);
+				ParameterizedType ptype =(ParameterizedType) type;
 				if (ptype.getRawType() instanceof Class<?> && List.class.isAssignableFrom((Class<?>) ptype.getRawType())
 						&& ptype.getRawType() instanceof Class<?> && !listTypes.contains(ptype.getActualTypeArguments()[0])) {
 					listTypes.add((Class<?>) ptype.getActualTypeArguments()[0]);

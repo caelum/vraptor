@@ -73,9 +73,9 @@ public final class ISO8601Util {
 			int month	= matcher.group(2) != null ? Integer.valueOf(matcher.group(2)) - 1 : 0;
 			int day		= matcher.group(3) != null ? Integer.valueOf(matcher.group(3)) : 0;
 			
-			int h	= (matcher.group(4) != null ? Integer.valueOf(matcher.group(4)) : 0);
-			int m	= (matcher.group(5) != null ? Integer.valueOf(matcher.group(5)) : 0);
-			int s	= (matcher.group(6) != null ? Integer.valueOf(matcher.group(6)) : 0);
+			int h	= matcher.group(4) != null ? Integer.valueOf(matcher.group(4)) : 0;
+			int m	= matcher.group(5) != null ? Integer.valueOf(matcher.group(5)) : 0;
+			int s	= matcher.group(6) != null ? Integer.valueOf(matcher.group(6)) : 0;
 			int ms	= Math.round(Float.parseFloat("0." + (matcher.group(7) != null ? matcher.group(7) : "0")) * 1000);
 
 			TimeZone timeZone = TimeZone.getTimeZone("GMT" + (matcher.group(8) != null ? matcher.group(8) : ""));

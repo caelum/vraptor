@@ -86,8 +86,8 @@ public class XStreamBuilderImpl implements XStreamBuilder {
 	  * @return configured hierarchical driver
 	  */
 	protected HierarchicalStreamDriver getHierarchicalStreamDriver() {
-	final String newLine = (indented ? INDENTED_NEW_LINE : DEFAULT_NEW_LINE);
-	final char[] lineIndenter = (indented ? INDENTED_LINE_INDENTER : DEFAULT_LINE_INDENTER);
+	final String newLine = indented ? INDENTED_NEW_LINE : DEFAULT_NEW_LINE;
+	final char[] lineIndenter = indented ? INDENTED_LINE_INDENTER : DEFAULT_LINE_INDENTER;
 
 	return new JsonHierarchicalStreamDriver() {
 		public HierarchicalStreamWriter createWriter(Writer writer) {

@@ -57,7 +57,7 @@ public class LocaleBasedDoubleConverter
 	
 		try {
 			final Locale locale = localization.getLocale();
-			DecimalFormat fmt = ((DecimalFormat) DecimalFormat.getInstance(locale));
+			DecimalFormat fmt = (DecimalFormat) DecimalFormat.getInstance(locale);
 	
 			return fmt.parse(value).doubleValue();
 		} catch (ParseException e) {

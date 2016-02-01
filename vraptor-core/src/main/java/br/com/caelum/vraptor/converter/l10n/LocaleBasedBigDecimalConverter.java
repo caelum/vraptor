@@ -57,7 +57,7 @@ public class LocaleBasedBigDecimalConverter
 		
 		try {
 			final Locale locale = localization.getLocale();
-			DecimalFormat fmt = ((DecimalFormat) DecimalFormat.getInstance(locale));
+			DecimalFormat fmt = (DecimalFormat) DecimalFormat.getInstance(locale);
 			fmt.setParseBigDecimal(true);
 			
 			return (BigDecimal) fmt.parse(value);

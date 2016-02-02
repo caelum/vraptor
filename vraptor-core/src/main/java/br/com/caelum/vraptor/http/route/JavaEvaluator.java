@@ -55,7 +55,7 @@ public class JavaEvaluator implements Evaluator {
 	}
 
 	private Object navigate(Object current, String path) {
-		int index = path.indexOf("[");
+		int index = path.indexOf('[');
 		int position = -1;
 		if (index != -1) {
 			position = Integer.parseInt(path.substring(index + 1));

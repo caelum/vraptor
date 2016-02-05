@@ -26,10 +26,8 @@ public class DateISO8601Deserializer implements JsonDeserializer<Date> {
 
 		try {
 			String value = json.getAsString();
-
-			Date date = iso8601.toDate(value);
-
-			return date;
+			
+			return iso8601.toDate(value);
 		} catch (ParseException e) {
 			throw new ConversionError("Error to convert Date: "	+ e.getMessage());
 		}

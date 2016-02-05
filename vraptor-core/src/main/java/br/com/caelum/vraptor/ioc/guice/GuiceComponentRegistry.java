@@ -167,7 +167,6 @@ public class GuiceComponentRegistry implements ComponentRegistry {
 			final Class<?> target = new ComponentFactoryIntrospector().targetTypeForComponentFactory(componentType);
 			Type adapterType = Types.newParameterizedType(ComponentFactoryProviderAdapter.class, target);
 			Type factoryType = Types.newParameterizedType(ComponentFactory.class, target);
-//			binder.bind(TypeLiteral.get(adapterType));
 			binder.bind(TypeLiteral.get(factoryType)).to(componentType);
 			binder.bind(target).toProvider((TypeLiteral) TypeLiteral.get(adapterType));
 		}

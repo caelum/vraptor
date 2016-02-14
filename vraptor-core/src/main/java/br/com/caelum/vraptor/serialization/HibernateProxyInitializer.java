@@ -29,6 +29,7 @@ import br.com.caelum.vraptor.ioc.ApplicationScoped;
  * @deprecated 3.5.0, since persistence plugins have their own projects
  */
 @ApplicationScoped
+@Deprecated
 public class HibernateProxyInitializer implements ProxyInitializer {
 
 	public boolean isProxy(Class<?> clazz) {

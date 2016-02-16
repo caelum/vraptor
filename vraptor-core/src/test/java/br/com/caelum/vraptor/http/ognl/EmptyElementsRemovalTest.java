@@ -48,8 +48,8 @@ public class EmptyElementsRemovalTest {
 	}
 	
 	class Dog {
-		private String names[];
-		public void setNames(String names[]) {
+		private String[] names;
+		public void setNames(String[] names) {
 			this.names = names;
 		}
 		public String[] getNames() {

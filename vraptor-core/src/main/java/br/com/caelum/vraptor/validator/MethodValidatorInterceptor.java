@@ -112,11 +112,11 @@ public class MethodValidatorInterceptor
 		Iterator<Node> path = violation.getPropertyPath().iterator();
 
 		StringBuilder cat = new StringBuilder();
-		cat.append(path.next()).append("."); // method name
+		cat.append(path.next()).append('.'); // method name
 		cat.append(paramNames[path.next().as(ParameterNode.class).getParameterIndex()]);// parameter name
 
 		while (path.hasNext()) {
-			cat.append(".").append(path.next());
+			cat.append('.').append(path.next());
 		}
 
 		return cat.toString();

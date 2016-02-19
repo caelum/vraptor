@@ -34,7 +34,7 @@ public class DefaultXMLConfiguration implements XMLConfiguration {
 		for(int i=1;i<name.length();i++) {
 			char c = name.charAt(i);
 			if(Character.isUpperCase(c)) {
-				content.append("_");
+				content.append('_');
 				content.append(Character.toLowerCase(c));
 			} else {
 				content.append(c);

@@ -99,7 +99,7 @@ public class JavassistBootstrapGenerator implements BootstrapGenerator {
 					 .append(".class);");
 		}
 
-		methodDef.append("}");
+		methodDef.append('}');
 
 		return methodDef.toString();
 	}

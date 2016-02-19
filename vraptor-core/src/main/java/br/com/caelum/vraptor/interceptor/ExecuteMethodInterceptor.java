@@ -55,10 +55,6 @@ public class ExecuteMethodInterceptor implements Interceptor {
 			throws InterceptionException {
 		try {
 			Method reflectionMethod = method.getMethod();
-			Object[] parameters = this.info.getParameters();
-
-			log.debug("Invoking {}", Stringnifier.simpleNameFor(reflectionMethod));
-			Object result = reflectionMethod.invoke(resourceInstance, parameters);
 
 			if (validator.hasErrors()) { // method should have thrown ValidationException
 				if (log.isDebugEnabled()) {
@@ -80,6 +76,10 @@ public class ExecuteMethodInterceptor implements Interceptor {
 				// vraptor2 compatibility
 				this.info.setResult("ok");
 			} else {
+				Object[] parameters = this.info.getParameters();
+				log.debug("Invoking {}", Stringnifier.simpleNameFor(reflectionMethod));
+				Object result = reflectionMethod.invoke(resourceInstance, parameters);
+
 				this.info.setResult(result);
 			}
 			stack.next(method, resourceInstance);

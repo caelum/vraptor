@@ -184,7 +184,7 @@ public class XStreamJSONSerializationTest {
 	@Test
 	public void shouldSerializeCollection() {
 		String expectedResult = "{\"price\": 15.0,\"comments\": \"pack it nicely, please\"}";
-		expectedResult += "," + expectedResult;
+		expectedResult += ',' + expectedResult;
 		expectedResult = "{\"list\": [" + expectedResult + "]}";
 
 		Order order = new Order(new Client("guilherme silveira"), 15.0, "pack it nicely, please");
@@ -195,7 +195,7 @@ public class XStreamJSONSerializationTest {
 	@Test
 	public void shouldSerializeCollectionWithPrefixTag() {
 		String expectedResult = "{\"price\": 15.0,\"comments\": \"pack it nicely, please\"}";
-		expectedResult += "," + expectedResult;
+		expectedResult += ',' + expectedResult;
 		expectedResult = "{\"orders\": [" + expectedResult + "]}";
 		Order order = new Order(new Client("guilherme silveira"), 15.0, "pack it nicely, please");
 		serialization.from(Arrays.asList(order, order), "orders").serialize();

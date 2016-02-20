@@ -121,7 +121,7 @@ public class ParametersInstantiatorInterceptor implements Interceptor {
 		if (name.contains("[]")) {
 			String[] values = request.getParameterValues(name);
 			for (int i = 0; i < values.length; i++) {
-				request.setParameter(name.replace("[]", "[" + i + "]"), values[i]);
+				request.setParameter(name.replace("[]", "[" + i + ']'), values[i]);
 			}
 		}
 	}

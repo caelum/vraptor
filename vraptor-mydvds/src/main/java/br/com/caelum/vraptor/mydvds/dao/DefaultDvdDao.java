@@ -62,7 +62,7 @@ public class DefaultDvdDao implements DvdDao {
 		// creates a criteria based on the Dvd class and adds
 		// the "title" restriction and then returns the list.
 		return session.createCriteria(Dvd.class).add(
-				Restrictions.ilike("title", "%" + title + "%")).list();
+				Restrictions.ilike("title", '%' + title + '%')).list();
 	}
 
 }

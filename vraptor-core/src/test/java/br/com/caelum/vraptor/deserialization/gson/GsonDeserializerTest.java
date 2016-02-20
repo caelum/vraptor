@@ -88,7 +88,7 @@ public class GsonDeserializerTest {
 		@Override
 		public String toString() {
 			return "Dog [name=" + name + ", age=" + age + ", birthday="
-					+ birthday + "]";
+					+ birthday + ']';
 		}
 	}
 

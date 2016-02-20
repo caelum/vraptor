@@ -30,7 +30,7 @@ public class CustomMatchers {
 
         @Override
         protected void describeMismatchSafely(String item, Description mismatchDescription) {
-            mismatchDescription.appendText(" " + item);
+            mismatchDescription.appendText(' ' + item);
         }
 
         @Override

@@ -30,14 +30,14 @@ public class Stringnifier {
 			if (i != parameterTypes.length - 1)
 				builder.append(", ");
 		}
-		return "(" + builder.toString() + ")";
+		return '(' + builder.toString() + ')';
 	}
 
 	public static String simpleNameFor(AccessibleObject object) {
 		if (object instanceof Method) {
 
 			Method method = (Method) object;
-			return method.getDeclaringClass().getSimpleName() + "." + method.getName()
+			return method.getDeclaringClass().getSimpleName() + '.' + method.getName()
 					+ argumentsToString(method.getParameterTypes());
 		}
 		if (object instanceof Constructor<?>) {

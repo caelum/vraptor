@@ -80,7 +80,7 @@ public class JavaEvaluator implements Evaluator {
 			}
 			return it.next();
 		}
-		throw new VRaptorException("Unable to access position of a" + current.getClass().getName() + ".");
+		throw new VRaptorException("Unable to access position of a" + current.getClass().getName() + '.');
 	}
 
 }

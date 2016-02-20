@@ -59,7 +59,7 @@ public class WebBasedClasspathResolver implements ClasspathResolver {
 		try {
 			String webInfClassesDir = servletContext.getRealPath("/WEB-INF/classes");
 			if (webInfClassesDir != null) {
-				return new URL("file:" + webInfClassesDir + "/");
+				return new URL("file:" + webInfClassesDir + '/');
 			} else {
 				// try to guess WEB-INF/classes from vraptor.jar location
 				return new StandaloneClasspathResolver().findWebInfClassesLocation();

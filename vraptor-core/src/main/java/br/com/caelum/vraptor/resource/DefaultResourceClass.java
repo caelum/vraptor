@@ -47,7 +47,7 @@ public class DefaultResourceClass implements ResourceClass {
 
 	@Override
 	public String toString() {
-		return "{ResourceClass " + type.getName() + "}";
+		return "{ResourceClass " + type.getName() + '}';
 	}
 
 	public Class<?> getType() {

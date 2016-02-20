@@ -46,7 +46,7 @@ public class JavassistBootstrapGenerator implements BootstrapGenerator {
 		final String simpleName = fullName.substring(WebAppBootstrap.STATIC_BOOTSTRAP_NAME.lastIndexOf('.') + 1);
 		final String packageName = fullName.substring(0, fullName.lastIndexOf('.'));
 		final String webInfClasses = resolver.findWebInfClassesLocation().getPath();
-		final String path = webInfClasses + "/" + packageName.replace('.', '/') + "/";
+		final String path = webInfClasses + '/' + packageName.replace('.', '/') + '/';
 		final String filename = path + simpleName + ".class";
 
 		// create the entire package path

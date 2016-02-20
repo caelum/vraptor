@@ -129,7 +129,7 @@ public class OgnlParametersProvider implements ParametersProvider {
 		ognl.startContext(param.name, param.type, root, bundle);
 
 		for (Entry<String, String[]> parameter : requestNames.entrySet()) {
-			String key = parameter.getKey().replaceFirst("^" + param.name + "\\.?", "");
+			String key = parameter.getKey().replaceFirst('^' + param.name + "\\.?", "");
 			String[] values = parameter.getValue();
 			setProperty(param.name, key, values, errors);
 		}
@@ -202,7 +202,7 @@ public class OgnlParametersProvider implements ParametersProvider {
 	}
 
 	protected Map<String, String[]> parametersThatStartWith(String name) {
-		Map<String, String[]> requestNames = filterKeys(request.getParameterMap(), containsPattern("^" + name));
+		Map<String, String[]> requestNames = filterKeys(request.getParameterMap(), containsPattern('^' + name));
 		return new TreeMap<String, String[]>(requestNames);
 	}
 }

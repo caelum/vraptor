@@ -73,7 +73,7 @@ public class ArrayAccessor extends ArrayPropertyAccessor {
 	super.setProperty(context, array, key, value);
 	}
 
-	private Object copyOf(Object array, int desiredLength, int currentLength) {
+	private static Object copyOf(Object array, int desiredLength, int currentLength) {
 	Object newArray = Array.newInstance(array.getClass().getComponentType(), desiredLength + 1);
 	for (int i = 0; i < currentLength; i++) {
 		Array.set(newArray, i, Array.get(array, i));

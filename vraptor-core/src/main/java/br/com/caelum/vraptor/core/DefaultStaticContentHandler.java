@@ -60,11 +60,11 @@ public class DefaultStaticContentHandler implements StaticContentHandler {
 		return removeQueryStringAndJSessionId(uri);
 	}
 	
-	private String removeQueryStringAndJSessionId(String uri) {
+	private static String removeQueryStringAndJSessionId(String uri) {
 		return uri.replaceAll("[\\?;].+", "");
 	}
 
-	private boolean isAFile(URL resourceUrl) {
+	private static boolean isAFile(URL resourceUrl) {
 		return !resourceUrl.toString().endsWith("/");
 	}
 

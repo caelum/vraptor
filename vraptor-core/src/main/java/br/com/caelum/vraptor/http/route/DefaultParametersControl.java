@@ -111,7 +111,7 @@ public class DefaultParametersControl implements ParametersControl {
 		return base.replaceAll("\\.\\*", "");
 	}
 
-	private Object selectParam(String key, String[] paramNames, Object[] paramValues) {
+	private static Object selectParam(String key, String[] paramNames, Object[] paramValues) {
 		for (int i = 0; i < paramNames.length; i++) {
 			if (key.matches('^' + paramNames[i] + "(\\..*|$)")) {
 				return paramValues[i];

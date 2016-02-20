@@ -69,7 +69,7 @@ public class VRaptorClassMapper extends MapperWrapper {
 		return should;
 	}
 
-	private boolean isCompatiblePath(Entry<String, Class<?>> path, Class definedIn, String fieldName) {
+	private static boolean isCompatiblePath(Entry<String, Class<?>> path, Class definedIn, String fieldName) {
 		return path.getValue().equals(definedIn) && (path.getKey().equals(fieldName) || path.getKey().endsWith('.' + fieldName));
 	}
 

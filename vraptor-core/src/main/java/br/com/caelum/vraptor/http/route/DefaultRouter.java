@@ -95,7 +95,7 @@ public class DefaultRouter implements Router {
 		return route.resourceMethod(request, uri);
 	}
 
-	private void checkIfThereIsAnotherRoute(String uri, HttpMethod method, Iterator<Route> iterator, Route route) {
+	private static void checkIfThereIsAnotherRoute(String uri, HttpMethod method, Iterator<Route> iterator, Route route) {
 		if (iterator.hasNext()) {
 			Route otherRoute = iterator.next();
 			if (route.getPriority() == otherRoute.getPriority()) {

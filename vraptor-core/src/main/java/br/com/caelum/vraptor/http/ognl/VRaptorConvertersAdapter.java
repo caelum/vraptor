@@ -88,7 +88,7 @@ public class VRaptorConvertersAdapter implements TypeConverter {
 	return target.getClass().getComponentType();
 	}
 
-	private Type extractFieldType(Member member) {
+	private static Type extractFieldType(Member member) {
 	return ((Field) member).getGenericType();
 	}
 

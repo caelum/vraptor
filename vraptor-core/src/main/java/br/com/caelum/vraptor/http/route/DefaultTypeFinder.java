@@ -59,7 +59,7 @@ public class DefaultTypeFinder implements TypeFinder {
 		}
 		return result;
 	}
-	private String upperFirst(String item) {
+	private static String upperFirst(String item) {
 		return item.substring(0, 1).toUpperCase() + item.substring(1);
 	}
 

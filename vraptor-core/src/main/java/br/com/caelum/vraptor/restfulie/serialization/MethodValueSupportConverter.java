@@ -61,7 +61,7 @@ public class MethodValueSupportConverter implements Converter {
 		writer.endNode();
 	}
 
-	private String nameFor(Method m) {
+	private static String nameFor(Method m) {
 		String name = m.getName();
 		if (name.startsWith("is")) {
 			return StringUtils.lowercaseFirst(name.substring(2));

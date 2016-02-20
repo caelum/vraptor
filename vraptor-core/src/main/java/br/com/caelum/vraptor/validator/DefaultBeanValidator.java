@@ -126,7 +126,7 @@ public class DefaultBeanValidator
 		return localization.getLocale() == null ? Locale.getDefault() : localization.getLocale();
 	}
 
-	private boolean hasProperties(String... properties) {
+	private static boolean hasProperties(String... properties) {
 		return properties != null && properties.length > 0;
 	}
 

@@ -107,7 +107,7 @@ public class ScannotationComponentScanner implements ComponentScanner {
 	} while (urls.hasMoreElements());
 	}
 
-	private String toFileName(String resource, URL url) {
+	private static String toFileName(String resource, URL url) {
 	String file = url.getFile().substring(0, url.getFile().length() - resource.length() - 1).replaceAll("(!)(/)?$", "");
 
 	if (!file.startsWith("file:")) {
@@ -138,7 +138,7 @@ public class ScannotationComponentScanner implements ComponentScanner {
 	}
 	}
 
-	private boolean packagesContains(List<String> basePackages, String clazz) {
+	private static boolean packagesContains(List<String> basePackages, String clazz) {
 	for (String basePackage : basePackages) {
 		if (clazz.startsWith(basePackage)) {
 		return true;
@@ -153,7 +153,7 @@ public class ScannotationComponentScanner implements ComponentScanner {
 	results.addAll(myStereotypes);
 	}
 
-	private void addVRaptorStereotypes(HashSet<String> results) {
+	private static void addVRaptorStereotypes(HashSet<String> results) {
 	for (Class<? extends Annotation> stereotype : BaseComponents.getStereotypes()) {
 		results.add(stereotype.getName());
 	}

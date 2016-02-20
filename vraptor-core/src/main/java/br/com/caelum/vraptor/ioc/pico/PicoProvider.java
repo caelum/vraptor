@@ -155,7 +155,7 @@ public class PicoProvider implements ContainerProvider {
 		}
 	}
 
-	private void registerAll(ComponentRegistry registry, Map<Class<?>, Class<?>> scope) {
+	private static void registerAll(ComponentRegistry registry, Map<Class<?>, Class<?>> scope) {
 		for (Map.Entry<Class<?>, Class<?>> entry : scope.entrySet()) {
 		registry.register(entry.getKey(), entry.getValue());
 		registry.register(entry.getValue(), entry.getValue());

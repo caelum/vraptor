@@ -118,7 +118,7 @@ public class ResourceControllerInterceptor<T extends HypermediaResource> impleme
 		return false;
 	}
 
-	private String lowerFirstChar(String simpleName) {
+	private static String lowerFirstChar(String simpleName) {
 		if(simpleName.length()==1) {
 			return simpleName.toLowerCase();
 		}

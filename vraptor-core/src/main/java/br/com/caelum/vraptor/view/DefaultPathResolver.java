@@ -67,7 +67,7 @@ public class DefaultPathResolver implements PathResolver {
 	return baseName;
 	}
 
-	private String lowerFirstCharacter(String baseName) {
+	private static String lowerFirstCharacter(String baseName) {
 	return baseName.toLowerCase().substring(0, 1) + baseName.substring(1, baseName.length());
 	}
 }

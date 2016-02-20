@@ -65,7 +65,7 @@ public class OldAndProbablyBuggyConfigurer {
 		excludesMap.remove(parentType, fieldName);
 	}
 	
-	private String getNameFor(String name) {
+	private static String getNameFor(String name) {
 		String[] path = name.split("\\.");
 		return path[path.length-1];
 	}

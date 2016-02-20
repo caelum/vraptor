@@ -89,7 +89,7 @@ public class JavassistBootstrapGenerator implements BootstrapGenerator {
 		}
 	}
 
-	private String createMethodDef(Collection<String> components) {
+	private static String createMethodDef(Collection<String> components) {
 		StringBuilder methodDef = new StringBuilder()
 			.append("public void configure (br.com.caelum.vraptor.ComponentRegistry registry){");
 

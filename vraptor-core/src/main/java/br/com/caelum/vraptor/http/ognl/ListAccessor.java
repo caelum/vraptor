@@ -96,7 +96,7 @@ public class ListAccessor extends ListPropertyAccessor {
 		super.setProperty(context, target, key, value);
 	}
 
-	private Class getActualType(Type genericType) {
+	private static Class getActualType(Type genericType) {
 		Class type;
 		if (genericType instanceof ParameterizedType) {
 			type = (Class) ((ParameterizedType) genericType).getActualTypeArguments()[0];

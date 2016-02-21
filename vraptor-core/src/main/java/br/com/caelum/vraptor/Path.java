@@ -34,6 +34,12 @@ import java.lang.annotation.Target;
 @Retention(RetentionPolicy.RUNTIME)
 public @interface Path {
 
+	public static final int LOWEST = Integer.MAX_VALUE;
+	public static final int LOW = Integer.MAX_VALUE/4*3;
+	public static final int DEFAULT = Integer.MAX_VALUE/2;
+	public static final int HIGH = Integer.MAX_VALUE/4;
+	public static final int HIGHEST = 0;
+
 	/**
 	 * All paths that will be mapped to an annotated Resource method. The path value also can be 
 	 * configured in class level and using {@link Get}, {@link Post}, {@link Trace} and {@link Delete} 
@@ -56,11 +62,5 @@ public @interface Path {
 	 *
 	 */
 	int priority() default DEFAULT;
-
-	public static final int LOWEST = Integer.MAX_VALUE;
-	public static final int LOW = Integer.MAX_VALUE/4*3;
-	public static final int DEFAULT = Integer.MAX_VALUE/2;
-	public static final int HIGH = Integer.MAX_VALUE/4;
-	public static final int HIGHEST = 0;
-
+	
 }

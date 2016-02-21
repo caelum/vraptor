@@ -38,12 +38,12 @@ public class DefaultRoutes implements Routes{
 	private final Proxifier proxifier;
 	private final Router router;
 
+	private String uri;
+
 	public DefaultRoutes(Router router, Proxifier proxifier) {
 		this.router = router;
 		this.proxifier = proxifier;
 	}
-
-	private String uri;
 
 	public <T> T uriFor(final Class<T> type) {
 		return proxifier.proxify(type, new MethodInvocation<T>() {

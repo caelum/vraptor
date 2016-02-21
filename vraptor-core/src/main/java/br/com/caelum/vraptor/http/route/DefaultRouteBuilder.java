@@ -198,7 +198,7 @@ public class DefaultRouteBuilder implements RouteBuilder {
 		}
 	}
 
-	private String[] sanitize(String[] parameters) {
+	private static String[] sanitize(String[] parameters) {
 		String[] sanitized = new String[parameters.length];
 		for (int i = 0; i < parameters.length; i++) {
 			sanitized[i] = parameters[i].replaceAll("(\\:.*|\\*)$", "");

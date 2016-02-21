@@ -80,7 +80,7 @@ public class DefaultExceptionMapper
 		return hasExceptionCause(e) ? findByException((Exception) e.getCause()) : null;
 	}
 
-	private boolean hasExceptionCause(Exception e) {
+	private static boolean hasExceptionCause(Exception e) {
 		return e.getCause() != null && e.getCause() instanceof Exception;
 	}
 }

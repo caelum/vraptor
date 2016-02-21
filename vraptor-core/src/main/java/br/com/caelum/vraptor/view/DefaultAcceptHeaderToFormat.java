@@ -144,7 +144,7 @@ public class DefaultAcceptHeaderToFormat implements AcceptHeaderToFormat {
 		return new MimeType(string, 1);
 	}
 
-	private double extractQualifier(String string) {
+	private static double extractQualifier(String string) {
 		double qualifier = DEFAULT_QUALIFIER_VALUE;
 		if (string.contains("q=")) {
 			Matcher matcher = Pattern.compile("\\s*q=(.+)\\s*").matcher(string);

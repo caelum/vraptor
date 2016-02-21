@@ -51,7 +51,7 @@ public class DefaultTypeNameExtractor implements TypeNameExtractor {
 		return nameFor((Class<?>) generic);
 	}
 
-	private String nameFor(Class<?> raw) {
+	private static String nameFor(Class<?> raw) {
 		if (raw.isArray()) {
 			return nameFor(raw.getComponentType()) + "List";
 		}
@@ -61,7 +61,7 @@ public class DefaultTypeNameExtractor implements TypeNameExtractor {
 		return StringUtils.lowercaseFirst(name);
 	}
 
-	private String nameFor(TypeVariable<?> variable) {
+	private static String nameFor(TypeVariable<?> variable) {
 		return StringUtils.lowercaseFirst(variable.getName());
 	}
 

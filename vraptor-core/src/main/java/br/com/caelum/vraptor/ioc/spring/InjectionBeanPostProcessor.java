@@ -44,7 +44,7 @@ class InjectionBeanPostProcessor extends AutowiredAnnotationBeanPostProcessor {
 	}
 
 	@SuppressWarnings({ "rawtypes" })
-	private Constructor checkIfThereIsOnlyOneNonDefaultConstructor(Class beanClass) {
+	private static Constructor checkIfThereIsOnlyOneNonDefaultConstructor(Class beanClass) {
 	Constructor[] constructors = beanClass.getDeclaredConstructors();
 	if (constructors.length == 1) {
 		if (constructors[0].getParameterTypes().length > 0) {

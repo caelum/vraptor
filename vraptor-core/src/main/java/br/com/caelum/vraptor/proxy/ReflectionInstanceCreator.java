@@ -53,7 +53,7 @@ public class ReflectionInstanceCreator
 	}
 	}
 
-	private <T> T useDefaultConstructor(Class<T> clazz) {
+	private static <T> T useDefaultConstructor(Class<T> clazz) {
 	try {
 		return clazz.newInstance();
 	} catch (Exception e) {
@@ -96,7 +96,7 @@ public class ReflectionInstanceCreator
 	 * @param parameterTypes of the constructor to be called, in order.
 	 * @return parameter instances for the given types.
 	 */
-	private Object[] proxyParameters(Class<?>[] parameterTypes) {
+	private static Object[] proxyParameters(Class<?>[] parameterTypes) {
 	return new Object[parameterTypes.length];
 	}
 
@@ -104,7 +104,7 @@ public class ReflectionInstanceCreator
 	 * @param constructors from the type to be proxified
 	 * @return null when there isn't a default (null) constructor
 	 */
-	private Constructor<?> findDefaultConstructor(Constructor<?>[] constructors) {
+	private static Constructor<?> findDefaultConstructor(Constructor<?>[] constructors) {
 	for (Constructor<?> constructor : constructors) {
 		if (constructor.getParameterTypes().length == 0) {
 		return constructor;

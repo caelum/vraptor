@@ -95,7 +95,7 @@ public class ReflectionBasedNullHandler extends ObjectNullHandler {
 	return instance;
 	}
 
-	private Object instantiateArray(Class<?> baseType) {
+	private static Object instantiateArray(Class<?> baseType) {
 	return Array.newInstance(baseType.getComponentType(), 0);
 	}
 

@@ -70,9 +70,9 @@ public class DownloadInterceptor implements Interceptor {
 	public void intercept(InterceptorStack stack, ResourceMethod method, Object instance) throws InterceptionException {
 		logger.debug("Sending a file to the client");
 
-		Object result = info.getResult();
+		Object resultLocal = info.getResult();
 
-		if (result == null) {
+		if (resultLocal == null) {
 			if (this.result.used()) {
 				stack.next(method, instance);
 				return;
@@ -83,17 +83,17 @@ public class DownloadInterceptor implements Interceptor {
 		try {
 			Download download = null;
 
-			if (result instanceof InputStream) {
-				InputStream input = (InputStream) result;
+			if (resultLocal instanceof InputStream) {
+				InputStream input = (InputStream) resultLocal;
 				download = new InputStreamDownload(input, null, null);
-			} else if (result instanceof byte[]) {
-				byte[] bytes = (byte[]) result;
+			} else if (resultLocal instanceof byte[]) {
+				byte[] bytes = (byte[]) resultLocal;
 				download = new ByteArrayDownload(bytes, null, null);
-			} else if (result instanceof File) {
-				File file = (File) result;
+			} else if (resultLocal instanceof File) {
+				File file = (File) resultLocal;
 				download = new FileDownload(file, null, null);
-			} else if (result instanceof Download) {
-				download = (Download) result;
+			} else if (resultLocal instanceof Download) {
+				download = (Download) resultLocal;
 			}
 
 			OutputStream output = response.getOutputStream();

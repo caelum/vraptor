@@ -67,8 +67,8 @@ public class JstlLocalization
 	 * {@link MissingResourceException}.
 	 */
 	private void initializeBundle() {
-		Object bundle = findByKey(Config.FMT_LOCALIZATION_CONTEXT);
-		ResourceBundle unsafe = extractUnsafeBundle(bundle);
+		Object bundleLocal = findByKey(Config.FMT_LOCALIZATION_CONTEXT);
+		ResourceBundle unsafe = extractUnsafeBundle(bundleLocal);
 	
 		this.bundle = new SafeResourceBundle(unsafe);
 	}

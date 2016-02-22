@@ -29,3 +29,4 @@ vraptor-mydvds/mydvds.war
 vraptor-mydvds/mydvdsDB.*
 *~
 vraptor-plugin-gae/build.tmp/
+.idea/

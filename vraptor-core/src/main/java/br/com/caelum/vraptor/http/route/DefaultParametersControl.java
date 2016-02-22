@@ -76,7 +76,7 @@ public class DefaultParametersControl implements ParametersControl {
 		String patternUri = originalPattern;
 		patternUri = patternUri.replaceAll("/\\*", "/.*");
 		for (Entry<String, String> parameter : parameters.entrySet()) {
-			patternUri = patternUri.replace("{" + parameter.getKey() + "}", "(" + parameter.getValue() + ")");
+			patternUri = patternUri.replace('{' + parameter.getKey() + '}', '(' + parameter.getValue() + ')');
 		}
 		
 		if (logger.isDebugEnabled()) {
@@ -105,7 +105,7 @@ public class DefaultParametersControl implements ParametersControl {
 				}
 			}
 
-			base = base.replace("{" + splittedPatterns[i] + "}", result == null ? "" : result.toString());
+			base = base.replace('{' + splittedPatterns[i] + '}', result == null ? "" : result.toString());
 		}
 		
 		return base.replaceAll("\\.\\*", "");
@@ -113,7 +113,7 @@ public class DefaultParametersControl implements ParametersControl {
 
 	private static Object selectParam(String key, String[] paramNames, Object[] paramValues) {
 		for (int i = 0; i < paramNames.length; i++) {
-			if (key.matches("^" + paramNames[i] + "(\\..*|$)")) {
+			if (key.matches('^' + paramNames[i] + "(\\..*|$)")) {
 				return paramValues[i];
 			}
 		}

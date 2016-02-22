@@ -71,7 +71,7 @@ public class StandaloneClasspathResolver implements ClasspathResolver {
 		try {
 			File webInfClasses = new File(this.getWebxml().getParent() + "/classes");
 			if (webInfClasses.exists()) {
-				return new URL("file:" + webInfClasses.getAbsolutePath() + "/");
+				return new URL("file:" + webInfClasses.getAbsolutePath() + '/');
 			}
 			throw new ScannerException("Could not determine WEB-INF/classes location");
 		} catch (MalformedURLException e) {

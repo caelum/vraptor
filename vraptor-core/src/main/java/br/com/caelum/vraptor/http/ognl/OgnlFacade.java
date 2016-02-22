@@ -105,7 +105,7 @@ public class OgnlFacade {
 			if (cause.getClass().isAnnotationPresent(ValidationException.class)) {
 				throw new ConversionError(cause.getLocalizedMessage());
 			} else {
-				throw new InvalidParameterException("unable to parse expression '" + key + "'", e);
+				throw new InvalidParameterException("unable to parse expression '" + key + '\'', e);
 			}
 
 		} catch (NoSuchPropertyException ex) {

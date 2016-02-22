@@ -41,7 +41,7 @@ final class ArrayAdapter implements Instantiator<Object> {
 			int i = 0;
 			public Parameter apply(Parameter parameter) {
 				if (target.getName().equals(parameter.getName())) {
-					return new Parameter(parameter.getName() + "[" + i++ + "]", parameter.getValue());
+					return new Parameter(parameter.getName() + '[' + i++ + ']', parameter.getValue());
 				}
 				return parameter;
 			}

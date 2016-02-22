@@ -139,11 +139,11 @@ public class DefaultRouter implements Router {
 			try {
 				return matches.next().urlFor(type, method, params);
 			} catch (Exception e) {
-				throw new VRaptorException("The selected route is invalid for redirection: " + type.getName() + "."
+				throw new VRaptorException("The selected route is invalid for redirection: " + type.getName() + '.'
 						+ method.getName(), e);
 			}
 		}
-		throw new RouteNotFoundException("The selected route is invalid for redirection: " + type.getName() + "."
+		throw new RouteNotFoundException("The selected route is invalid for redirection: " + type.getName() + '.'
 				+ method.getName());
 	}
 

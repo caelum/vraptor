@@ -192,7 +192,7 @@ public class PathAnnotationRoutesParser implements RoutesParser {
 
 	private static String fixLeadingSlash(String uri) {
 		if (!uri.startsWith("/")) {
-			return  "/" + uri;
+			return '/' + uri;
 		}
 		return uri;
 	}
@@ -206,9 +206,9 @@ public class PathAnnotationRoutesParser implements RoutesParser {
 		if ("".equals(prefix)) {
 			String baseName = lowerFirstCharacter(type.getSimpleName());
 			if (baseName.endsWith("Controller")) {
-				return "/" + baseName.substring(0, baseName.lastIndexOf("Controller"));
+				return '/' + baseName.substring(0, baseName.lastIndexOf("Controller"));
 			}
-			return "/" + baseName;
+			return '/' + baseName;
 		} else {
 			return prefix;
 		}
@@ -219,7 +219,7 @@ public class PathAnnotationRoutesParser implements RoutesParser {
 	 * default URI, given a controller name and a method name
 	 */
 	protected String defaultUriFor(String controllerName, String methodName) {
-		return controllerName + "/" + methodName;
+		return controllerName + '/' + methodName;
 	}
 
 	protected String lowerFirstCharacter(String baseName) {

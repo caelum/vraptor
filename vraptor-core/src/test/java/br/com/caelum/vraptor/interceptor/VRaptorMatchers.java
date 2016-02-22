@@ -76,7 +76,7 @@ public class VRaptorMatchers {
 		return new TypeSafeMatcher<ValidationMessage>() {
 
 			protected void describeMismatchSafely(ValidationMessage item, Description mismatchDescription) {
-				mismatchDescription.appendText(" validation message='" +item.getMessage() + "', category = '"+item.getCategory()+"'");
+				mismatchDescription.appendText(" validation message='" +item.getMessage() + "', category = '"+item.getCategory()+ '\'');
 			}
 
 			protected boolean matchesSafely(ValidationMessage m) {
@@ -84,7 +84,7 @@ public class VRaptorMatchers {
 		}
 
 			public void describeTo(Description description) {
-				description.appendText(" validation message='" +message + "', category = '"+category+"'");
+				description.appendText(" validation message='" +message + "', category = '"+category+ '\'');
 			}
 			
 		};

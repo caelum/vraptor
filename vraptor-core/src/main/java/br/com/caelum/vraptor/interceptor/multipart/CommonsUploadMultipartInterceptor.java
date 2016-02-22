@@ -191,7 +191,7 @@ public class CommonsUploadMultipartInterceptor
 
 	protected String fixIndexedParameters(String name) {
 		if (name.contains("[]")) {
-			String newName = name.replace("[]", "[" + (indexes.count(name)) + "]");
+			String newName = name.replace("[]", "[" + (indexes.count(name)) + ']');
 			indexes.add(name);
 			logger.debug("{} was renamed to {}", name, newName);
 			name = newName;

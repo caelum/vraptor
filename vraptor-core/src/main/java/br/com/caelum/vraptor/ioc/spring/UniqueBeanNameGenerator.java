@@ -19,7 +19,7 @@ public class UniqueBeanNameGenerator implements BeanNameGenerator {
 		String name = delegate.generateBeanName(definition, registry);
 		while (registry.containsBeanDefinition(name) &&
 				!registry.getBeanDefinition(name).getBeanClassName().equals(definition.getBeanClassName())) {
-			name = name + "$";
+			name = name + '$';
 		}
 		return name;
 	}

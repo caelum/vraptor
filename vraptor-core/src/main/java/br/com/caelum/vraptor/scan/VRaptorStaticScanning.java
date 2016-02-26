@@ -15,6 +15,9 @@
  */
 package br.com.caelum.vraptor.scan;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.util.Collection;
 
 /**
@@ -24,6 +27,7 @@ import java.util.Collection;
  * @since 3.2
  */
 public class VRaptorStaticScanning {
+	private static final Logger LOGGER = LoggerFactory.getLogger(VRaptorStaticScanning.class);
 
 	/**
 	 * @param args[0] (optional) The WEB-INF/web.xml location
@@ -43,14 +47,14 @@ public class VRaptorStaticScanning {
 			cpr = new StandaloneClasspathResolver(webxml);
 		}
 
-		System.out.print("Initiating the scanning...");
+		LOGGER.debug("Initiating the scanning...");
 		ComponentScanner scanner = new ScannotationComponentScanner();
 		Collection<String> classes = scanner.scan(cpr);
-		System.out.println(" done.");
+		LOGGER.debug(" done.");
 
-		System.out.print("Generating the static registry...");
+		LOGGER.debug("Generating the static registry...");
 		BootstrapGenerator generator = new JavassistBootstrapGenerator();
 		generator.generate(classes, cpr);
-		System.out.println(" done.");
+		LOGGER.debug(" done.");
 	}
 }

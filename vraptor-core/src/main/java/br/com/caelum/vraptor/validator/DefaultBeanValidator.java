@@ -48,6 +48,10 @@ public class DefaultBeanValidator
 
 	private static final Logger logger = LoggerFactory.getLogger(DefaultBeanValidator.class);
 
+	private static final String SKIP_VALIDATION_INPUT_NULL = "skiping validation, input bean is null.";
+
+	private static final String VIOLATIONS_AT_BEAN = "there are {} violations at bean {}.";
+
 	private final Localization localization;
 
 	private final Validator validator;
@@ -62,19 +66,19 @@ public class DefaultBeanValidator
 
 	public List<Message> validate(Object bean, Class<?>... groups) {
 	if (bean == null) {
-		logger.warn("skiping validation, input bean is null.");
+		logger.warn(SKIP_VALIDATION_INPUT_NULL);
 		return emptyList();
 	}
 
 	final Set<ConstraintViolation<Object>> violations = validator.validate(bean, groups);
-	logger.debug("there are {} violations at bean {}.", violations.size(), bean);
+	logger.debug(VIOLATIONS_AT_BEAN, violations.size(), bean);
 
 	return getMessages(violations);
 	}
 
 	public List<Message> validateProperties(Object bean, String... properties) {
 		if(bean == null) {
-			logger.warn("skiping validation, input bean is null.");
+			logger.warn(SKIP_VALIDATION_INPUT_NULL);
 		return emptyList();
 		}
 		
@@ -84,7 +88,7 @@ public class DefaultBeanValidator
 		
 		for(String property : properties) {	
 		Set<ConstraintViolation<Object>> violations = validator.validateProperty(bean, property);
-		logger.debug("there are {} violations at bean {}.", violations.size(), bean);
+		logger.debug(VIOLATIONS_AT_BEAN, violations.size(), bean);
 
 		messages.addAll(getMessages(violations));
 	}
@@ -94,14 +98,14 @@ public class DefaultBeanValidator
 	
 	public List<Message> validateProperty(Object bean, String property, Class<?>... groups) {
 		if(bean == null) {
-		logger.warn("skiping validation, input bean is null.");
+		logger.warn(SKIP_VALIDATION_INPUT_NULL);
 		return emptyList();
 		}
 		
 		List<Message> messages = new ArrayList<Message>();
 		
 		Set<ConstraintViolation<Object>> violations = validator.validateProperty(bean, property, groups);
-		logger.debug("there are {} violations at bean {}.", violations.size(), bean);
+		logger.debug(VIOLATIONS_AT_BEAN, violations.size(), bean);
 
 		messages.addAll(getMessages(violations));
 		

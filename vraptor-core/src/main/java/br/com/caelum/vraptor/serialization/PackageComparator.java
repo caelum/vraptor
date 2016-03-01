@@ -23,10 +23,13 @@ import java.util.Comparator;
  * @since 3.4.0
  */
 final class PackageComparator implements Comparator<Serialization> {
+	private static final String VRAPTOR_SERIALIZATION_CLASS_PACKAGE = "br.com.caelum.vraptor.serialization";
+	private static final String RESTFULIE_SERIALIZATION_CLASS_PACKAGE = "br.com.caelum.vraptor.restfulie.serialization";
+
 	private int number(Serialization s) {
 		String packageName = s.getClass().getPackage().getName();
-		if (packageName.startsWith("br.com.caelum.vraptor.serialization")
-		 || packageName.startsWith("br.com.caelum.vraptor.restfulie.serialization")) {
+		if (packageName.startsWith(VRAPTOR_SERIALIZATION_CLASS_PACKAGE)
+		 || packageName.startsWith(RESTFULIE_SERIALIZATION_CLASS_PACKAGE)) {
 			return 1;
 		}
 		return 0;
@@ -36,11 +39,11 @@ final class PackageComparator implements Comparator<Serialization> {
 		String packageNameO1 = o1.getClass().getPackage().getName();
 		String packageNameO2 = o2.getClass().getPackage().getName();
 		
-		if(packageNameO1.startsWith("br.com.caelum.vraptor.serialization") 
-		&& packageNameO2.startsWith("br.com.caelum.vraptor.restfulie.serialization")) {
+		if(packageNameO1.startsWith(VRAPTOR_SERIALIZATION_CLASS_PACKAGE) 
+		&& packageNameO2.startsWith(RESTFULIE_SERIALIZATION_CLASS_PACKAGE)) {
 			return 1;
-		} else if (packageNameO2.startsWith("br.com.caelum.vraptor.serialization") 
-		&& packageNameO1.startsWith("br.com.caelum.vraptor.restfulie.serialization")){
+		} else if (packageNameO2.startsWith(VRAPTOR_SERIALIZATION_CLASS_PACKAGE) 
+		&& packageNameO1.startsWith(RESTFULIE_SERIALIZATION_CLASS_PACKAGE)){
 			return -1;
 		}
 		return packageNameO1.compareTo(packageNameO2);

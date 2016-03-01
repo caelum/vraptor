@@ -31,6 +31,7 @@ import br.com.caelum.vraptor.mydvds.model.User;
  */
 @Component
 public class DefaultUserDao implements UserDao {
+	private static final String LOGIN = "login";
 
 	private final Session session;
 
@@ -51,7 +52,7 @@ public class DefaultUserDao implements UserDao {
 		String hql = "from User u where u.login = :login and u.password = :password";
 
 		Query query = session.createQuery(hql)
-			.setParameter("login", login)
+			.setParameter(LOGIN, login)
 			.setParameter("password", password);
 
 		return (User) query.uniqueResult();
@@ -60,7 +61,7 @@ public class DefaultUserDao implements UserDao {
 	public User find(String login) {
 		String hql = "from User u where u.login = :login";
 
-		Query query = session.createQuery(hql).setParameter("login", login);
+		Query query = session.createQuery(hql).setParameter(LOGIN, login);
 
 		return (User) query.uniqueResult();
 	}
@@ -84,7 +85,7 @@ public class DefaultUserDao implements UserDao {
 
 	public boolean containsUserWithLogin(String login) {
 		String hql = "from User user where user.login = :login";
-		Query query = session.createQuery(hql).setParameter("login", login);
+		Query query = session.createQuery(hql).setParameter(LOGIN, login);
 
 		return !query.list().isEmpty();
 	}

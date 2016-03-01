@@ -38,6 +38,7 @@ import com.google.common.io.CharStreams;
 @Component
 public class DefaultHttpResult implements HttpResult {
 
+	private static final String COULD_NOT_WRITE_TO_RESPONSE_BODY = "Couldn't write to response body";
 	private final HttpServletResponse response;
 	private final Status status;
 
@@ -95,7 +96,7 @@ public class DefaultHttpResult implements HttpResult {
 		try {
 			response.getWriter().print(body);
 		} catch (IOException e) {
-			throw new ResultException("Couldn't write to response body", e);
+			throw new ResultException(COULD_NOT_WRITE_TO_RESPONSE_BODY, e);
 		}
 		return this;
 	}
@@ -104,7 +105,7 @@ public class DefaultHttpResult implements HttpResult {
 		try {
 			ByteStreams.copy(body, response.getOutputStream());
 		} catch (IOException e) {
-			throw new ResultException("Couldn't write to response body", e);
+			throw new ResultException(COULD_NOT_WRITE_TO_RESPONSE_BODY, e);
 		}
 		return this;
 	}
@@ -113,7 +114,7 @@ public class DefaultHttpResult implements HttpResult {
 		try {
 			CharStreams.copy(body, response.getWriter());
 		} catch (IOException e) {
-			throw new ResultException("Couldn't write to response body", e);
+			throw new ResultException(COULD_NOT_WRITE_TO_RESPONSE_BODY, e);
 		}
 		return this;
 	}

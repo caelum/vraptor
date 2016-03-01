@@ -36,6 +36,7 @@ import br.com.caelum.vraptor.ioc.PrototypeScoped;
 @Convert(Enum.class)
 @PrototypeScoped
 public class EnumConverter<T extends Enum<T>> implements Converter<T> {
+	private static final String IS_NOT_A_VALID_ENUM_VALUE = "is_not_a_valid_enum_value";
 
 	/**
 	 * Enums are always final, so I can suppress this warning safely
@@ -57,7 +58,7 @@ public class EnumConverter<T extends Enum<T>> implements Converter<T> {
 		try {
 			return Enum.valueOf(enumType, value);
 		} catch (IllegalArgumentException e) {
-				throw new ConversionError(MessageFormat.format(bundle.getString("is_not_a_valid_enum_value"), value));
+				throw new ConversionError(MessageFormat.format(bundle.getString(IS_NOT_A_VALID_ENUM_VALUE), value));
 		}
 	}
 
@@ -65,11 +66,11 @@ public class EnumConverter<T extends Enum<T>> implements Converter<T> {
 		try {
 			int ordinal = Integer.parseInt(value);
 			if (ordinal >= enumType.getEnumConstants().length) {
-					throw new ConversionError(MessageFormat.format(bundle.getString("is_not_a_valid_enum_value"), value));
+					throw new ConversionError(MessageFormat.format(bundle.getString(IS_NOT_A_VALID_ENUM_VALUE), value));
 			}
 			return enumType.getEnumConstants()[ordinal];
 		} catch (NumberFormatException e) {
-				throw new ConversionError(MessageFormat.format(bundle.getString("is_not_a_valid_enum_value"), value));
+				throw new ConversionError(MessageFormat.format(bundle.getString(IS_NOT_A_VALID_ENUM_VALUE), value));
 		}
 	}
 

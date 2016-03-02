@@ -71,13 +71,6 @@ public class LinkConverter implements Converter {
 		}
 	}
 
-	private static Object getRoot(Object root) {
-		if (root instanceof ConfigurableHypermediaResource) {
-			return ((ConfigurableHypermediaResource) root).getModel();
-		}
-		return root;
-	}
-
 	public Object unmarshal(HierarchicalStreamReader arg0,
 			UnmarshallingContext arg1) {
 		return base.unmarshal(arg0, arg1);

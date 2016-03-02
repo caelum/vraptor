@@ -420,19 +420,6 @@ public class BaseComponents {
 		}
 	}
 
-	private static boolean registerIfClassPresent(Map<Class<?>, Class<?>> components, String className, Class<?>... types) {
-		try {
-			Class.forName(className);
-			for (Class<?> type : types) {
-				components.put(type, type);
-			}
-			return true;
-		} catch (ClassNotFoundException e) {
-			/* ok, don't register */
-			return false;
-		}
-	}
-
 	private static void registerIfClassPresent(Set<Class<? extends Converter<?>>> components, String className, Class<? extends Converter<?>>... types) {
 		if (components.contains(types[0])) {
 			return;

@@ -260,9 +260,9 @@ public class PicoComponentRegistry extends AbstractComponentRegistry {
 	 * @param componentFactoryMap
 	 */
 	private void registerComponentFactories(MutablePicoContainer container, Map<Class<?>, Class<? extends ComponentFactory>> componentFactoryMap) {
-	for (Class<?> targetType : componentFactoryMap.keySet()) {
-		container.addAdapter(new PicoComponentAdapter(targetType, componentFactoryMap.get(targetType)));
-	}
+		for (Map.Entry<Class<?>, Class<? extends ComponentFactory>> targetTypeEntry : componentFactoryMap.entrySet()) {
+			container.addAdapter(new PicoComponentAdapter(targetTypeEntry.getKey(), targetTypeEntry.getValue()));
+		}
 	}
 
 	public Collection<Class<?>> getAllRegisteredApplicationScopedComponents() {

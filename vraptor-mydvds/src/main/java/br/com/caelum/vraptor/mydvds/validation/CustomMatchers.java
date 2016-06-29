@@ -24,7 +24,7 @@ import org.hamcrest.TypeSafeMatcher;
  * @author Lucas Cavalcanti
  *
  */
-public class CustomMatchers {
+public final class CustomMatchers {
 
     private static TypeSafeMatcher<String> EMPTY = new TypeSafeMatcher<String>() {
 
@@ -43,6 +43,10 @@ public class CustomMatchers {
         }
 
     };
+
+	private CustomMatchers() {
+		throw new InstantiationError( "Must not instantiate this class" );
+	}
 
     /**
      * matches if the given string is not empty. This matcher is null-safe.

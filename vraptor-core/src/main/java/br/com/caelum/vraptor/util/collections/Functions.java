@@ -20,7 +20,11 @@ import br.com.caelum.vraptor.ioc.Container;
 
 import com.google.common.base.Function;
 
-public class Functions {
+public final class Functions {
+
+	private Functions() {
+		throw new InstantiationError( "Must not instantiate this class" );
+	}
 
 	public static <T> Function<Class<? extends T>, ? extends T> instanceWith(final Container container) {
 		return new Function<Class<? extends T>, T>() {

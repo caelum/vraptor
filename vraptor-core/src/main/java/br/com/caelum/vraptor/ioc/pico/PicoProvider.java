@@ -62,11 +62,11 @@ public class PicoProvider implements ContainerProvider {
 
 	private final class AppScopedContainer implements Container {
 		public <T> T instanceFor(Class<T> type) {
-			Container container = containersByThread.get();
-			if (container == null) {
+			Container containerLocal = containersByThread.get();
+			if (containerLocal == null) {
 				return picoContainer.getComponent(type);
 			}
-			return container.instanceFor(type);
+			return containerLocal.instanceFor(type);
 		}
 
 		public <T> boolean canProvide(Class<T> type) {

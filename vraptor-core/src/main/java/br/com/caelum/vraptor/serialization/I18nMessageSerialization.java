@@ -42,9 +42,9 @@ public class I18nMessageSerialization implements View{
 	}
 
 	public I18nMessageSerialization from(String category, String key, Object...params) {
-		I18nMessage i18nMessage = new I18nMessage(category, key, params);
-		i18nMessage.setBundle(localization.getBundle());
-		this.i18nMessage = i18nMessage;
+		I18nMessage i18nMessageLocal = new I18nMessage(category, key, params);
+		i18nMessageLocal.setBundle(localization.getBundle());
+		this.i18nMessage = i18nMessageLocal;
 		return this;
 	}
 	

@@ -15,10 +15,7 @@
  */
 package br.com.caelum.vraptor.serialization.gson;
 
-import java.io.IOException;
-
-import javax.servlet.http.HttpServletResponse;
-
+import br.com.caelum.vraptor.http.LateResponseCommitHandler;
 import br.com.caelum.vraptor.interceptor.TypeNameExtractor;
 import br.com.caelum.vraptor.ioc.Component;
 import br.com.caelum.vraptor.serialization.JSONSerialization;
@@ -27,7 +24,6 @@ import br.com.caelum.vraptor.serialization.ProxyInitializer;
 import br.com.caelum.vraptor.serialization.Serializer;
 import br.com.caelum.vraptor.serialization.SerializerBuilder;
 import br.com.caelum.vraptor.serialization.xstream.Serializee;
-import br.com.caelum.vraptor.view.ResultException;
 
 /**
  * Gson implementation for JSONSerialization
@@ -39,7 +35,7 @@ import br.com.caelum.vraptor.view.ResultException;
 @Component
 public class GsonJSONSerialization implements JSONSerialization {
 
-	protected final HttpServletResponse response;
+	protected final LateResponseCommitHandler responseHandler;
 
 	protected final TypeNameExtractor extractor;
 
@@ -49,9 +45,9 @@ public class GsonJSONSerialization implements JSONSerialization {
 
 	protected final Serializee serializee;
 
-	public GsonJSONSerialization(HttpServletResponse response, TypeNameExtractor extractor,
+	public GsonJSONSerialization(LateResponseCommitHandler responseHandler, TypeNameExtractor extractor,
 			ProxyInitializer initializer, VRaptorGsonBuilder builder, Serializee serializee) {
-		this.response = response;
+		this.responseHandler = responseHandler;
 		this.extractor = extractor;
 		this.initializer = initializer;
 
@@ -68,16 +64,11 @@ public class GsonJSONSerialization implements JSONSerialization {
 	}
 
 	public <T> Serializer from(T object, String alias) {
-		response.setContentType("application/json");
 		return getSerializer().from(object, alias);
 	}
 
 	protected SerializerBuilder getSerializer() {
-		try {
-			return new GsonSerializer(builder, response.getWriter(), extractor, initializer, serializee);
-		} catch (IOException e) {
-			throw new ResultException("Unable to serialize data", e);
-		}
+		return new GsonSerializer(builder, responseHandler, extractor, initializer, serializee);
 	}
 
 	/**

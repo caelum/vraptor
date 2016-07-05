@@ -15,7 +15,10 @@
  */
 package br.com.caelum.vraptor.core;
 
+import java.io.IOException;
+
 import br.com.caelum.vraptor.VRaptorException;
+import br.com.caelum.vraptor.http.LateResponseCommitHandler;
 import br.com.caelum.vraptor.interceptor.Interceptor;
 import br.com.caelum.vraptor.interceptor.InterceptorRegistry;
 import br.com.caelum.vraptor.ioc.PrototypeScoped;
@@ -31,17 +34,26 @@ public class EnhancedRequestExecution implements RequestExecution {
 
 	private final InterceptorRegistry registry;
 	private final InterceptorStack stack;
+	private final LateResponseCommitHandler responseHandler;
 
-	public EnhancedRequestExecution(InterceptorStack stack, InterceptorRegistry registry) {
-		this.stack = stack;
+	public EnhancedRequestExecution(InterceptorRegistry registry, InterceptorStack stack,
+			LateResponseCommitHandler responseHandler) {
 		this.registry = registry;
+		this.stack = stack;
+		this.responseHandler = responseHandler;
 	}
+
 
 	public void execute() throws VRaptorException {
 		for (Class<? extends Interceptor> interceptor : registry.all()) {
 			stack.add(interceptor);
 		}
 		stack.next(null, null);
+		try {
+			responseHandler.commit();
+		} catch (IOException e) {
+			throw new VRaptorException("IO error when commiting the response", e);
+		}
 	}
 
 }

@@ -17,8 +17,6 @@ package br.com.caelum.vraptor.serialization.gson;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 
-import java.io.IOException;
-import java.io.Writer;
 import java.util.Calendar;
 import java.util.Collection;
 import java.util.Date;
@@ -28,6 +26,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import br.com.caelum.vraptor.http.LateResponseCommitHandler;
 import br.com.caelum.vraptor.interceptor.TypeNameExtractor;
 import br.com.caelum.vraptor.serialization.ProxyInitializer;
 import br.com.caelum.vraptor.serialization.Serializer;
@@ -45,7 +44,7 @@ import com.google.gson.Gson;
 
 public class GsonSerializer implements SerializerBuilder {
 
-	private final Writer writer;
+	private final LateResponseCommitHandler responseHandler;
 
 	private final TypeNameExtractor extractor;
 
@@ -55,9 +54,9 @@ public class GsonSerializer implements SerializerBuilder {
 
 	protected VRaptorGsonBuilder builder;
 
-	public GsonSerializer(VRaptorGsonBuilder builder, Writer writer, TypeNameExtractor extractor,
+	public GsonSerializer(VRaptorGsonBuilder builder, LateResponseCommitHandler responseHandler, TypeNameExtractor extractor,
 			ProxyInitializer initializer, Serializee serializee) {
-		this.writer = writer;
+		this.responseHandler = responseHandler;
 		this.extractor = extractor;
 		this.initializer = initializer;
 		this.builder = builder;
@@ -135,7 +134,6 @@ public class GsonSerializer implements SerializerBuilder {
 	}
 
 	public void serialize() {
-		try {
 			Object root = serializee.getRoot();
 
 			builder.setExclusionStrategies(new Exclusions(serializee));
@@ -144,15 +142,12 @@ public class GsonSerializer implements SerializerBuilder {
 
 			String alias = builder.getAlias();
 			if (builder.isWithoutRoot()) {
-				writer.write(gson.toJson(root));
+				responseHandler.writeJson(gson.toJson(root));
 			} else {
 				Map<String, Object> tree = new HashMap<String, Object>();
 				tree.put(alias, root);
-				writer.write(gson.toJson(tree));
+				responseHandler.writeJson(gson.toJson(tree));
 			}
-		} catch (IOException e) {
-			throw new RuntimeException("Não pode serializar", e);
-		}
 	}
 
 	public Serializer recursive() {

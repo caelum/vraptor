@@ -104,4 +104,8 @@ public class MockValidator extends AbstractValidator {
 		return false;
 	}
 	
+	public void clearErrors() {
+		this.errors.clear();
+	}
+	
 }

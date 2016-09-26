@@ -64,8 +64,21 @@ public class XStreamSerializer implements SerializerBuilder {
 
 	private void preConfigure(Object obj,String alias) {
 		checkNotNull(obj, "You can't serialize null objects");
-
-		xstream.processAnnotations(obj.getClass());
+		
+		
+		if (obj instanceof Collection) {
+			Set<Class<?>> types = new HashSet<Class<?>>();
+			types.add(obj.getClass());
+			
+			for (Object o : (Collection<?>) obj) {
+				types.add(o.getClass());
+			}
+			
+			Class<?>[] classes = types.toArray(new Class[]{});
+			xstream.processAnnotations(classes);
+		} else {
+			xstream.processAnnotations(obj.getClass());
+		}
 
 		serializee.setRootClass(initializer.getActualClass(obj));
 		if (alias == null && initializer.isProxy(obj.getClass())) {

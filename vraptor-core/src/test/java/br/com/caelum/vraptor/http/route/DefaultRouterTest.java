@@ -284,6 +284,12 @@ public class DefaultRouterTest {
 		@Path("/*/customPath")
 		public void starPath() {
 		}
+		
+		public void withParameter(Dog dog) {
+		}
+		
+		public void withParameter(Dog dog, String a) {
+		}
 	}
 
 	@br.com.caelum.vraptor.Resource
@@ -297,7 +303,7 @@ public class DefaultRouterTest {
 		String url = router.urlFor(MyResource.class, method, new Object[] {});
 		assertThat(router.parse(url, HttpMethod.POST, null).getMethod(), is(equalTo(method)));
 	}
-
+	
 	private void registerRulesFor(Class<?> type) {
 		RoutesParser parser = new PathAnnotationRoutesParser(router);
 		
@@ -314,6 +320,24 @@ public class DefaultRouterTest {
 		registerRulesFor(InheritanceExample.class);
 		final Method method = MyResource.class.getMethod("notAnnotated");
 		String url = router.urlFor(InheritanceExample.class, method, new Object[] {});
+		assertThat(router.parse(url, HttpMethod.POST, null).getMethod(), is(equalTo(method)));
+	}
+	
+	@Test
+	public void shouldReturnRouterIfMethodInheritanceMethodWithParameter() throws NoSuchMethodException, SecurityException {
+		registerRulesFor(MyResource.class);
+		registerRulesFor(InheritanceExample.class);
+		final Method method = MyResource.class.getMethod("withParameter", Dog.class);
+		String url = router.urlFor(InheritanceExample.class, method, new Object[] {});
+		assertThat(router.parse(url, HttpMethod.POST, null).getMethod(), is(equalTo(method)));
+	}
+	
+	@Test
+	public void shouldReturnRouterIfMethodWithParameterOver() throws NoSuchMethodException, SecurityException {
+		registerRulesFor(MyResource.class);
+		registerRulesFor(InheritanceExample.class);
+		final Method method = MyResource.class.getMethod("withParameter", Dog.class, String.class);
+		String url = router.urlFor(MyResource.class, method, new Object[] {});
 		assertThat(router.parse(url, HttpMethod.POST, null).getMethod(), is(equalTo(method)));
 	}
 

@@ -77,8 +77,8 @@ public class DefaultAcceptHeaderToFormat implements AcceptHeaderToFormat {
 		String[] mimeTypes = getOrderedMimeTypes(acceptHeader);
 
 		for (String mimeType : mimeTypes) {
-			if (mimeToFormat.containsKey(mimeType)) {
-				String format = mimeToFormat.get(mimeType);
+			String format;
+			if ((format = mimeToFormat.get(mimeType)) != null) {
 				acceptToFormatCache.put(acceptHeader, format);
 				return format;
 			}

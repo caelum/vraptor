@@ -25,9 +25,13 @@ import br.com.caelum.vraptor.ioc.ComponentFactory;
 
 @Component
 @ApplicationScoped
-public class ComponentFactoryInTheClasspath implements ComponentFactory<br.com.caelum.vraptor.ioc.fixture.ComponentFactoryInTheClasspath.Provided> {
+public final class ComponentFactoryInTheClasspath implements ComponentFactory<br.com.caelum.vraptor.ioc.fixture.ComponentFactoryInTheClasspath.Provided> {
 	private int callsToPreDestroy = 0 ;
-	
+
+	private ComponentFactoryInTheClasspath () {
+		throw new InstantiationError( "Must not instantiate this class" );
+	}
+
 	@PreDestroy
 	public void preDestroy() {
 		callsToPreDestroy++;

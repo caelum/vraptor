@@ -460,11 +460,11 @@ public final class BaseComponents {
 		HashMap<Class<?>, Class<?>> map = new HashMap<Class<?>, Class<?>>();
 		Iterator<Class<?>> it = Arrays.asList(items).iterator();
 		while (it.hasNext()) {
-			Class<?> key = it.next();
 			Class<?> value = it.next();
 			if (value == null) {
 			throw new IllegalArgumentException("The number of items should be even.");
 			}
+			Class<?> key = it.next();
 			map.put(key, value);
 		}
 		return map;

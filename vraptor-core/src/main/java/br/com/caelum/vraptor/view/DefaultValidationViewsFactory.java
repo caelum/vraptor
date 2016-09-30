@@ -72,7 +72,6 @@ public class DefaultValidationViewsFactory implements ValidationViewsFactory {
 			final T viewInstance) {
 		return new MethodInvocation<T>() {
 			public Object intercept(T proxy, Method method, Object[] args, SuperMethod superMethod) {
-				final Object instance = new Mirror().on(viewInstance).invoke().method(method).withArgs(args);
 				Class type = method.getReturnType();
 				if (type == void.class) {
 					throw new ValidationException(errors);
@@ -82,6 +81,7 @@ public class DefaultValidationViewsFactory implements ValidationViewsFactory {
 					return proxy;
 				}
 
+				final Object instance = new Mirror().on(viewInstance).invoke().method(method).withArgs(args);
 				if (args.length > 0 && args[0] instanceof Class<?>) {
 					return proxifier.proxify((Class<?>) args[0], throwValidationExceptionOnFirstInvocation(errors, instance));
 				}

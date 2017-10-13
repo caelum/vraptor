@@ -58,7 +58,7 @@ public class JstlLocalization
 		if (bundle == null) {
 			initializeBundle();
 		}
-	
+
 		return bundle;
 	}
 
@@ -69,21 +69,21 @@ public class JstlLocalization
 	private void initializeBundle() {
 		Object bundleLocal = findByKey(Config.FMT_LOCALIZATION_CONTEXT);
 		ResourceBundle unsafe = extractUnsafeBundle(bundleLocal);
-	
+
 		this.bundle = new SafeResourceBundle(unsafe);
 	}
 
 	private ResourceBundle extractUnsafeBundle(Object bundle) {
 		if (bundle instanceof String || bundle == null) {
 			String baseName = (bundle == null) ? DEFAULT_BUNDLE_NAME : bundle.toString();
-	
+
 			try {
 			return ResourceBundle.getBundle(baseName, getLocale());
 			} catch (MissingResourceException e) {
 			logger.debug("couldn't find message bundle, creating an empty one");
 			return new EmptyBundle();
 			}
-	
+
 		}
 		if (bundle instanceof LocalizationContext) {
 			return ((LocalizationContext) bundle).getResourceBundle();
@@ -102,13 +102,13 @@ public class JstlLocalization
 
 	private Locale localeFor(String key) {
 		Object localeValue = findByKey(key);
-	
+
 		if (localeValue instanceof String) {
 			return findLocalefromString((String) localeValue);
 		} else if (localeValue instanceof Locale) {
 			return (Locale) localeValue;
 		}
-	
+
 		return request.getRequest().getLocale();
 	}
 
@@ -124,17 +124,17 @@ public class JstlLocalization
 		if (value != null) {
 			return value;
 		}
-	
-		value = Config.get(request.getRequest().getSession(), key);
+
+		value = Config.get(request.getRequest().getSession(false), key);
 		if (value != null) {
 			return value;
 		}
-	
+
 		value = Config.get(request.getServletContext(), key);
 		if (value != null) {
 			return value;
 		}
-	
+
 		return request.getServletContext().getInitParameter(key);
 	}
 
@@ -160,12 +160,12 @@ public class JstlLocalization
 			return new Locale(arr[0]);
 			} else if (arr.length == 2) {
 			return new Locale(arr[0], arr[1]);
-	
+
 			} else {
 			return new Locale(arr[0], arr[1], arr[2]);
 			}
 		}
-	
+
 		return null;
 	}
 }

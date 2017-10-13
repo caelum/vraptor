@@ -26,7 +26,7 @@ import br.com.caelum.vraptor.http.MutableRequest;
 
 /**
  * Test class for {@link JstlLocalization}.
- * 
+ *
  * @author Otávio Scherer Garcia
  */
 public class JstlLocalizationTest {
@@ -57,7 +57,7 @@ public class JstlLocalizationTest {
 	LocalizationContext context = new LocalizationContext(bundle);
 	when(request.getAttribute(FMT_LOCALIZATION_CONTEXT + ".request")).thenReturn(context);
 
-	when(request.getSession()).thenReturn(session);
+	when(request.getSession(false)).thenReturn(session);
 	}
 
 	@Test
